@@ -46,6 +46,27 @@ char	*ft_new_strdup(t_program *program, char *str)
 	return (res);
 }
 
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
+	size_t	srclen;
+
+	srclen = 0;
+	while (src[srclen])
+		srclen++;
+	if (!dstsize)
+		return (srclen);
+	i = 0;
+	while (src[i] && i < dstsize - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	if (dstsize)
+		dst[i] = '\0';
+	return (srclen);
+}
+
 // Compile like this: cc example.c ../build/libs/collector.a -I ..
 int	main(void)
 {
@@ -59,6 +80,14 @@ int	main(void)
 		ft_exit(&program->head, 1);
 
 	printf("str: %s\n", str);
+
+	char *new = ft_realloc(&program->head, str, 10);
+
+	printf("same str: %s\n", new);
+
+	// but I can now safely change
+	new[7] = 'a';
+	printf("and I can reach: %c\n", new[7]);
 
 	// After everthing finish, we can just free all the nodes in one call. No need another free.
 	ft_free(&program->head);

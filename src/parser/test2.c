@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 typedef struct command COMMAND;
 
 enum command_type
