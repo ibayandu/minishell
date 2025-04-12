@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.com. +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/06 00:52:57 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:43:52 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

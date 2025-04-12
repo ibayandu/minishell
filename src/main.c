@@ -3,26 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.com. +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/06 05:32:19 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:24:53 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer/includes/token_utils.h"
 #include "lexer/lexer.h"
-#include "parser/parser.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int	main(void)
 {
-	t_tokens	*tokens;
-	char	*input;
-	int		i;
+	char			*input;
+	t_token_list	*token_list;
 
-	input = " \n \n #!/bin/bash\n\
+	input = "#!/bin/bash\n\
 # Simple line count example, using bash\n\
 #\n\
 # Bash tutorial: http://linuxconfig.org/Bash_scripting_Tutorial#8-2-read-file-into-bash-array\n\
@@ -65,20 +60,6 @@ echo \"Expected number of lines: `wc -l $in`\"\n\
 #restore stdin from filedescriptor 10\n\
 #and close filedescriptor 10\n\
 exec 0<&10 10<&-\n";
-	tokens = lexer(input);
-	i = 0;
-	while (tokens->tokens[i].value)
-	{
-		printf("Token: %s , Type: %d\n", tokens->tokens[i].value, tokens->tokens[i].type);
-		i++;
-	}
-	printf("Token: %s , Type: %d\n", tokens->tokens[i].value, tokens->tokens[i].type);
-	
-	printf("\n\n_____________________________AST_NODE_____________________________\n");
-
-
-
-
-	ASTNode *ast_node = parse(tokens);
-	print_ast(ast_node,10);
+	token_list = lexer(input);
+	ft_putnbr_fd(token_list->count, 1);
 }

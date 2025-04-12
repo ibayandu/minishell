@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.com. +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:53 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/06 01:12:52 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/06 13:59:03 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,4 @@
 
 # include "token.h"
 
-void	handle_word_without_quotes(char *input, int *i, t_token *tokens,
-			int *token_index);
-void	handle_word_with_quotes(char *input, int *i, t_token *tokens,
-			int *token_index);
 #endif // LEXER_UTILS_H
