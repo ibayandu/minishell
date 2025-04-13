@@ -1,6 +1,6 @@
 MAKEFLAGS+=--no-print-directory
 
-CC = gcc
+CC = cc
 
 CFLAGS = -Wall -Werror -Wextra
 
@@ -10,6 +10,7 @@ SRCS = main.c
 
 LEXER = lexer/build/bin/lexer.a
 PARSER = parser/build/bin/parser.a
+LIBFT = lib/libft/build/bin/libft.a
 
 OBJS = $(SRCS:%.c=src/build/%.o)
 
@@ -20,19 +21,21 @@ src/build/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all:
+	@$(MAKE) -C src/lib/libft
 	@$(MAKE) -C src/parser
 	@$(MAKE) -C src/lexer
 	@$(MAKE) program
 
 program: ${NAME}
 
-$(NAME): $(OBJS) $(LEXER) $(PARSER)
+$(NAME): $(OBJS) $(LEXER) $(PARSER) $(LIBFT)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
 	@rm -rf src/build
 	@$(MAKE) clean -C src/lexer
 	@$(MAKE) clean -C src/parser
+	@$(MAKE) clean -C src/lib/libft
 
 fclean: clean
 	@rm -rf $(NAME)
@@ -45,4 +48,4 @@ norm:
 run:
 	./$(NAME)
 
-.PHONY:	init all clean fclean re run
+.PHONY:	program all clean fclean re run

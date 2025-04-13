@@ -3,20 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.com. +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:30 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/06 00:52:49 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/06 15:22:34 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMON_H
 # define COMMON_H
 
-int		is_operator(char *str);
-int		skip_whitespace_and_comments(const char *input, int *index,
-			int *in_token);
-char	*trim(char *str);
-char	*ft_strdup(const char *str);
+# include "../../lib/libft/libft.h"
+
+int	is_operator(char *str);
 
 #endif // COMMON_H

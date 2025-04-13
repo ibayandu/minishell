@@ -1,40 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.h                                            :+:      :+:    :+:   */
+/*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 14:28:42 by ibayandu         ###   ########.fr       */
+/*   Created: 2024/10/08 13:49:58 by ibayandu          #+#    #+#             */
+/*   Updated: 2024/10/08 13:50:16 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_H
-# define TOKEN_H
-
-typedef enum
+int	ft_tolower(int c)
 {
-	T_WORD,
-	T_ASSIGNMENT_WORD,
-	T_LESS,
-	T_GREAT,
-	T_DLESS,
-	T_DGREAT,
-	T_SQUOTE,
-	T_DQUOTE,
-	T_PIPE,
-	T_AND_IF,
-	T_OR_IF,
-	T_LPARANTHESE,
-	T_RPARANTHESE,
-	T_EOF
-}					t_token_type;
-
-typedef struct
-{
-	t_token_type	token_type;
-	char			*value;
-}					t_token;
-
-#endif // TOKEN_H
+	if (c <= 'Z' && c >= 'A')
+		c += 32;
+	return (c);
+}

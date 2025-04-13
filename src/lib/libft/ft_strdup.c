@@ -1,40 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.h                                            :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 14:28:42 by ibayandu         ###   ########.fr       */
+/*   Created: 2024/10/12 10:32:54 by ibayandu          #+#    #+#             */
+/*   Updated: 2024/10/12 10:38:39 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_H
-# define TOKEN_H
+#include "libft.h"
 
-typedef enum
+char	*ft_strdup(const char *s1)
 {
-	T_WORD,
-	T_ASSIGNMENT_WORD,
-	T_LESS,
-	T_GREAT,
-	T_DLESS,
-	T_DGREAT,
-	T_SQUOTE,
-	T_DQUOTE,
-	T_PIPE,
-	T_AND_IF,
-	T_OR_IF,
-	T_LPARANTHESE,
-	T_RPARANTHESE,
-	T_EOF
-}					t_token_type;
+	char	*newstr;
+	size_t	strlen;
 
-typedef struct
-{
-	t_token_type	token_type;
-	char			*value;
-}					t_token;
-
-#endif // TOKEN_H
+	strlen = ft_strlen(s1);
+	newstr = ft_calloc(strlen + 1, sizeof(char));
+	if (!newstr)
+		return (NULL);
+	ft_memcpy(newstr, s1, strlen);
+	return (newstr);
+}

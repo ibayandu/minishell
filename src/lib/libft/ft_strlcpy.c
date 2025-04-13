@@ -1,40 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.h                                            :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 14:28:42 by ibayandu         ###   ########.fr       */
+/*   Created: 2024/10/08 11:20:25 by ibayandu          #+#    #+#             */
+/*   Updated: 2024/10/12 10:22:25 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_H
-# define TOKEN_H
+#include "libft.h"
 
-typedef enum
+unsigned int	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	T_WORD,
-	T_ASSIGNMENT_WORD,
-	T_LESS,
-	T_GREAT,
-	T_DLESS,
-	T_DGREAT,
-	T_SQUOTE,
-	T_DQUOTE,
-	T_PIPE,
-	T_AND_IF,
-	T_OR_IF,
-	T_LPARANTHESE,
-	T_RPARANTHESE,
-	T_EOF
-}					t_token_type;
+	size_t	i;
 
-typedef struct
-{
-	t_token_type	token_type;
-	char			*value;
-}					t_token;
-
-#endif // TOKEN_H
+	i = 0;
+	if (dstsize)
+	{
+		while (src[i] && i < dstsize - 1)
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = 0;
+	}
+	return (ft_strlen(src));
+}

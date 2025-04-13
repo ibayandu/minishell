@@ -1,40 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.h                                            :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 14:28:42 by ibayandu         ###   ########.fr       */
+/*   Created: 2024/10/09 22:21:50 by ibayandu          #+#    #+#             */
+/*   Updated: 2024/10/12 10:22:43 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_H
-# define TOKEN_H
+#include "libft.h"
 
-typedef enum
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	T_WORD,
-	T_ASSIGNMENT_WORD,
-	T_LESS,
-	T_GREAT,
-	T_DLESS,
-	T_DGREAT,
-	T_SQUOTE,
-	T_DQUOTE,
-	T_PIPE,
-	T_AND_IF,
-	T_OR_IF,
-	T_LPARANTHESE,
-	T_RPARANTHESE,
-	T_EOF
-}					t_token_type;
-
-typedef struct
-{
-	t_token_type	token_type;
-	char			*value;
-}					t_token;
-
-#endif // TOKEN_H
+	while (*s1 && *s1 == *s2 && n > 0)
+	{
+		s1++;
+		s2++;
+		n--;
+	}
+	if (!n)
+		return (0);
+	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+}

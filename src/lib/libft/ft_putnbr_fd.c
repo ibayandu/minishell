@@ -1,40 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.h                                            :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 14:28:42 by ibayandu         ###   ########.fr       */
+/*   Created: 2024/10/14 19:28:30 by ibayandu          #+#    #+#             */
+/*   Updated: 2024/10/14 19:47:25 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_H
-# define TOKEN_H
+#include "libft.h"
 
-typedef enum
+void	ft_putnbr_fd(int n, int fd)
 {
-	T_WORD,
-	T_ASSIGNMENT_WORD,
-	T_LESS,
-	T_GREAT,
-	T_DLESS,
-	T_DGREAT,
-	T_SQUOTE,
-	T_DQUOTE,
-	T_PIPE,
-	T_AND_IF,
-	T_OR_IF,
-	T_LPARANTHESE,
-	T_RPARANTHESE,
-	T_EOF
-}					t_token_type;
+	int	a;
+	int	b;
 
-typedef struct
-{
-	t_token_type	token_type;
-	char			*value;
-}					t_token;
-
-#endif // TOKEN_H
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		n *= -1;
+	}
+	if (n == -2147483648)
+	{
+		ft_putchar_fd('2', fd);
+		n = 147483648;
+	}
+	b = n / 10;
+	if (n > 9)
+		ft_putnbr_fd(b, fd);
+	a = (n % 10) + 48;
+	ft_putchar_fd(a, fd);
+}

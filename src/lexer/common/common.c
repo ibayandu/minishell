@@ -3,78 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   common.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.com. +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:51:38 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/06 01:01:16 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/13 14:36:29 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ctype.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
+#include "../../lib/libft/libft.h"
+#include "includes/token.h"
 
 int	is_operator(char *str)
 {
-	const char	*op_keywords[] = {"<<-", "&&", "||", ";;", "<<", ">>", "<&",
-		">&", "<>", ">|", "{", "}", "!", "|", "(", ")", "<", ">", "&", ";",
-		NULL};
 	int			i;
+	const int	op_keywords[11][3] = {{'<', '<', T_DLESS}, {'>', '>', T_DGREAT},
+			{'<', 0, T_LESS}, {'>', 0, T_GREAT}, {'\'', 0, T_SQUOTE}, {'"', 0,
+			T_DQUOTE}, {'|', 0, T_PIPE}, {'&', '&', T_AND_IF}, {'|', '|',
+			T_OR_IF}, {'(', 0, T_LPARANTHESE}, {')', 0, T_RPARANTHESE}};
 
 	i = -1;
-	while (i++ < 19)
-		if (strncmp(str, op_keywords[i], strlen(op_keywords[i])) == 0)
-			return (strlen(op_keywords[i]));
+	while (i++ < 18)
+		if (ft_strncmp(str, op_keywords[i], ft_strlen(op_keywords[i])) == 0)
+			return (ft_strlen(op_keywords[i]));
 	return (0);
-}
-
-int	skip_whitespace_and_comments(const char *input, int *index, int *in_token)
-{
-	int	i;
-
-	i = *index;
-	if (input[i] == '#')
-	{
-		while (input[i] && input[i] != '\n')
-			i++;
-		if (in_token)
-			*in_token = 0;
-		i++;
-		*index = i;
-		return (1);
-	}
-	if (isspace(input[i]))
-	{
-		if (in_token)
-			*in_token = 0;
-		while (isspace(input[i]))
-			i++;
-		*index = i;
-		return (1);
-	}
-	return (0);
-}
-
-char	*trim(char *str)
-{
-	int	start;
-
-	start = 0;
-	while (isspace((unsigned char)str[start]))
-		start++;
-	return (str + start);
-}
-
-char	*ft_strdup(const char *str)
-{
-	size_t	len;
-	char	*copy;
-
-	len = strlen(str) + 1;
-	copy = (char *)malloc(len);
-	if (!copy)
-		exit(ENOMEM);
-	memcpy(copy, str, len);
-	return (copy);
 }

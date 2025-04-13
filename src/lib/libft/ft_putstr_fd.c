@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.h                                      :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.com. +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:52:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/06 00:52:57 by ibayandu         ###   ########.fr       */
+/*   Created: 2024/10/14 19:20:59 by ibayandu          #+#    #+#             */
+/*   Updated: 2024/10/14 19:22:27 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_UTILS_H
-# define TOKEN_UTILS_H
+#include "libft.h"
 
-int	token_count(char *input);
-
-#endif // TOKEN_UTILS_H
+void	ft_putstr_fd(char *s, int fd)
+{
+	while (*s)
+		ft_putchar_fd(*s++, fd);
+}
