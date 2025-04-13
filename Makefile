@@ -1,6 +1,6 @@
 MAKEFLAGS+=--no-print-directory
 
-CC = gcc
+CC = cc
 
 CFLAGS = -Wall -Werror -Wextra
 
@@ -10,7 +10,7 @@ SRCS = main.c
 
 LEXER = lexer/build/bin/lexer.a
 PARSER = parser/build/bin/parser.a
-LIBFT = lib/libft/libft.a
+LIBFT = lib/libft/build/bin/libft.a
 
 OBJS = $(SRCS:%.c=src/build/%.o)
 

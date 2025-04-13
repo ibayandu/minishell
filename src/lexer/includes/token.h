@@ -3,64 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 12:08:38 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/13 14:28:42 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# include "../../../src/lib/libft/libft.h"
-
-typedef enum e_token_type
+typedef enum
 {
 	T_WORD,
 	T_ASSIGNMENT_WORD,
-	T_NAME,
-	T_NEWLINE,
-	T_IO_NUMBER,
-	T_AND_IF,
-	T_OR_IF,
-	T_DSEMI,
+	T_LESS,
+	T_GREAT,
 	T_DLESS,
 	T_DGREAT,
-	T_LESSAND,
-	T_GREATAND,
-	T_LESSGREAT,
-	T_DLESSDASH,
-	T_CLOBBER,
-	T_If,
-	T_Then,
-	T_Else,
-	T_Elif,
-	T_Fi,
-	T_Do,
-	T_Done,
-	T_Case,
-	T_Esac,
-	T_While,
-	T_Until,
-	T_For,
-	T_Lbrace,
-	T_Rbrace,
-	T_Bang,
-	T_In,
+	T_SQUOTE,
+	T_DQUOTE,
+	T_PIPE,
+	T_AND_IF,
+	T_OR_IF,
+	T_LPARANTHESE,
+	T_RPARANTHESE,
 	T_EOF
 }					t_token_type;
 
-typedef struct s_token
+typedef struct
 {
-	t_token_type	type;
+	t_token_type	token_type;
 	char			*value;
 }					t_token;
-
-typedef struct s_token_list
-{
-	t_list			*tokens;
-	int				count;
-}					t_token_list;
 
 #endif // TOKEN_H

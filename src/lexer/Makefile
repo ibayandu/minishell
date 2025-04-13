@@ -1,8 +1,8 @@
-CC = gcc
+CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -Iincludes
 
-VPATH = lexer_utils:token:common
+VPATH = token:common
 
 SRCS = lexer.c lexer_utils.c token_count.c common.c
 
@@ -19,3 +19,5 @@ build/%.o: %.c
 
 clean:
 	@rm -rf build
+
+.PHONY: clean
