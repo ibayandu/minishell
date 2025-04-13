@@ -48,4 +48,4 @@ norm:
 run:
 	./$(NAME)
 
-.PHONY:	init all clean fclean re run
+.PHONY:	program all clean fclean re run
