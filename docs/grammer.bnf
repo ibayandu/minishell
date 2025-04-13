@@ -1,0 +1,118 @@
+%token <word> WORD ASSIGNMENT_WORD REDIR_WORD
+%token <number> NUMBER
+%token AND_AND OR_OR GREATER_GREATER LESS_LESS
+
+%type <command> inputunit command pipeline pipeline_command
+%type <command> list list0 list1 compound_list simple_list simple_list1
+%type <command> simple_command shell_command
+%type <command> subshell
+%type <redirect> redirection redirection_list
+%type <element> simple_command_element
+%type <word_list> word_list pattern
+%type <pattern> pattern_list
+%type <number> list_terminator
+
+%start inputunit
+
+%left '\n' EOF
+%left AND_AND OR_OR
+%right '|'
+%%
+
+inputunit:	simple_list list_terminator
+		|	'\n'
+		|	error '\n'
+		|	error EOF
+		|	EOF
+		;
+
+word_list:	WORD
+		|	word_list WORD
+		;
+
+redirection:	'>' WORD
+			|	'<' WORD
+			|	NUMBER '>' WORD
+			|	NUMBER '<' WORD
+			|	REDIR_WORD '>' WORD
+			|	REDIR_WORD '<' WORD
+			|	GREATER_GREATER WORD
+			|	NUMBER GREATER_GREATER WORD
+			|	REDIR_WORD GREATER_GREATER WORD
+			|	LESS_LESS WORD
+			|	NUMBER LESS_LESS WORD
+			|	REDIR_WORD LESS_LESS WORD
+			;
+
+simple_command_element: WORD
+					|	ASSIGNMENT_WORD
+					|	redirection
+					;
+
+redirection_list: redirection
+			|	redirection_list redirection
+			;
+
+simple_command:	simple_command_element
+			|	simple_command simple_command_element
+			;
+
+command:	simple_command
+		|	shell_command
+		|	shell_command redirection_list
+		;
+
+shell_command:	subshell
+			;
+
+subshell:	'(' compound_list ')'
+		;
+
+pattern_list:	newline_list pattern ')' compound_list
+			|	newline_list pattern ')' newline_list
+			|	newline_list '(' pattern ')' compound_list
+			|	newline_list '(' pattern ')' newline_list
+			;
+
+pattern:	WORD
+		|	pattern '|' WORD
+		;
+
+list:	newline_list list0
+	;
+
+compound_list:	list
+			|	newline_list list1
+			;
+
+list0:	list1 '\n' newline_list
+	;
+
+list1:	list1 AND_AND newline_list list1
+	|	list1 OR_OR newline_list list1
+	|	list1 '\n' newline_list list1
+	|	pipeline_command
+	;
+
+list_terminator:	'\n'
+				|	EOF
+				;
+
+newline_list:	newline_list '\n'
+			;
+
+simple_list:	simple_list1
+			;
+
+simple_list1:	simple_list1 AND_AND newline_list simple_list1
+			|	simple_list1 OR_OR newline_list simple_list1
+			|	pipeline_command
+			;
+
+pipeline_command: pipeline
+				;
+
+pipeline:	pipeline '|' newline_list pipeline
+		|	command
+		;
+%%
