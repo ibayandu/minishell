@@ -6,14 +6,13 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 22:16:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 19:44:06 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/04/14 21:07:53 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/libft.h"
 
-t_list	*ft_lstmap(t_memblock **head, t_list *lst, void *(*f)(void *),
-		void (*del)(void *))
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*new_lst;
 	t_list	*node;
@@ -25,7 +24,7 @@ t_list	*ft_lstmap(t_memblock **head, t_list *lst, void *(*f)(void *),
 	while (lst)
 	{
 		mapped_content = f(lst->content);
-		node = ft_lstnew(head, mapped_content);
+		node = ft_lstnew(mapped_content);
 		if (!node)
 		{
 			del(mapped_content);

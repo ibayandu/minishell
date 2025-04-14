@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:14:55 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 19:41:28 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/04/14 21:07:10 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	how_many_digits(long n)
 	return (result);
 }
 
-char	*ft_itoa(t_memblock **head, int n)
+char	*ft_itoa(int n)
 {
 	long	number;
 	int		length_number;
@@ -45,7 +45,7 @@ char	*ft_itoa(t_memblock **head, int n)
 		is_minus = 1;
 		number *= -1;
 	}
-	result = ft_calloc(head, length_number + 1, sizeof(char));
+	result = ft_calloc(length_number + 1, sizeof(char));
 	if (!result)
 		return (NULL);
 	while (length_number--)

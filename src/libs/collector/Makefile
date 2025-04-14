@@ -21,12 +21,6 @@ $(OBJS_DIR)/%.o: %.c
 all: dir $(NAME)
 
 dir:
-	@if [ ! -d $(OBJS_DIR) ]; then \
-		$(MKDIR) $(OBJS_DIR); \
-	fi
-	@if [ ! -d $(NAME_DIR) ]; then \
-		$(MKDIR) $(NAME_DIR); \
-	fi
 	$(MKDIR) $(OBJS_DIR)
 	$(MKDIR) $(NAME_DIR)
 
