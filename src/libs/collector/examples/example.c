@@ -10,9 +10,9 @@ typedef struct s_program
 }	t_program;
 
 // Exiting program never been this easy before!!!
-void	ft_exit(t_memblock **head, int status)
+void	ft_exit(int status)
 {
-	ft_free(head);
+	ft_free();
 	exit(status);
 }
 
@@ -24,7 +24,7 @@ void	ft_exit(t_memblock **head, int status)
 * something that covers everything about our logic, we may also choose to give
 * every function no matter what.
 */
-char	*ft_new_strdup(t_program *program, char *str)
+char	*ft_new_strdup(char *str)
 {
 	char	*res;
 	size_t	i;
@@ -33,7 +33,7 @@ char	*ft_new_strdup(t_program *program, char *str)
 	len = 0;
 	while (str[len])
 		len++;
-	res = ft_malloc(&program->head, sizeof(char) * (len + 1));
+	res = ft_malloc(sizeof(char) * (len + 1));
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -71,17 +71,17 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 int	main(void)
 {
 	// Initilazing everything zero inside the program
-	t_program *const	program = &(t_program){0};
+	//t_program *const	program = &(t_program){0};
 
 	// New implementation of strdup
-	char *str = ft_new_strdup(program, "test");
+	char *str = ft_new_strdup("test");
 	if (!str)
 		// We can handle malloc error like this
-		ft_exit(&program->head, 1);
+		ft_exit(1);
 
 	printf("str: %s\n", str);
 
-	char *new = ft_realloc(&program->head, str, 10);
+	char *new = ft_realloc(str, 10);
 
 	printf("same str: %s\n", new);
 
@@ -90,6 +90,6 @@ int	main(void)
 	printf("and I can reach: %c\n", new[7]);
 
 	// After everthing finish, we can just free all the nodes in one call. No need another free.
-	ft_free(&program->head);
+	ft_free();
 	return (0);
 }
