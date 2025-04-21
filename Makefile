@@ -2,7 +2,7 @@ MAKEFLAGS+=--no-print-directory
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs
 
 VPATH = src
 
@@ -10,7 +10,8 @@ SRCS = main.c
 
 LEXER = lexer/build/bin/lexer.a
 PARSER = parser/build/bin/parser.a
-LIBFT = lib/libft/build/bin/libft.a
+LIBFT = libs/libft/build/bin/libft.a
+COLLECTOR = libs/collector/build/bin/collector.a
 
 OBJS = $(SRCS:%.c=src/build/%.o)
 
@@ -21,21 +22,23 @@ src/build/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all:
-	@$(MAKE) -C src/lib/libft
+	@$(MAKE) -C src/libs/collector
+	@$(MAKE) -C src/libs/libft
 	@$(MAKE) -C src/parser
 	@$(MAKE) -C src/lexer
 	@$(MAKE) program
 
 program: ${NAME}
 
-$(NAME): $(OBJS) $(LEXER) $(PARSER) $(LIBFT)
+$(NAME): $(OBJS) $(LEXER) $(PARSER) $(LIBFT) $(COLLECTOR)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
 	@rm -rf src/build
 	@$(MAKE) clean -C src/lexer
 	@$(MAKE) clean -C src/parser
-	@$(MAKE) clean -C src/lib/libft
+	@$(MAKE) clean -C src/libs/libft
+	@$(MAKE) clean -C src/libs/collector
 
 fclean: clean
 	@rm -rf $(NAME)

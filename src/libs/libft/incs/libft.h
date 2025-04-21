@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 11:39:18 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/14 21:18:56 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/04/21 19:54:14 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-# include "../collector/incs/collector.h"
+# include "../../collector/incs/collector.h"
 
 typedef struct s_list
 {
