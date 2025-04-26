@@ -1,21 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   common.h                                           :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:52:30 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/26 18:40:44 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/04/26 21:29:55 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/04/26 21:30:06 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMON_H
-# define COMMON_H
-
-# include "libft.h"
-# include "token.h"
-
-t_token_type	get_token_type(char *str);
-
-#endif // COMMON_H
+int	ft_isspace(int c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
+		|| c == '\f');
+}

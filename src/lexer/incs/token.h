@@ -6,14 +6,16 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/21 20:07:49 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:26:18 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-typedef enum
+/// @typedef token türlerini temsil eden enum.
+/// @brief token türlerini temsil eden enum.
+typedef enum s_token_type
 {
 	T_WORD,
 	T_ASSIGNMENT_WORD,
@@ -31,7 +33,8 @@ typedef enum
 	T_EOF
 }					t_token_type;
 
-typedef struct
+/// @brief token listesini temsil eden bir yapı.
+typedef struct s_token
 {
 	t_token_type	token_type;
 	char			*value;

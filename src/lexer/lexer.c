@@ -6,78 +6,82 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/21 21:52:38 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:46:28 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "token.h"
+#include "common.h"
+#include "lexer.h"
+#include "token_utils.h"
 
-int	ft_isspace(int c)
+/**
+ * @brief input'u verdiğinde ilk token'ın içinde kaç tane quote olduğunu döner.
+ * @warning Açılıp kapanan quote'u 1 sayar.
+ * @param input Quote sayısını öğrenmek istediğin string.
+ * @return Verilen stringin içinde kaç tane quote olduğunu döner.
+ *
+ * Örnek Kullanım
+ *
+ * @code
+ * int	x = quote_count(input);
+ * @endcode
+ */
+static int	quote_count(char *input)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
-		|| c == '\f');
-}
+	int		count;
+	char	quote;
 
-char	*ft_strndup(const char *s1, size_t n)
-{
-	char	*newstr;
-	size_t	strlen;
-
-	strlen = ft_strlen(s1);
-	if (n > strlen)
-		n = strlen;
-	newstr = ft_calloc(n + 1, sizeof(char));
-	if (!newstr)
-		return (NULL);
-	ft_memcpy(newstr, s1, n);
-	return (newstr);
-}
-
-static t_token	*create_token(t_token_type type, const char *value)
-{
-	t_token	*token;
-
-	token = ft_malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->token_type = type;
-	token->value = ft_strdup(value);
-	if (!token->value)
+	count = 0;
+	while (*input && !ft_isspace(*input))
 	{
-		ft_free();
-		return (NULL);
+		if (*input == '"' || *input == '\'')
+		{
+			quote = *input;
+			input++;
+			count++;
+			while (*input && *input != quote)
+				input++;
+			if (*input == quote)
+				input++;
+		}
+		else
+			input++;
 	}
-	return (token);
+	return (count);
 }
 
+/**
+ * @brief kullanıcıdan alınan input'u bu fonksiyona verdiğinde senin için
+ * tokenize eder.
+ * @param input tokenize edilecek string.
+ * @return girdiyi tiplerine göre ayrıştırarak t_token* döner.
+ * @note t_token türüne incs klasörü altında token.h dosyasının
+ * içinde ulaşabilirsin.
+ *
+ * Örnek Kullanım
+ *
+ * t_token	x = lexer(input);
+ */
 t_list	*lexer(char *input)
 {
 	t_list	*tokens;
-	char	*start;
-	char	*end;
 	t_token	*token;
 
 	tokens = NULL;
-	start = input;
-	while (*start)
+	while (*input)
 	{
-		if (ft_isspace(*start))
+		if (ft_isspace(*input))
 		{
-			start++;
+			input++;
 			continue ;
 		}
-		end = start;
-		while (*end && !ft_isspace(*end))
-			end++;
-		token = create_token(T_WORD, ft_strndup(start, end - start));
+		token = create_token(get_token_type(input), get_token_str(input));
 		if (token)
-
 			ft_lstadd_back(&tokens, ft_lstnew(token));
-		start = end;
+		input += ft_strlen(token->value) + (quote_count(input) * 2);
 	}
 	token = create_token(T_EOF, "");
 	if (token)
-		ft_lstadd_back(&tokens,ft_lstnew(token));
+		ft_lstadd_back(&tokens, ft_lstnew(token));
 	return (tokens);
 }
