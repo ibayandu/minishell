@@ -1,6 +1,7 @@
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -Iincludes
+CFLAGS = -Wall -Werror -Wextra 
+CFLAGS += -I../lexer
 
 VPATH = parser_utils:common
 

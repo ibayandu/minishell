@@ -1,6 +1,7 @@
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I./
+CFLAGS = -Wall -Werror -Wextra
+CFLAGS += -I../lexer/incs -I../lexer -I..libs/libft/incs
 
 VPATH = srcs
 

@@ -6,59 +6,72 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:54 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/26 22:10:07 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:40:08 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "common.h"
 #include "token_utils.h"
 
-static int	is_quote(char c)
+/// @brief verilen char'ın quote olup olmadığını kontrol eder
+/// single quote veya double quote kontrolü yapar sadece.
+/// @param x kontrol edilecek olan char.
+/// @return eğer girilen char single quote veya double quote ise 1
+/// aksi durumda 0 döner.
+static int	is_quote(char x)
 {
-	return (c == '"' || c == '\'');
+	return (x == '\'' || x == '"');
 }
 
-static void	handle_quote_open(char c, int *in_quotes, char *quote_type)
+/// @brief bu fonksiyon verilen stringten sonraki ilk token'ın uzunluğunu döner.
+/// bunu yaparken şunlara dikkat eder.
+///
+/// eğer verilen stringten sonraki ilk token bir operatör ise o zaman ilgili
+/// operatör'ün uzunluğunu geri döner.
+///
+/// aksi halde
+///
+/// boşluk görene kadar saymaya başlar.
+/// eğer bir quote görürse boşlukları umursamadan quote kapanana kadar gider.
+///
+/// eğer quote dışında iken bir operatör ile karşılaşırsa durur ve oraya
+/// kadarki uzunluğu döner.
+/// @param input ilk token'ının uzunluğunu öğrenmek istediğimiz string.
+/// @return verilen parametredeki stringten sonra gelen ilk token'ın uzunluğu.
+static int	token_len(char *input)
 {
-	*in_quotes = 1;
-	*quote_type = c;
+	int		len;
+	char	quote;
+
+	len = 0;
+	if (get_token_type(input) >= 1 && get_token_type(input) <= 4)
+		return (2);
+	else if (get_token_type(input) != T_WORD)
+		return (1);
+	while (input[len] && !ft_isspace(input[len]))
+	{
+		if (get_token_type(input + len) != T_WORD)
+			return (len);
+		else if (is_quote(input[len]))
+		{
+			quote = input[len++];
+			while (input[len] && input[len] != quote)
+				len++;
+		}
+		len++;
+	}
+	return (len);
 }
 
-static void	handle_quote_close(int *in_quotes, char *quote_type)
-{
-	*in_quotes = 0;
-	*quote_type = 0;
-}
-
-static int	should_break(char c, int in_quotes)
-{
-	return (ft_isspace(c) && !in_quotes);
-}
-
+/// @brief bu fonsiyon parametresinden aldığı stringten sonraki gelen ilk
+/// token'ı string olarak geri döner.
+/// @param input kendisinden sonra gelen ilk token'ı dönmesini
+/// istediğimiz string.
+/// @return parametreden aldığı string'in ilk token'ı
 char	*get_token_str(char *input)
 {
-	char	*result;
-	char	*res_ptr;
-	int		in_quotes;
-	char	quote_type;
+	char	*token;
 
-	in_quotes = 0;
-	quote_type = 0;
-	result = ft_calloc(ft_strlen(input) + 1, 1);
-	res_ptr = result;
-	while (*input)
-	{
-		if (is_quote(*input) && !in_quotes)
-			handle_quote_open(*input, &in_quotes, &quote_type);
-		else if (*input == quote_type && in_quotes)
-			handle_quote_close(&in_quotes, &quote_type);
-		else if (should_break(*input, in_quotes))
-			break ;
-		else
-		{
-			*res_ptr = *input;
-			res_ptr++;
-		}
-		input++;
-	}
-	return (result);
+	token = ft_calloc(token_len(input), 1);
+	return (ft_memcpy(token, input, token_len(input)));
 }

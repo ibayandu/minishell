@@ -6,28 +6,24 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/26 22:26:18 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:20:04 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-/// @typedef token türlerini temsil eden enum.
 /// @brief token türlerini temsil eden enum.
 typedef enum s_token_type
 {
 	T_WORD,
-	T_ASSIGNMENT_WORD,
-	T_LESS,
-	T_GREAT,
 	T_DLESS,
 	T_DGREAT,
-	T_SQUOTE,
-	T_DQUOTE,
-	T_PIPE,
 	T_AND_IF,
 	T_OR_IF,
+	T_PIPE,
+	T_LESS,
+	T_GREAT,
 	T_LPARANTHESE,
 	T_RPARANTHESE,
 	T_EOF
