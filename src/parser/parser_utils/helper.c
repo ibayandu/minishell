@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 21:53:01 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/04 01:45:31 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/05/04 02:03:55 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/05/04 02:38:33 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ast.h"
+#include "lexer.h"
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+int	match(t_list *tokens, t_token_type type)
 {
-	if (!lst || !new)
-		return ;
-	if (*lst)
-		ft_lstlast(*lst)->next = new;
-	else
-		*lst = new;
+	t_token	*token;
+
+	token = (t_token *)tokens->content;
+	if (token && token->token_type == type)
+		return (1);
+	return (0);
+}
+
+t_token	*consume(t_list *tokens)
+{
+	t_token	*token;
+
+	token = (t_token *)tokens->content;
+	if (token)
+		token = (t_token *)tokens->next->content;
+	return (token);
 }

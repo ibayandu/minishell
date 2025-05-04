@@ -6,11 +6,11 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 09:18:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/21 20:49:24 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/04 01:45:19 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/libft.h"
+#include "libft.h"
 
 void	ft_bzero(void *s, size_t n)
 {

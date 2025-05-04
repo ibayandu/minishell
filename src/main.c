@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/27 22:32:48 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/04 02:08:13 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ const char	*token_type_to_string(t_token_type type)
 		return ("UNKNOWN");
 }
 
+#define blue "\033[0;34m"
+#define yellow "\033[0;33m"
+#define green "\033[0;32m"
+#define defaultcolor "\033[0;0m"
+
 int	main(void)
 {
 	t_list	*tokens;
@@ -49,9 +54,9 @@ int	main(void)
 	t_token	*token;
 	char	*input;
 
-	input = "( echo \"Başlangıç: $(date)\"\
+	input = "( echo \"Başlangiç: $(date)\"\
 		&& cat <<EOF; echo \"Heredoc içerik\"; EOF )\
-		&& echo \"Alt işlem başarılı\"\
+		&& echo \"Alt işlem başarıli\"\
 		|| echo \"Alt işlem başarısız\" | grep \"içerik\"\
 		|| echo \"Eşleşme bulunamadı\" > output.txt && cat < output.txt\
 		|| cat <<EOF > new_output.txt; echo \"Yeni dosyaya yazılan içerik\"; EOF";
@@ -60,8 +65,8 @@ int	main(void)
 	while (current)
 	{
 		token = (t_token *)current->content;
-		printf("Token Type: %s, Value: %s\n",
-			token_type_to_string(token->token_type), token->value);
+		printf(yellow"Token Type: "blue"%-13s "yellow"Value: "green"%s"defaultcolor"\n",
+			token_type_to_string(token->token_type),token->value);
 		current = current->next;
 	}
 	ft_free();

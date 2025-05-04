@@ -3,7 +3,7 @@ MAKEFLAGS+=--no-print-directory
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra 
-CFLAGS += -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs
+CFLAGS += -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser -Isrc/parser/incs
 
 VPATH = src
 
