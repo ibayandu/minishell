@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 12:28:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/07 15:29:23 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/04/06 00:52:30 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/04/27 22:33:00 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
 
-# include "collector.h"
+#ifndef COMMON_H
+# define COMMON_H
 
-t_memblock	*ft_add_new_block(void *data, size_t size);
-void		ft_clear_block(t_memblock **head);
-size_t		ft_find_size(void *data);
+# include "libft.h"
+# include "token.h"
 
-#endif // UTILS_H
+t_token_type	get_token_type(char *str);
+
+#endif // COMMON_H

@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   token_utils.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:53:12 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 13:10:37 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/04/26 21:40:27 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/04/27 22:32:56 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef TOKEN_UTILS_H
+# define TOKEN_UTILS_H
 
-# include "includes/token.h"
+# include "libft.h"
+# include "token.h"
 
-t_list	*lexer(char *input);
+t_token	*create_token(t_token_type type, char *value);
+char	*get_token_str(char *input);
 
-#endif // LEXER_H
+#endif // TOKEN_UTILS_H

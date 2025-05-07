@@ -1,21 +1,42 @@
 CC = cc
+RM = rm -rf
+AR = ar rcs
+MKDIR = mkdir -p
 
-CFLAGS = -Wall -Werror -Wextra -Iincludes
+IFLAGS = -I ./incs
+CFLAGS = -Wall -Werror -Wextra
 
-VPATH = parser_utils:common
-
+VPATH = srcs
 SRCS = parser.c
 
-OBJS = $(SRCS:%.c=build/%.o)
+OBJS_DIR = build/objs
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-TARGET = build/bin/parser.a
+NAME_DIR = build/libs
+NAME = $(NAME_DIR)/parser.a
 
-$(TARGET): $(OBJS)
-	ar rcs $@ $^
+$(OBJS_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o  $@ $(IFLAGS)
 
-build/%.o: %.c
-	@mkdir -p build/bin
-	$(CC) $(CFLAGS) -c $< -o $@
+all: dir $(NAME)
+
+dir:
+	@if [ ! -d $(OBJS_DIR) ]; then \
+		$(MKDIR) $(OBJS_DIR); \
+	fi
+	@if [ ! -d $(NAME_DIR) ]; then \
+		$(MKDIR) $(NAME_DIR); \
+	fi
+
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
 
 clean:
-	@rm -rf build
+	$(RM) $(OBJS)
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re dir

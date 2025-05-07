@@ -6,12 +6,12 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:57:12 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/04/14 21:20:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/07 15:29:31 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/utils.h"
-#include "incs/collector.h"
+#include "utils.h"
+#include "collector.h"
 
 void	*ft_malloc(size_t size)
 {

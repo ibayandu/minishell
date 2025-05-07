@@ -3,7 +3,7 @@ RM = rm -rf
 AR = ar rcs
 MKDIR = mkdir -p
 
-IFLAGS = -I ./
+IFLAGS = -I ./incs
 CFLAGS = -Wall -Werror -Wextra
 
 VPATH = srcs
@@ -21,8 +21,12 @@ $(OBJS_DIR)/%.o: %.c
 all: dir $(NAME)
 
 dir:
-	$(MKDIR) $(OBJS_DIR)
-	$(MKDIR) $(NAME_DIR)
+	@if [ ! -d $(OBJS_DIR) ]; then \
+		$(MKDIR) $(OBJS_DIR); \
+	fi
+	@if [ ! -d $(NAME_DIR) ]; then \
+		$(MKDIR) $(NAME_DIR); \
+	fi
 
 $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)

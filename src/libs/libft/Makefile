@@ -3,7 +3,7 @@ RM = rm -rf
 AR = ar rcs
 MKDIR = mkdir -p
 
-IFLAGS = -I ./
+IFLAGS = -I ../collector/incs
 CFLAGS = -Wall -Werror -Wextra
 
 VPATH = srcs
