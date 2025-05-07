@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/07 16:07:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/07 16:09:56 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_connect_cmd
 	t_command		*second;
 	t_connect_type	connect_type;
 
-}	t_connect_cmd;
+}	t_connect_cmd; 
 
 typedef struct s_subshell_cmd
 {
