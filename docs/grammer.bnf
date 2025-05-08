@@ -5,8 +5,7 @@
 %type <command> inputunit command pipeline list1 compound_list simple_list1 simple_command
 %type <redirect> redirection redirection_list
 %type <element> simple_command_element
-%type <word_list> word_list pattern
-%type <pattern> pattern_list
+%type <word_list> word_list
 %type <number> list_terminator
 
 %start inputunit
@@ -57,16 +56,6 @@ simple_command:	simple_command_element
 command:	simple_command
 		|	'(' compound_list ')'
 		|	'(' compound_list ')' redirection_list
-		;
-
-pattern_list:	newline_list pattern ')' compound_list
-			|	newline_list pattern ')' newline_list
-			|	newline_list '(' pattern ')' compound_list
-			|	newline_list '(' pattern ')' newline_list
-			;
-
-pattern:	WORD
-		|	pattern '|' WORD
 		;
 
 compound_list:	newline_list list1 '\n' newline_list
