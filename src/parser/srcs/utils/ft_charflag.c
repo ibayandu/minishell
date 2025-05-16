@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   collector.h                                        :+:      :+:    :+:   */
+/*   ft_charflag.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 11:48:44 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/16 20:04:20 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/05/16 23:37:00 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/05/16 23:55:54 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLLECTOR_H
-# define COLLECTOR_H
+#include "flags.h"
+#include "libft.h"
 
-# include <stddef.h>
-
-typedef struct s_memblock
+static int	ft_charflags(unsigned char c)
 {
-	void				*data;
-	size_t				size;
-	struct s_memblock	**head;
-	struct s_memblock	*next;
+	int f;
 
-}	t_memblock;
+	f = 0;
+	if (c == '$' || c == '"' || c == '\\' || c == '`')
+		f |= CBSDQUOTE;
+	return f;
+}
 
-void	*ft_malloc(size_t size);
-void	*ft_calloc(size_t type, size_t size);
-void	*ft_realloc(void *old_data, size_t new_size);
-void	ft_free(void);
-
-#endif // COLLECTOR_H
+int	ft_charflag(char c, int flag)
+{
+	int	flags;
+	flags = ft_charflags((unsigned char)c);
+	return ((flags & flag) != 0);
+}

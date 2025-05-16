@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/08 16:08:28 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/16 21:00:14 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ typedef enum e_redir_type
 	REDIR_OUTPUT,
 	REDIR_INPUT,
 	REDIR_APPEND,
-	REDIR_UNTIL,
-	REDIR_STRING,
+	REDIR_UNTIL
 
 }	t_redir_type;
 
@@ -105,17 +104,17 @@ typedef struct s_subshell_cmd
 
 }	t_subshell_cmd;
 
-typedef struct command
+typedef struct s_command
 {
 	int				flags;
 	t_cmd_type		type;
 	t_redirect		*redirects;
-	union u_content
+	union u_value
 	{
 		t_connect_cmd	*connection;
 		t_simple_cmd	*simple;
 		t_subshell_cmd	*subshell;
-	} content;
+	} value;
 
 }	t_command;
 

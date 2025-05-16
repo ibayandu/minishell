@@ -6,10 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:57:12 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/07 15:29:31 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/16 20:04:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "utils.h"
 #include "collector.h"
 

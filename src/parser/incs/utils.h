@@ -1,32 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   collector.h                                        :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 11:48:44 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/16 20:04:20 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/05/16 20:51:48 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLLECTOR_H
-# define COLLECTOR_H
+#ifndef UTILS_H
+# define UTILS_H
 
-# include <stddef.h>
+size_t	ft_mbrlen(const char *s, size_t max_len);
 
-typedef struct s_memblock
-{
-	void				*data;
-	size_t				size;
-	struct s_memblock	**head;
-	struct s_memblock	*next;
-
-}	t_memblock;
-
-void	*ft_malloc(size_t size);
-void	*ft_calloc(size_t type, size_t size);
-void	*ft_realloc(void *old_data, size_t new_size);
-void	ft_free(void);
-
-#endif // COLLECTOR_H
+#endif // UTILS_H
