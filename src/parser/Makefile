@@ -5,7 +5,7 @@ CFLAGS += -Iincs -I../lexer -I../lexer/incs -I../libs/libft/incs
 
 VPATH = parser_utils:parser_utils/parser_funcs:common
 
-SRCS = parser.c helper.c parse_sequence.c parse_redirs.c parse_command.c parse_pipe.c
+SRCS = parser.c helper.c parse_sequence.c parse_redirs.c parse_commands.c parse_pipe.c
 
 OBJS = $(SRCS:%.c=build/%.o)
 

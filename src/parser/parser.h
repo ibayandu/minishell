@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/04 02:42:20 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/04 20:57:51 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,7 @@
 # define PARSER_H
 
 # include "ast.h"
+
+t_ast	*parser(t_list **tokens);
 
 #endif // PARSER_H
