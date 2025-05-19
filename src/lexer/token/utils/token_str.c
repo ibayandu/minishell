@@ -6,21 +6,21 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:54 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 17:49:44 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:40:08 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "common.h"
 #include "token_utils.h"
 
-static int	is_quote_continue(char current, char quote)
+/// @brief verilen char'ın quote olup olmadığını kontrol eder
+/// single quote veya double quote kontrolü yapar sadece.
+/// @param x kontrol edilecek olan char.
+/// @return eğer girilen char single quote veya double quote ise 1
+/// aksi durumda 0 döner.
+static int	is_quote(char x)
 {
-	return (current && (current != quote));
-}
-
-static int	is_quote(char current)
-{
-	return (current == '\'' || current == '"');
+	return (x == '\'' || x == '"');
 }
 
 /// @brief bu fonksiyon verilen stringten sonraki ilk token'ın uzunluğunu döner.
@@ -48,14 +48,14 @@ static int	token_len(char *input)
 		return (2);
 	else if (get_token_type(input) != T_WORD)
 		return (1);
-	while (!ft_isspace(input[len]))
+	while (input[len] && !ft_isspace(input[len]))
 	{
 		if (get_token_type(input + len) != T_WORD)
 			return (len);
 		else if (is_quote(input[len]))
 		{
 			quote = input[len++];
-			while (is_quote_continue(input[len], quote))
+			while (input[len] && input[len] != quote)
 				len++;
 		}
 		len++;

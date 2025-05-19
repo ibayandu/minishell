@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:14 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 17:32:25 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 20:51:49 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /// dosyasının içinde bulabilirsin.
 t_token	*create_token(t_token_type type, char *value)
 {
-	t_token	*token;
+	t_token *token;
 
 	token = ft_malloc(sizeof(t_token));
 	if (!token)

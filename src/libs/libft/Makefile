@@ -1,7 +1,7 @@
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -Iincs -I../collector/incs
+CFLAGS += -I./incs -I../collector/incs
 
 VPATH = srcs
 
@@ -18,13 +18,13 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 
 OBJS = $(SRCS:%.c=build/%.o)
 
-TARGET = build/bin/libft.a
+TARGET = build/libs/libft.a
 
 $(TARGET): $(OBJS)
 	ar rcs $@ $^
 
 build/%.o: %.c
-	@mkdir -p build/bin
+	@mkdir -p build/libs
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
