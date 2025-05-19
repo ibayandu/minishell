@@ -75,7 +75,7 @@ t_command *parse_inputunit() {
         return cmd;
     }
     return NULL; // Error in parse_simple_list1 already reported
-}
+} 
 
 t_word_list *parse_word_list() {
     // word_list: WORD (WORD)*
