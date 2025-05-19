@@ -6,19 +6,19 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:34 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 18:54:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/19 20:51:26 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
 #include "makers.h"
 
-
 t_command	*parse_inputunit()
 {
 	t_command	*res;
 
 	res = NULL;
+	if (get_next_token()->token_type == )
 }
 
 t_redirect	*parse_redirection()
@@ -46,17 +46,7 @@ t_command	*parse_command()
 
 }
 
-t_command	*parse_compound_list()
-{
-
-}
-
 t_command	*parse_list()
-{
-
-}
-
-t_token	*parse_list_terminator()
 {
 
 }

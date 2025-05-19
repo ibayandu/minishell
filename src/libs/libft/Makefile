@@ -1,7 +1,7 @@
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -Iincs -I../collector/incs
+CFLAGS += -I./incs -I../collector/incs
 
 VPATH = srcs
 
