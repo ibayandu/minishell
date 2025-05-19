@@ -6,14 +6,14 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 11:39:18 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 14:22:34 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 19:38:59 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include "../../collector/incs/collector.h"
+# include "collector.h"
 # include <stdlib.h>
 # include <unistd.h>
 

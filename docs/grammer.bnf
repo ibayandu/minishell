@@ -2,14 +2,10 @@
 %token <number> NUMBER
 %token AND_AND OR_OR GREATER_GREATER LESS_LESS
 
-%type <command> inputunit command pipeline pipeline_command
-%type <command> list list0 list1 compound_list simple_list simple_list1
-%type <command> simple_command shell_command
-%type <command> subshell
+%type <command> inputunit command pipeline list compound_list simple_list simple_command
 %type <redirect> redirection redirection_list
 %type <element> simple_command_element
-%type <word_list> word_list pattern
-%type <pattern> pattern_list
+%type <word_list> word_list
 %type <number> list_terminator
 
 %start inputunit
@@ -24,10 +20,6 @@ inputunit:	simple_list list_terminator
 		|	error '\n'
 		|	error EOF
 		|	EOF
-		;
-
-word_list:	WORD
-		|	word_list WORD
 		;
 
 redirection:	'>' WORD
@@ -58,61 +50,30 @@ simple_command:	simple_command_element
 			;
 
 command:	simple_command
-		|	shell_command
-		|	shell_command redirection_list
+		|	'(' compound_list ')'
+		|	'(' compound_list ')' redirection_list
 		;
 
-shell_command:	subshell
+compound_list:	( list '\n' )
+			|	(list)
 			;
 
-subshell:	'(' compound_list ')'
-		;
-
-pattern_list:	newline_list pattern ')' compound_list
-			|	newline_list pattern ')' newline_list
-			|	newline_list '(' pattern ')' compound_list
-			|	newline_list '(' pattern ')' newline_list
-			;
-
-pattern:	WORD
-		|	pattern '|' WORD
-		;
-
-list:	newline_list list0
-	;
-
-compound_list:	list
-			|	newline_list list1
-			;
-
-list0:	list1 '\n' newline_list
-	;
-
-list1:	list1 AND_AND newline_list list1
-	|	list1 OR_OR newline_list list1
-	|	list1 '\n' newline_list list1
-	|	pipeline_command
+list:	list AND_AND list
+	|	list OR_OR list
+	|	list '\n' list
+	|	pipeline
 	;
 
 list_terminator:	'\n'
 				|	EOF
 				;
 
-newline_list:	newline_list '\n'
+simple_list:	simple_list AND_AND simple_list
+			|	simple_list OR_OR simple_list
+			|	pipeline
 			;
 
-simple_list:	simple_list1
-			;
-
-simple_list1:	simple_list1 AND_AND newline_list simple_list1
-			|	simple_list1 OR_OR newline_list simple_list1
-			|	pipeline_command
-			;
-
-pipeline_command: pipeline
-				;
-
-pipeline:	pipeline '|' newline_list pipeline
+pipeline:	pipeline '|' pipeline
 		|	command
 		;
 %%

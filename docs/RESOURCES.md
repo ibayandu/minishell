@@ -38,3 +38,7 @@ Bash V2 Grammer
 
 Shell Syntax
  - https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html
+
+Extended Shell Syntax
+ - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
+ 

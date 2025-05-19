@@ -6,11 +6,12 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:19:37 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/04/14 21:20:42 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/16 20:04:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/collector.h"
+#include <stdlib.h>
+#include "collector.h"
 
 t_memblock	*ft_add_new_block(void *data, size_t size)
 {

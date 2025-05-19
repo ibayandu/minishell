@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   ft_mbrlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 12:28:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/07 15:29:23 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/05/16 20:38:24 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/05/16 20:42:01 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include <stddef.h>
 
-# include "collector.h"
+size_t	ft_mbrlen(const char *s, size_t max_len)
+{
+	const unsigned char c = (unsigned char)s[0];
 
-t_memblock	*ft_add_new_block(void *data, size_t size);
-void		ft_clear_block(t_memblock **head);
-size_t		ft_find_size(void *data);
-
-#endif // UTILS_H
+	if (!s || max_len == 0)
+		return 0;
+	if (c < 0x80)
+		return 1;
+	else if ((c >> 5) == 0x6 && max_len >= 2)
+		return 2;
+	else if ((c >> 4) == 0xE && max_len >= 3)
+		return 3;
+	else if ((c >> 3) == 0x1E && max_len >= 4)
+		return 4;
+	return 1;
+}

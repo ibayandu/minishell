@@ -551,7 +551,7 @@ void	ft_test(int yyn)
 				goto yyerrlab;
 			yyn = -yyn;
 			goto yyreduce;
-		}
+		}">|"
 
 		if (yyerrstatus)
 			yyerrstatus--;

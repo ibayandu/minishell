@@ -1,27 +1,42 @@
 CC = cc
+RM = rm -rf
+AR = ar rcs
+MKDIR = mkdir -p
 
-CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I./
+IFLAGS = -I ./incs
+CFLAGS = -Wall -Werror -Wextra
 
 VPATH = srcs
-
 SRCS = utils.c collector.c
 
-OBJS = $(SRCS:%.c=build/%.o)
+OBJS_DIR = build/objs
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-TARGET = build/bin/collector.a
+NAME_DIR = build/libs
+NAME = $(NAME_DIR)/collector.a
 
 $(OBJS_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o  $@ $(IFLAGS)
 
-$(TARGET): $(OBJS)
-	ar rcs $@ $^
+all: dir $(NAME)
 
-build/%.o: %.c
-	@mkdir -p build/bin
-	$(CC) $(CFLAGS) -c $< -o $@
+dir:
+	@if [ ! -d $(OBJS_DIR) ]; then \
+		$(MKDIR) $(OBJS_DIR); \
+	fi
+	@if [ ! -d $(NAME_DIR) ]; then \
+		$(MKDIR) $(NAME_DIR); \
+	fi
+
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
 
 clean:
-	@rm -rf build
+	$(RM) $(OBJS)
 
-.PHONY: clean
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re dir

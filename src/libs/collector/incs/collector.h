@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:48:44 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/04/14 21:20:27 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/16 20:04:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLLECTOR_H
 # define COLLECTOR_H
 
-# include <stdlib.h>
+# include <stddef.h>
 
 typedef struct s_memblock
 {
