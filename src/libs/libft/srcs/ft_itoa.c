@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:14:55 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/14 21:07:10 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/04 01:45:26 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/libft.h"
+#include "libft.h"
 
 static int	how_many_digits(long n)
 {

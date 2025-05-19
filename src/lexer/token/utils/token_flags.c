@@ -1,22 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   token_flags.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:53:12 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 19:24:15 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/05/19 17:21:39 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/05/19 17:25:51 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "common.h"
 
-# include "libft.h"
-# include "token.h"
+int	get_token_flags(char *value)
+{
+	int	flags;
 
-void	*init_lexer(char *input);
-t_token	*get_next_token(void);
-
-#endif // LEXER_H
+	flags = 0;
+	while (*value)
+	{
+		if (*value == '$')
+			flags |= DOLLAR;
+		else if (*value == '=')
+			flags |= ASSIGNMENT;
+		else if (*value == '\'' || *value == '"')
+		{
+			flags |= QUOTED;
+			if (*value == '"')
+				flags |= DOUBLE_QUOTE;
+			else
+				flags |= SINGLE_QUOTE;
+		}
+		value++;
+	}
+	return (flags);
+}

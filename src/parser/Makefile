@@ -3,7 +3,7 @@ RM = rm -rf
 AR = ar rcs
 MKDIR = mkdir -p
 
-IFLAGS = -I ./incs
+IFLAGS = -I./incs -I../lexer/incs 
 CFLAGS = -Wall -Werror -Wextra
 
 VPATH = srcs

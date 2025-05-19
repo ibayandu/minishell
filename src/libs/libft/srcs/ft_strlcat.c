@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 11:27:19 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 19:50:10 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/04 01:46:38 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/libft.h"
+#include "libft.h"
 
 unsigned int	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {

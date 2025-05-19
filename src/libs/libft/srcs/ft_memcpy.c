@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 09:22:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/13 19:46:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/04 01:46:00 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/libft.h"
+#include "libft.h"
 
 void	*ft_memcpy(void *destaddr, const void *srcaddr, size_t len)
 {

@@ -1,51 +1,33 @@
 CC = cc
-RM = rm -rf
-AR = ar rcs
-MKDIR = mkdir -p
 
-IFLAGS = -I ../collector/incs
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS += -Iincs -I../collector/incs
 
 VPATH = srcs
+
 SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
-		ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \
-		ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c \
-		ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c \
-		ft_atoi.c ft_strdup.c ft_substr.c ft_strjoin.c \
+		ft_isspace.c ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c \
+		ft_memmove.c ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c \
+		ft_strchr.c  ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c  \
+		ft_strnstr.c ft_atoi.c ft_strdup.c ft_substr.c ft_strjoin.c \
 		ft_strtrim.c ft_split.c ft_itoa.c ft_strmapi.c ft_striteri.c \
 		ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
 		ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 		ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \
-		ft_lstmap.c
+		ft_lstmap.c ft_strndup.c
 
-OBJS_DIR = build/objs
-OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
+OBJS = $(SRCS:%.c=build/%.o)
 
-NAME_DIR = build/libs
-NAME = $(NAME_DIR)/libft.a
+TARGET = build/bin/libft.a
 
-$(OBJS_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o  $@ $(IFLAGS)
+$(TARGET): $(OBJS)
+	ar rcs $@ $^
 
-all: dir $(NAME)
-
-dir:
-	@if [ ! -d $(OBJS_DIR) ]; then \
-		$(MKDIR) $(OBJS_DIR); \
-	fi
-	@if [ ! -d $(NAME_DIR) ]; then \
-		$(MKDIR) $(NAME_DIR); \
-	fi
-
-$(NAME): $(OBJS)
-	$(AR) $(NAME) $(OBJS)
+build/%.o: %.c
+	@mkdir -p build/bin
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS)
+	@rm -rf build
 
-fclean: clean
-	$(RM) $(NAME)
-
-re: fclean all
-
-.PHONY: all clean fclean re dir
+.PHONY: clean
