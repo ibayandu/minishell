@@ -1,6 +1,7 @@
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I./
+CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS += -I./
 
 VPATH = srcs
 

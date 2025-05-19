@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/04 03:20:33 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 16:27:22 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_token
 {
 	t_token_type	token_type;
 	char			*value;
+	char			flags;
 }					t_token;
 
 #endif // TOKEN_H

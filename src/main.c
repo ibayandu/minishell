@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/11 20:32:43 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:56:01 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,36 +132,31 @@ void	print_ast(t_ast *node, int depth)
 #define blue "\033[0;34m"
 #define yellow "\033[0;33m"
 #define green "\033[0;32m"
+#define red "\033[31m"
 #define defaultcolor "\033[0;0m"
 
 int	main(void)
 {
-	t_list	*tokens;
-	t_list	*current;
 	t_token	*token;
 	char	*input;
-	t_ast	*ast;
+	void	*err_check;
 
-	input = "( echo\\ \"Başlangiç: $(date)\"\
+	input = " ( echo \"Başlangiç: $(date)\"\
 		&& cat <<EOF; echo \"Heredoc içerik\"; EOF )\
-		&& echo \"Alt işlem\\\" başarıli\"\
+		&& echo \"Alt işlem başarıli\"\
 		|| echo \"Alt işlem başarısız\" | grep \"içerik\"\
 		|| echo \"Eşleşme bulunamadı\" > output.txt && cat < output.txt\
-		|| cat <<EOF > new_output.txt; echo \"Yeni dosyaya yazılan içerik\"; EOF";
-	tokens = lexer(input);
-	current = tokens;
-	while (current)
+		|| cat <<EOF > new_output.txt; 'test' echo \"Yeni dosyaya yazılan içerik\" EOF\
+		export a=deneme";
+	err_check = init_lexer(input);
+	if (!err_check)
+		printf("Hata Var\n");
+	while ((token = get_next_token()))
 	{
-		token = (t_token *)current->content;
-		printf(yellow "Token Type: " blue "%-13s " yellow "Value: " green "%s" defaultcolor "\n",
-			token_type_to_string2(token->token_type), token->value);
-		current = current->next;
+		printf(yellow "Token Type: " blue "%-13s " yellow "Value: " green "%-35s" yellow "Token Flag" red "%d" defaultcolor "\n",
+			token_type_to_string2(token->token_type), token->value,
+			token->flags);
 	}
-	printf("deneme\n");
-	ast = parser(&tokens);
-	printf("deneme\n");
-	printf("---%d----\n", ast->left->type);
-	printf("test\n");
 	ft_free();
 	return (0);
 }

@@ -6,10 +6,11 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:14 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/27 20:59:20 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:32:25 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "common.h"
 #include "token_utils.h"
 
 /// @brief verilen parametreleri kullanarak t_token türünde bir token
@@ -26,12 +27,11 @@ t_token	*create_token(t_token_type type, char *value)
 	token = ft_malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->token_type = type;
 	token->value = value;
+	token->token_type = type;
+	if (token->token_type != T_EOF)
+		token->flags = get_token_flags(value);
 	if (!token->value)
-	{
-		ft_free();
 		return (NULL);
-	}
 	return (token);
 }

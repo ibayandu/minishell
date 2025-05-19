@@ -1,11 +1,11 @@
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra 
+CFLAGS = -Wall -Werror -Wextra -g
 CFLAGS += -I./incs -I../libs/libft/incs
 
 VPATH = token:token/utils:common
 
-SRCS = lexer.c common.c token_create.c token_str.c
+SRCS = lexer.c common.c token_create.c token_str.c token_flags.c
 
 OBJS = $(SRCS:%.c=build/%.o)
 

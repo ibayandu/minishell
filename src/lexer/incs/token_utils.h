@@ -6,17 +6,19 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:40:27 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/27 22:32:56 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:21:27 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_UTILS_H
 # define TOKEN_UTILS_H
 
+# include "common.h"
 # include "libft.h"
 # include "token.h"
 
-t_token	*create_token(t_token_type type, char *value);
+t_token	*create_token(t_token_type type, char *input);
 char	*get_token_str(char *input);
+int		get_token_flags(char *value);
 
 #endif // TOKEN_UTILS_H

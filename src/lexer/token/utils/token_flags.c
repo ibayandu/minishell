@@ -1,36 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helper.c                                           :+:      :+:    :+:   */
+/*   token_flags.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 02:03:55 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/04 21:12:27 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/05/19 17:21:39 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/05/19 17:25:51 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.h"
-#include "lexer.h"
-#include "libft.h"
+#include "common.h"
 
-int	match(t_list *tokens, t_token_type type)
+int	get_token_flags(char *value)
 {
-	t_token	*token;
+	int	flags;
 
-	if (!tokens || !tokens->content)
-		return (0);
-	token = (t_token *)tokens->content;
-	return (token->token_type == type);
-}
-
-t_token	*consume(t_list **tokens)
-{
-	if (*tokens)
+	flags = 0;
+	while (*value)
 	{
-		t_token *token = (t_token *)(*tokens)->content;
-		*tokens = (*tokens)->next;
-		return (token);
+		if (*value == '$')
+			flags |= DOLLAR;
+		else if (*value == '=')
+			flags |= ASSIGNMENT;
+		else if (*value == '\'' || *value == '"')
+		{
+			flags |= QUOTED;
+			if (*value == '"')
+				flags |= DOUBLE_QUOTE;
+			else
+				flags |= SINGLE_QUOTE;
+		}
+		value++;
 	}
-	return (NULL);
+	return (flags);
 }

@@ -6,24 +6,21 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:54 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/11 21:22:53 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:49:44 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "common.h"
 #include "token_utils.h"
 
-static int	is_token_continue(char current, char before)
+static int	is_quote_continue(char current, char quote)
 {
-	int	is_space;
-
-	is_space = ft_isspace(current);
-	return (current && (!is_space || (is_space && before == '\\')));
+	return (current && (current != quote));
 }
 
-static int	is_quote_continue(char current, char before, char quote)
+static int	is_quote(char current)
 {
-	return (current && (current != quote || (quote == '"' && before == '\\')));
+	return (current == '\'' || current == '"');
 }
 
 /// @brief bu fonksiyon verilen stringten sonraki ilk token'ın uzunluğunu döner.
@@ -51,14 +48,14 @@ static int	token_len(char *input)
 		return (2);
 	else if (get_token_type(input) != T_WORD)
 		return (1);
-	while (is_token_continue(input[len], input[len - 1]))
+	while (!ft_isspace(input[len]))
 	{
 		if (get_token_type(input + len) != T_WORD)
 			return (len);
-		else if (input[len] == '\'' || input[len] == '"')
+		else if (is_quote(input[len]))
 		{
 			quote = input[len++];
-			while (is_quote_continue(input[len], input[len - 1], quote))
+			while (is_quote_continue(input[len], quote))
 				len++;
 		}
 		len++;
