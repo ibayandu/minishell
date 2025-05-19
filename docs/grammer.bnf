@@ -2,7 +2,7 @@
 %token <number> NUMBER
 %token AND_AND OR_OR GREATER_GREATER LESS_LESS
 
-%type <command> inputunit command pipeline list1 compound_list simple_list1 simple_command
+%type <command> inputunit command pipeline list compound_list simple_list simple_command
 %type <redirect> redirection redirection_list
 %type <element> simple_command_element
 %type <word_list> word_list
@@ -15,15 +15,11 @@
 %right '|'
 %%
 
-inputunit:	simple_list1 list_terminator
+inputunit:	simple_list list_terminator
 		|	'\n'
 		|	error '\n'
 		|	error EOF
 		|	EOF
-		;
-
-word_list:	WORD
-		|	word_list WORD
 		;
 
 redirection:	'>' WORD
@@ -58,13 +54,13 @@ command:	simple_command
 		|	'(' compound_list ')' redirection_list
 		;
 
-compound_list:	newline_list list1 '\n' newline_list
-			|	newline_list list1
+compound_list:	( list '\n' )
+			|	(list)
 			;
 
-list1:	list1 AND_AND newline_list list1
-	|	list1 OR_OR newline_list list1
-	|	list1 '\n' newline_list list1
+list:	list AND_AND list
+	|	list OR_OR list
+	|	list '\n' list
 	|	pipeline
 	;
 
@@ -72,15 +68,12 @@ list_terminator:	'\n'
 				|	EOF
 				;
 
-newline_list:	newline_list '\n'
-			;
-
-simple_list1:	simple_list1 AND_AND newline_list simple_list1
-			|	simple_list1 OR_OR newline_list simple_list1
+simple_list:	simple_list AND_AND simple_list
+			|	simple_list OR_OR simple_list
 			|	pipeline
 			;
 
-pipeline:	pipeline '|' newline_list pipeline
+pipeline:	pipeline '|' pipeline
 		|	command
 		;
 %%

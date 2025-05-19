@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 20:45:57 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/16 23:39:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/19 14:16:37 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,8 @@
 # define CSPECVAR 0x0800	/* single-character shell variable name */
 # define CSUBSTOP 0x1000	/* values of OP for ${word[:]OPstuff} */
 # define CBLANK 0x2000	/* whitespace (blank) character */
+
+// Command Flags
+# define CMD_WANT_SUBSHELL 0x01
 
 #endif // FLAGS_H

@@ -6,50 +6,45 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/17 00:06:28 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/19 14:13:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "flags.h"
 
-char	*string_extract_single_quoted (string, sindex, allowesc)
-     char *string;
-     int *sindex;
-     int allowesc;
+char	*string_extract_single_quoted(char *string, int *sindex, int allowesc)
 {
-  register int i;
-  size_t slen;
-  char *t;
-  int pass_next;
-  DECLARE_MBSTATE;
+	int		i;
+	size_t	slen;
+	char	*t;
+	int		pass_next;
 
-  /* Don't need slen for ADVANCE_CHAR unless multibyte chars possible. */
-  slen = (MB_CUR_MAX > 1) ? strlen (string + *sindex) + *sindex : 0;
-  i = *sindex;
-  pass_next = 0;
-  while (string[i])
-    {
-      if (pass_next)
+	if (MB_CUR_MAX >  1)
+		slen = ft_strlen(string + *sindex) + *sindex;
+	else
+		slen = 0;
+	i = *sindex;
+	pass_next = 0;
+	while (string[i])
 	{
-	  pass_next = 0;
-	  ADVANCE_CHAR (string, slen, i);
-	  continue;
+		if (pass_next)
+		{
+			pass_next = 0;
+			i += ft_mbrlen(string + i, slen - i);
+			continue;
+		}
+		if (allowesc && string[i] == '\\')
+			pass_next++;
+		else if (string[i] == '\'')
+			break;
+		i += ft_mbrlen(string + i, slen - i);
 	}
-      if (allowesc && string[i] == '\\')
-	pass_next++;
-      else if (string[i] == '\'')
-        break;
-      ADVANCE_CHAR (string, slen, i);
-    }
-
-  t = substring (string, *sindex, i);
-
-  if (string[i])
-    i++;
-  *sindex = i;
-
-  return (t);
+	t = ft_substr(string, *sindex, i);
+	if (string[i])
+		i++;
+	*sindex = i;
+	return (t);
 }
 
 char	*string_quote_removal(char *string, int quoted)
@@ -94,7 +89,18 @@ char	*string_quote_removal(char *string, int quoted)
 			{
 				tindex = sindex + 1;
 				temp = string_extract_single_quoted(string, &tindex, 0);
+				if (temp)
+				{
+					ft_strcpy(r, temp);
+					r += ft_strlen(r);
+				}
+				sindex = tindex;
 			}
+		}
+		else if (c == '"')
+		{
+			dquote = 1 - dquote;
+			sindex++;
 		}
 		else
 		{
@@ -102,49 +108,6 @@ char	*string_quote_removal(char *string, int quoted)
 			sindex++;
 		}
 	}
-	for (dquote = sindex = 0; c = string[sindex];)
-    {
-      switch (c)
-	{
-	case '\\':
-	  c = string[++sindex];
-	  if (c == 0)
-	    {
-	      *r++ = '\\';
-	      break;
-	    }
-	  if (((quoted & (Q_HERE_DOCUMENT|Q_DOUBLE_QUOTES)) || dquote) && ft_charflag(c, CBSDQUOTE))
-	    *r++ = '\\';
-	  /* FALLTHROUGH */
-
-	default:
-	  SCOPY_CHAR_M (r, string, send, sindex);
-	  break;
-
-	case '\'':
-	  if ((quoted & (Q_HERE_DOCUMENT|Q_DOUBLE_QUOTES)) || dquote)
-	    {
-	      *r++ = c;
-	      sindex++;
-	      break;
-	    }
-	  tindex = sindex + 1;
-	  temp = string_extract_single_quoted (string, &tindex, 0);
-	  if (temp)
-	    {
-	      strcpy (r, temp);
-	      r += strlen (r);
-	      free (temp);
-	    }
-	  sindex = tindex;
-	  break;
-
-	case '"':
-	  dquote = 1 - dquote;
-	  sindex++;
-	  break;
-	}
-    }
-    *r = '\0';
-    return (result_string);
+	*r = '\0';
+	return (result_string);
 }
