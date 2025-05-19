@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:12 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 19:24:15 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 22:18:23 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,7 @@
 
 void	*init_lexer(char *input);
 t_token	*get_next_token(void);
+t_token *get_current_token();
+int		consume_token(t_token_type type);
 
 #endif // LEXER_H

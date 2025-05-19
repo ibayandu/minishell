@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 20:39:37 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:41:16 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ const char	*token_type_to_string2(t_token_type type)
 int	main(void)
 {
 	t_token	*token;
+	t_token *token2;
 	char	*input;
 	void	*err_check;
 
@@ -69,6 +70,13 @@ int	main(void)
 		printf(yellow "Token Type: " blue "%-13s " yellow "Value: " green "%-35s" yellow "Token Flag" red "%d" defaultcolor "\n",
 			token_type_to_string2(token->token_type), token->value,
 			token->flags);
+		if (token->token_type == T_WORD)
+		{
+			token2 = get_current_token();
+			printf(yellow "Token Type: " blue "%-13s " yellow "Value: " green "%-35s" yellow "Token Flag" red "%d" defaultcolor "\n",
+			token_type_to_string2(token2->token_type), token2->value,
+			token2->flags);
+		}
 	}
 	ft_free();
 	return (0);
