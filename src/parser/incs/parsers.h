@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   parsers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/20 18:47:21 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/05/20 18:48:41 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/05/20 18:50:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#ifndef PARSERS_H
+# define PARSERS_H
 
 #include "structs.h"
 
-size_t		ft_mbrlen(const char *s, size_t max_len);
-int			ft_charflag(char c, int flag);
-t_word_list	*ft_revword(t_word_list *list);
-t_redirect	*ft_revredir(t_redirect *list);
+t_command	*parse_inputunit();
+t_redirect	*parse_redirection();
+t_element	*parse_simple_command_element();
+t_redirect	*parse_redirection_list();
+t_command	*parse_simple_command();
+t_command	*parse_command();
+t_command	*parse_list();
+t_command	*parse_simple_list();
+t_command	*parse_pipeline();
 
-#endif // UTILS_H
+#endif // PARSERS_H

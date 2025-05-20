@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:40:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/19 14:46:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/20 18:39:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,7 @@ t_command	*make_simple_command(t_element element, t_command *command)
 t_command	*clean_simple_command(t_command *command)
 {
 	if (command->type != CMD_SIMPLE)
-	{
-		// ERROR: not matching type
-	}
+		;// ERROR: not matching type
 	else
 	{
 		command->value.simple->words = ft_revword(command->value.simple->words);

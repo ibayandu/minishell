@@ -3,11 +3,11 @@ RM = rm -rf
 AR = ar rcs
 MKDIR = mkdir -p
 
-IFLAGS = -I./incs -I../lexer/incs 
-CFLAGS = -Wall -Werror -Wextra
+IFLAGS = -I./incs -I../lexer -I../libs/collector/incs -I../libs/libft/incs -I../lexer/incs
+CFLAGS = -Wall -Werror -Wextra -g
 
-VPATH = srcs
-SRCS = parser.c
+VPATH = srcs:srcs/makers:srcs/utils:srcs/parsers
+SRCS = parser.c cmd_maker.c redir_maker.c simple_maker.c word_maker.c ft_listrev.c
 
 OBJS_DIR = build/objs
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
@@ -32,10 +32,10 @@ $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) build/objs
 
-fclean: clean
-	$(RM) $(NAME)
+fclean:
+	$(RM) build
 
 re: fclean all
 

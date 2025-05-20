@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/19 14:57:44 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/20 22:27:19 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,9 @@
 #include "flags.h"
 #include "libft.h"
 
-t_redirect	*make_redirection(t_redir source, t_redir_type redir_type, t_redir dest_and_filename, int flags)
+t_redirect	*make_redirection(t_word *source, t_redir_type redir_type, t_word *dest_and_filename)
 {
 	t_redirect	*temp;
-	t_word		*w;
-	int			wlen;
-	long		lfd;
 
 	temp = ft_malloc(sizeof(t_redirect));
 	temp->redirector = source;
@@ -29,7 +26,6 @@ t_redirect	*make_redirection(t_redir source, t_redir_type redir_type, t_redir de
 	temp->here_doc_eof = 0;
 	temp->redir_type = redir_type;
 	temp->flags = 0;
-	temp->rflags = flags;
 	temp->next = NULL;
 
 	if (redir_type == REDIR_OUTPUT)
@@ -39,12 +35,17 @@ t_redirect	*make_redirection(t_redir source, t_redir_type redir_type, t_redir de
 	else if (redir_type == REDIR_APPEND)
 		temp->flags = O_APPEND | O_WRONLY | O_CREAT;
 	else if (redir_type != REDIR_UNTIL)
-		// ERROR: not type match and abort
+		;
+	else
+		;// ERROR: not type match and abort
 	return (temp);
 }
 
 void	make_here_document(t_redirect *temp)
 {
+	write(1, "HEREDOC PARSED\n", 16);
+	(void)temp;
+	/*
 	int		redir_len;
 	char	*redir_word;
 	char	*document;
@@ -131,5 +132,6 @@ void	make_here_document(t_redirect *temp)
 		temp->redirectee.filename->word = document;
 		here_doc_first_line = 0;
 	}
+	*/
 }
 

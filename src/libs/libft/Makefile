@@ -18,9 +18,11 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 
 OBJS = $(SRCS:%.c=build/%.o)
 
-TARGET = build/libs/libft.a
+NAME = build/libs/libft.a
 
-$(TARGET): $(OBJS)
+all: $(NAME)
+
+$(NAME): $(OBJS)
 	ar rcs $@ $^
 
 build/%.o: %.c
@@ -28,6 +30,11 @@ build/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
+	@rm -rf build/objs
+
+fclean:
 	@rm -rf build
 
-.PHONY: clean
+re: fclean all
+
+.PHONY: clean fclean all re
