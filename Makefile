@@ -56,7 +56,7 @@ norm:
 run:
 	./$(NAME)
 
-valgrind:
+leak:
 	valgrind --leak-check=full ./$(NAME)
 
-.PHONY:	program all clean fclean re run
+.PHONY:	program all clean fclean re run leak

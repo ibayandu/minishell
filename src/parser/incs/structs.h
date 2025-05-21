@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/20 22:25:49 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/21 19:29:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_simple_cmd
 
 typedef struct s_connect_cmd
 {
+	int			ignore;
 	t_command	*first;
 	t_command	*second;
 	t_cnt_type	type;

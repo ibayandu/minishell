@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:54 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/27 21:40:08 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:31:10 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,6 @@ char	*get_token_str(char *input)
 {
 	char	*token;
 
-	token = ft_calloc(token_len(input), 1);
+	token = ft_calloc(token_len(input) + 1, 1);
 	return (ft_memcpy(token, input, token_len(input)));
 }

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:34 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/20 22:26:48 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/21 22:22:47 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ t_redirect	*parse_redirection()
 	t_redir_type	redir_type;
 
 
-	if (get_current_token()->token_type == T_WORD /*&& get_current_token()->flags & F_NUMBER */)
+	source = NULL;
+	dest = NULL;
+	t_token *token = get_current_token();
+	(void)token;
+	if (get_current_token()->token_type == T_WORD && get_current_token()->flags & F_NUMBER )
 	{
 		source = make_word(get_current_token()->value, get_current_token()->flags);
 		get_next_token();
@@ -57,6 +61,13 @@ t_redirect	*parse_redirection()
 	else
 		return (NULL); // ERROR: Expected redirection operator after NUMBER
 	get_next_token();
+	if (!source)
+	{
+		if (redir_type == REDIR_OUTPUT || redir_type == REDIR_APPEND)
+			source = make_word("1", F_NUMBER);
+        else if (redir_type == REDIR_INPUT || redir_type == REDIR_UNTIL)
+			source = make_word("0", F_NUMBER);
+	}
 
 	if (get_current_token()->token_type == T_WORD)
 	{
@@ -85,7 +96,9 @@ t_element	*parse_simple_command_element()
 		return (NULL); // ERROR: Malloc failed for t_element
 	elem->word = NULL;
 	elem->redirect = NULL;
-	if (get_current_token()->token_type == T_WORD)
+	t_token *token = get_current_token();
+	(void)token;
+	if (get_current_token()->token_type == T_WORD && !(get_current_token()->flags & F_NUMBER))
 	{
 		elem->word = make_word(get_current_token()->value, get_current_token()->flags);
 		if (!elem->word)
