@@ -1,11 +1,9 @@
-%token <word> WORD ASSIGNMENT_WORD
-%token <number> NUMBER
-%token AND_AND OR_OR GREATER_GREATER LESS_LESS
+%token <word> WORD
+%token AND_AND OR_OR GREATER_GREATER LESS_LESS NUMBER_GREATER NUMBER_LESS NUMBER_GREATER_GREATER NUMBER_LESS NUMBER_LESS_LESS
 
 %type <command> inputunit command pipeline list simple_list simple_command
 %type <redirect> redirection redirection_list
 %type <element> simple_command_element
-%type <word_list> word_list
 
 %start inputunit
 
@@ -21,16 +19,15 @@ inputunit:	simple_list EOF
 
 redirection:	'>' WORD
 			|	'<' WORD
-			|	NUMBER '>' WORD
-			|	NUMBER '<' WORD
+			|	NUMBER_GREATER WORD
+			|	NUMBER_LESS WORD
 			|	GREATER_GREATER WORD
-			|	NUMBER GREATER_GREATER WORD
+			|	NUMBER_GREATER_GREATER WORD
 			|	LESS_LESS WORD
-			|	NUMBER LESS_LESS WORD
+			|	NUMBER_LESS_LESS WORD
 			;
 
 simple_command_element: WORD
-					|	ASSIGNMENT_WORD
 					|	redirection
 					;
 

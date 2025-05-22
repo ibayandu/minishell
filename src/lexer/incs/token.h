@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/21 22:34:43 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/22 19:31:51 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@
 # define F_SINGLE_QUOTE 4
 # define F_DOUBLE_QUOTE 8
 # define F_ASSIGNMENT 16
-# define F_NUMBER 32
-# define F_STAR 64
-
+# define F_STAR 32
 
 /// @brief token türlerini temsil eden enum.
 typedef enum s_token_type
@@ -34,6 +32,10 @@ typedef enum s_token_type
 	T_DGREAT,
 	T_GREAT,
 	T_LESS,
+	T_NUMBER_LESS,
+	T_NUMBER_GREAT,
+	T_NUMBER_DLESS,
+	T_NUMBER_DGREAT,
 	T_PIPE,
 	T_LPARANTHESE,
 	T_RPARANTHESE,

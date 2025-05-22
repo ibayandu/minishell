@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:34 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/21 22:22:47 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/22 21:03:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,33 +42,33 @@ t_redirect	*parse_redirection()
 
 
 	source = NULL;
-	dest = NULL;
-	t_token *token = get_current_token();
-	(void)token;
-	if (get_current_token()->token_type == T_WORD && get_current_token()->flags & F_NUMBER )
-	{
-		source = make_word(get_current_token()->value, get_current_token()->flags);
-		get_next_token();
-	}
-	if (get_current_token()->token_type == T_GREAT)
+	if (get_current_token()->token_type == T_NUMBER_LESS
+		|| get_current_token()->token_type == T_NUMBER_GREAT
+		|| get_current_token()->token_type == T_NUMBER_DGREAT
+		|| get_current_token()->token_type == T_NUMBER_DLESS)
+		source = make_word(ft_itoa(ft_atoi(get_current_token()->value)), 0);
+	if (get_current_token()->token_type == T_GREAT
+		|| get_current_token()->token_type == T_NUMBER_GREAT)
 		redir_type = REDIR_OUTPUT;
-	else if (get_current_token()->token_type == T_LESS)
+	else if (get_current_token()->token_type == T_LESS
+		|| get_current_token()->token_type == T_NUMBER_LESS)
 		redir_type = REDIR_INPUT;
-	else if (get_current_token()->token_type == T_DGREAT)
+	else if (get_current_token()->token_type == T_DGREAT
+		|| get_current_token()->token_type == T_NUMBER_DGREAT)
 		redir_type = REDIR_APPEND;
-	else if (get_current_token()->token_type == T_DLESS)
+	else if (get_current_token()->token_type == T_DLESS
+		|| get_current_token()->token_type == T_NUMBER_DLESS)
 		redir_type = REDIR_UNTIL;
 	else
-		return (NULL); // ERROR: Expected redirection operator after NUMBER
+		return (NULL); // ERROR: Expected redirection operator
 	get_next_token();
 	if (!source)
 	{
 		if (redir_type == REDIR_OUTPUT || redir_type == REDIR_APPEND)
-			source = make_word("1", F_NUMBER);
-        else if (redir_type == REDIR_INPUT || redir_type == REDIR_UNTIL)
-			source = make_word("0", F_NUMBER);
+			source = make_word("1", 0);
+		else if (redir_type == REDIR_INPUT || redir_type == REDIR_UNTIL)
+			source = make_word("0", 0);
 	}
-
 	if (get_current_token()->token_type == T_WORD)
 	{
 		dest = make_word(get_current_token()->value, get_current_token()->flags);
@@ -89,16 +89,12 @@ t_redirect	*parse_redirection()
 
 t_element	*parse_simple_command_element()
 {
-	t_element		*elem;
+	t_element	*elem;
 
 	elem = ft_malloc(sizeof(t_element));
 	if (!elem)
 		return (NULL); // ERROR: Malloc failed for t_element
-	elem->word = NULL;
-	elem->redirect = NULL;
-	t_token *token = get_current_token();
-	(void)token;
-	if (get_current_token()->token_type == T_WORD && !(get_current_token()->flags & F_NUMBER))
+	if (get_current_token()->token_type == T_WORD)
 	{
 		elem->word = make_word(get_current_token()->value, get_current_token()->flags);
 		if (!elem->word)
@@ -149,7 +145,9 @@ t_command	*parse_simple_command()
 	{
 		token_type = get_current_token()->token_type;
 		if (token_type == T_WORD || token_type == T_GREAT || token_type == T_LESS
-		|| token_type == T_DGREAT || token_type == T_DLESS)
+		|| token_type == T_DGREAT || token_type == T_DLESS
+		|| token_type == T_NUMBER_DGREAT || token_type == T_NUMBER_DLESS
+		|| token_type == T_NUMBER_LESS || token_type == T_NUMBER_GREAT)
 		{
 			element = parse_simple_command_element();
 			if (!element)
