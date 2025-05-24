@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remquot.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/19 14:13:07 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/24 21:58:40 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "utils.h"
 #include "flags.h"
 
 char	*string_extract_single_quoted(char *string, int *sindex, int allowesc)
@@ -91,7 +92,7 @@ char	*string_quote_removal(char *string, int quoted)
 				temp = string_extract_single_quoted(string, &tindex, 0);
 				if (temp)
 				{
-					ft_strcpy(r, temp);
+					ft_strlcpy(r, temp, ft_strlen(temp));
 					r += ft_strlen(r);
 				}
 				sindex = tindex;
@@ -104,7 +105,7 @@ char	*string_quote_removal(char *string, int quoted)
 		}
 		else
 		{
-			*r++ = string[sindex++];
+			*r++ = string[sindex];
 			sindex++;
 		}
 	}

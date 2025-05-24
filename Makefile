@@ -4,6 +4,7 @@ CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
 CFLAGS += -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser/incs -Isrc/libs/collector/incs
+CFLAGS += 
 
 VPATH = src
 
@@ -25,19 +26,19 @@ src/build/%.o: %.c
 all:
 	@$(MAKE) -C src/libs/collector
 	@$(MAKE) -C src/libs/libft
-#	@$(MAKE) -C src/parser
+	@$(MAKE) -C src/parser
 	@$(MAKE) -C src/lexer
 	@$(MAKE) program
 
 program: ${NAME}
 
 $(NAME):  $(OBJS) $(PARSER) $(LEXER) $(LIBFT) $(COLLECTOR)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ -L/usr/local/lib -I/usr/local/include -lreadline
 
 clean:
 	@rm -rf src/build
 	@$(MAKE) clean -C src/lexer
-#	@$(MAKE) clean -C src/parser
+	@$(MAKE) clean -C src/parser
 	@$(MAKE) clean -C src/libs/libft
 	@$(MAKE) clean -C src/libs/collector
 

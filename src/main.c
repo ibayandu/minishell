@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/24 19:03:46 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/25 00:26:58 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "libft.h"
 #include "parsers.h"
 #include <stdio.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 void print_command(t_command *command, int cmd_count, int tab_count);
 
@@ -196,7 +198,7 @@ int	main(void)
 
 	//input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo \"Heredoc içerik\") && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)";
 
-	input = "echo deneme -2>ismet.txt";
+	input = "cat << \"deneme\" > ismet.txt";
 
 	// char *input = "echo hello | grep h | cat > abc";
 	char *err_check = init_lexer(input);

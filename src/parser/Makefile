@@ -7,7 +7,7 @@ IFLAGS = -I./incs -I../lexer -I../libs/collector/incs -I../libs/libft/incs -I../
 CFLAGS = -Wall -Werror -Wextra -g
 
 VPATH = srcs:srcs/makers:srcs/utils:srcs/parsers
-SRCS = parser.c cmd_maker.c redir_maker.c simple_maker.c word_maker.c ft_listrev.c
+SRCS = parser.c cmd_maker.c redir_maker.c simple_maker.c word_maker.c ft_listrev.c ft_remquot.c ft_mbrlen.c ft_charflag.c
 
 OBJS_DIR = build/objs
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)

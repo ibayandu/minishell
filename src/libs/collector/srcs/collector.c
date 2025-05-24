@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   collector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:57:12 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/16 20:04:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/24 22:52:27 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "utils.h"
 #include "collector.h"
+#include "utils.h"
+#include <stdlib.h>
 
 void	*ft_malloc(size_t size)
 {
@@ -44,12 +44,12 @@ void	*ft_calloc(size_t count, size_t size)
 
 void	*ft_realloc(void *old_data, size_t new_size)
 {
-	size_t					i;
-	void					*res;
-	unsigned char			*new_ptr;
-	unsigned char *const	old_ptr = old_data;
-	size_t					old_size;
+	size_t			i;
+	void			*res;
+	unsigned char	*new_ptr;
+	size_t			old_size;
 
+	unsigned char *const old_ptr = old_data;
 	res = malloc(new_size);
 	if (!res)
 		return (NULL);
@@ -66,4 +66,10 @@ void	*ft_realloc(void *old_data, size_t new_size)
 void	ft_free(void)
 {
 	ft_clear_block(ft_add_new_block(NULL, 0)->head);
+}
+
+void	*ft_absorb(void *addr)
+{
+	ft_add_new_block(addr, 1);
+	return (addr);
 }
