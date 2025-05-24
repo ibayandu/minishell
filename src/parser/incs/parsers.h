@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   parsers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:53:12 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 22:18:23 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/05/20 18:48:41 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/05/20 18:50:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef PARSERS_H
+# define PARSERS_H
 
-# include "libft.h"
-# include "token.h"
+#include "structs.h"
 
-void	*init_lexer(char *input);
-t_token	*get_next_token(void);
-t_token *get_current_token();
-int		consume_token(t_token_type type);
+t_command	*parse_inputunit();
+t_redirect	*parse_redirection();
+t_element	*parse_simple_command_element();
+t_redirect	*parse_redirection_list();
+t_command	*parse_simple_command();
+t_command	*parse_command();
+t_command	*parse_list();
+t_command	*parse_simple_list();
+t_command	*parse_pipeline();
 
-#endif // LEXER_H
+#endif // PARSERS_H

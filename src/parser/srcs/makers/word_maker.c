@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/19 15:37:17 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/20 18:36:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,18 @@ t_word	*make_bare_word(const char *string)
 	return (temp);
 }
 
-t_word	*make_word_flags(t_word *w, const char *string)
+t_word	*make_word_flags(t_word *w, const char flags)
 {
-	int		i;
-	size_t	slen;
-
-	i = 0;
-	slen = ft_strlen(string);
-	while (i < slen)
-	{
-		if (string[i] == '$')
-			w->flags |= W_HASDOLLAR;
-		else if (string[i] == '\''
-				|| string[i] == '"')
-			w->flags |= W_QUOTED;
-		i += ft_mbrlen(string + i, slen - i);
-	}
+	w->flags = flags;
 	return (w);
 }
 
-t_word	*make_word(const char *string)
+t_word	*make_word(const char *string, const char flags)
 {
 	t_word	*temp;
 
 	temp = make_bare_word(string);
-	return (make_word_flags(temp, string));
+	return (make_word_flags(temp, flags));
 }
 
 t_word	*make_word_from_token(int token)
@@ -76,5 +63,5 @@ t_word	*make_word_from_token(int token)
 	tokenizer[0] = token;
 	tokenizer[1] = '\0';
 
-	return (make_word(tokenizer));
+	return (make_word(tokenizer, 0));
 }

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 14:23:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/21 19:29:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef STRUCTS_H
+# define STRUCTS_H
 
 typedef struct s_command	t_command;
 
@@ -55,22 +55,14 @@ typedef struct s_word_list
 
 }	t_word_list;
 
-typedef union u_redir
-{
-	int		fd;
-	t_word	*filename;
-
-}	t_redir;
-
 typedef struct s_redirect
 {
-	int					rflags;
 	int					flags;
 	char				*here_doc_eof;
-	t_redir				redirector;
-	t_redir				redirectee;
+	t_word				*redirector;
+	t_word				*redirectee;
 	t_redir_type		redir_type;
-	struct redirect		*next;
+	struct s_redirect		*next;
 
 }	t_redirect;
 
@@ -91,6 +83,7 @@ typedef struct s_simple_cmd
 
 typedef struct s_connect_cmd
 {
+	int			ignore;
 	t_command	*first;
 	t_command	*second;
 	t_cnt_type	type;
@@ -119,4 +112,4 @@ typedef struct s_command
 }	t_command;
 
 
-#endif // PARSER_H
+#endif // STRUCTS_H

@@ -1,43 +1,33 @@
-%token <word> WORD ASSIGNMENT_WORD REDIR_WORD
-%token <number> NUMBER
-%token AND_AND OR_OR GREATER_GREATER LESS_LESS
+%token <word> WORD
+%token AND_AND OR_OR GREATER_GREATER LESS_LESS NUMBER_GREATER NUMBER_LESS NUMBER_GREATER_GREATER NUMBER_LESS NUMBER_LESS_LESS
 
-%type <command> inputunit command pipeline list compound_list simple_list simple_command
+%type <command> inputunit command pipeline list simple_list simple_command
 %type <redirect> redirection redirection_list
 %type <element> simple_command_element
-%type <word_list> word_list
-%type <number> list_terminator
 
 %start inputunit
 
-%left '\n' EOF
+%left EOF
 %left AND_AND OR_OR
 %right '|'
 %%
 
-inputunit:	simple_list list_terminator
-		|	'\n'
-		|	error '\n'
+inputunit:	simple_list EOF
 		|	error EOF
 		|	EOF
 		;
 
 redirection:	'>' WORD
 			|	'<' WORD
-			|	NUMBER '>' WORD
-			|	NUMBER '<' WORD
-			|	REDIR_WORD '>' WORD
-			|	REDIR_WORD '<' WORD
+			|	NUMBER_GREATER WORD
+			|	NUMBER_LESS WORD
 			|	GREATER_GREATER WORD
-			|	NUMBER GREATER_GREATER WORD
-			|	REDIR_WORD GREATER_GREATER WORD
+			|	NUMBER_GREATER_GREATER WORD
 			|	LESS_LESS WORD
-			|	NUMBER LESS_LESS WORD
-			|	REDIR_WORD LESS_LESS WORD
+			|	NUMBER_LESS_LESS WORD
 			;
 
 simple_command_element: WORD
-					|	ASSIGNMENT_WORD
 					|	redirection
 					;
 
@@ -50,23 +40,14 @@ simple_command:	simple_command_element
 			;
 
 command:	simple_command
-		|	'(' compound_list ')'
-		|	'(' compound_list ')' redirection_list
+		|	'(' list ')'
+		|	'(' list ')' redirection_list
 		;
-
-compound_list:	( list '\n' )
-			|	(list)
-			;
 
 list:	list AND_AND list
 	|	list OR_OR list
-	|	list '\n' list
 	|	pipeline
 	;
-
-list_terminator:	'\n'
-				|	EOF
-				;
 
 simple_list:	simple_list AND_AND simple_list
 			|	simple_list OR_OR simple_list

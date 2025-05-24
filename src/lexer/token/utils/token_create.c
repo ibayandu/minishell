@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:14 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 20:51:49 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/24 19:01:57 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_token	*create_token(t_token_type type, char *value)
 	token->token_type = type;
 	if (token->token_type != T_EOF)
 		token->flags = get_token_flags(value);
-	if (!token->value)
+	if (!token->value && type != T_EOF)
 		return (NULL);
 	return (token);
 }

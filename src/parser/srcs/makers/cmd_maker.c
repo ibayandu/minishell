@@ -6,12 +6,12 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:37:01 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/19 14:46:59 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/20 18:58:36 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
-#include "parser.h"
+#include "structs.h"
 #include "flags.h"
 #include "collector.h"
 
@@ -50,5 +50,5 @@ t_command	*make_subshell_command(t_command *command)
 	temp = ft_malloc(sizeof(t_subshell_cmd));
 	temp->command = command;
 	temp->flags = CMD_WANT_SUBSHELL;
-	return (make_command (CMD_SUBSHELL, temp));
+	return (make_command (CMD_SUBSHELL, (t_simple_cmd *)temp));
 }

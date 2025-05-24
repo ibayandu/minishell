@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   ft_nbrlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 00:53:12 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 22:18:23 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/05/22 20:20:05 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/05/24 19:08:19 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "libft.h"
 
-# include "libft.h"
-# include "token.h"
+unsigned int	ft_nbrlen(const char *str)
+{
+	int	i;
 
-void	*init_lexer(char *input);
-t_token	*get_next_token(void);
-t_token *get_current_token();
-int		consume_token(t_token_type type);
-
-#endif // LEXER_H
+	if (!str)
+		return (0);
+	i = -1;
+	while (str[++i])
+		if (!ft_isdigit(str[i]))
+			break;
+	return (i);
+}

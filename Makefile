@@ -3,7 +3,7 @@ MAKEFLAGS+=--no-print-directory
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser -Isrc/parser/incs -Isrc/libs/collector/incs
+CFLAGS += -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser/incs -Isrc/libs/collector/incs
 
 VPATH = src
 
@@ -31,7 +31,7 @@ all:
 
 program: ${NAME}
 
-$(NAME): $(OBJS) $(LEXER) $(LIBFT) $(COLLECTOR)
+$(NAME):  $(OBJS) $(PARSER) $(LEXER) $(LIBFT) $(COLLECTOR)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
@@ -43,6 +43,10 @@ clean:
 
 fclean: clean
 	@rm -rf $(NAME)
+	@$(MAKE) fclean -C src/lexer
+	@$(MAKE) fclean -C src/parser
+	@$(MAKE) fclean -C src/libs/libft
+	@$(MAKE) fclean -C src/libs/collector
 
 re: fclean all
 
@@ -52,7 +56,7 @@ norm:
 run:
 	./$(NAME)
 
-valgrind:
+leak:
 	valgrind --leak-check=full ./$(NAME)
 
-.PHONY:	program all clean fclean re run
+.PHONY:	program all clean fclean re run leak

@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:54 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/04/27 21:40:08 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/24 19:02:35 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,15 @@ static int	token_len(char *input)
 	len = 0;
 	if (get_token_type(input) >= 1 && get_token_type(input) <= 4)
 		return (2);
+	else if (get_token_type(input) == 7 || get_token_type(input) == 8)
+		return (ft_nbrlen(input) + 1);
+	else if (get_token_type(input) == 9 || get_token_type(input) == 10)
+		return (ft_nbrlen(input) + 2);
 	else if (get_token_type(input) != T_WORD)
 		return (1);
 	while (input[len] && !ft_isspace(input[len]))
 	{
-		if (get_token_type(input + len) != T_WORD)
+		if (get_token_type(input + len) != T_WORD && !ft_isdigit(input[len]))
 			return (len);
 		else if (is_quote(input[len]))
 		{
@@ -72,6 +76,6 @@ char	*get_token_str(char *input)
 {
 	char	*token;
 
-	token = ft_calloc(token_len(input), 1);
+	token = ft_calloc(token_len(input) + 1, 1);
 	return (ft_memcpy(token, input, token_len(input)));
 }
