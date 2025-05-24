@@ -58,6 +58,6 @@ run:
 	./$(NAME)
 
 leak:
-	valgrind --leak-check=full ./$(NAME)
+	valgrind --leak-check=full --suppressions=readline.supp ./$(NAME)
 
 .PHONY:	program all clean fclean re run leak

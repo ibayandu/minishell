@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remquot.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/24 21:58:40 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/25 00:44:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,37 +66,38 @@ char	*string_quote_removal(char *string, int quoted)
 	r = result_string;
 	dquote = 0;
 	sindex = 0;
-	while (string[sindex])
+	c = string[sindex];
+	while(c)
 	{
-		c = string[sindex];
 		if (c == '\\')
 		{
 			c = string[++sindex];
 			if (c == 0)
 			{
 				*r++ = '\\';
+				continue;
 			}
-			else if (((quoted & (Q_HERE_DOCUMENT | Q_DOUBLE_QUOTES)) || dquote) && ft_charflag(c, CBSDQUOTE))
+			if (((quoted & (Q_HERE_DOCUMENT | Q_DOUBLE_QUOTES)) || dquote) && ft_charflag(c, CBSDQUOTE))
 				*r++ = '\\';
+			*(r)++ = string[sindex];
+			sindex++;
 		}
 		else if (c == '\'')
 		{
-			if ((quoted & (Q_DOUBLE_QUOTES | Q_DOUBLE_QUOTES)) || dquote)
+			if ((quoted & (Q_HERE_DOCUMENT|Q_DOUBLE_QUOTES)) || dquote)
 			{
 				*r++ = c;
 				sindex++;
+				continue;
 			}
-			else
+			tindex = sindex + 1;
+			temp = string_extract_single_quoted(string, &tindex, 0);
+			if (temp)
 			{
-				tindex = sindex + 1;
-				temp = string_extract_single_quoted(string, &tindex, 0);
-				if (temp)
-				{
-					ft_strlcpy(r, temp, ft_strlen(temp));
-					r += ft_strlen(r);
-				}
-				sindex = tindex;
+				ft_strlcpy(r, temp, ft_strlen(temp));
+				r += ft_strlen(r);
 			}
+			sindex = tindex;
 		}
 		else if (c == '"')
 		{
@@ -105,9 +106,10 @@ char	*string_quote_removal(char *string, int quoted)
 		}
 		else
 		{
-			*r++ = string[sindex];
+			*(r)++ = string[sindex];
 			sindex++;
 		}
+		c = string[sindex];
 	}
 	*r = '\0';
 	return (result_string);

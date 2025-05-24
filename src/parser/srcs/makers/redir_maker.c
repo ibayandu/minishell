@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_maker.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/25 00:17:36 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/25 00:46:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ void	make_here_document(t_redirect *temp)
 		len = ft_strlen(line);
 		if (len + document_index >= document_size)
 		{
-			document_size = document_size + len + 2;
+			document_size = document_size + len + 1;
 			document = ft_realloc(document, document_size);
 		}
 		ft_memcpy(document + document_index, line, len);
-        ft_memcpy(document+document_size+len,"\n\0",2);
-		document_index += len;
+        ft_memcpy(document+document_size+len,"\n",1);
+		document_index += len + 1;
         full_line = ft_absorb( readline(">"));
         add_history(full_line);
 	}
