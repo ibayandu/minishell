@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:34 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/22 21:03:07 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 12:30:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,17 @@
 
 t_command	*parse_inputunit()
 {
-	t_command	*res;
+	t_command	*cmd;
 
-	res = NULL;
-	if (get_current_token()->token_type == T_EOF)
+	cmd = NULL;
+	if (get_current_token()->token_type == T_EOF || get_current_token()->token_type == T_NL)
 		return (NULL);
-	res = parse_simple_list();
-	if (!res)
-	{
-		if (get_current_token()->token_type == T_EOF)
-			return (NULL); // ERROR: Expected simple_list or EOF at inputunit start
-	}
-	if (!consume_token(T_EOF))
+	cmd = parse_list();
+	if (cmd && !parse_list_terminator())
 		return (NULL);
-	return (res);
+	else if (!cmd && get_current_token()->token_type != T_EOF && get_current_token()->token_type != T_NL)
+		return (NULL);
+	return (cmd);
 }
 
 t_redirect	*parse_redirection()
@@ -91,7 +88,7 @@ t_element	*parse_simple_command_element()
 {
 	t_element	*elem;
 
-	elem = ft_malloc(sizeof(t_element));
+	elem = ft_calloc(sizeof(t_element), 1);
 	if (!elem)
 		return (NULL); // ERROR: Malloc failed for t_element
 	if (get_current_token()->token_type == T_WORD)
@@ -135,7 +132,7 @@ t_command	*parse_simple_command()
 	int				element_parsed;
 	t_token_type	token_type;
 	t_element		*element;
-	t_element		temp_element;
+	t_element		*temp_element;
 
 	cmd = make_bare_simple_command();
 	if (!cmd)
@@ -157,8 +154,8 @@ t_command	*parse_simple_command()
 				return (NULL);
 			}
 			element_parsed = 1;
-			temp_element = *element;
-			cmd = make_simple_command(temp_element,cmd);
+			temp_element = element;
+			cmd = make_simple_command(temp_element, cmd);
 			if (!cmd)
 				return (NULL);
 		}
@@ -184,7 +181,7 @@ t_command	*parse_command()
 	if (get_current_token()->token_type == T_LPARANTHESE)
 	{
 		get_next_token();
-		sub_cmd = parse_list();
+		sub_cmd = parse_compound_list();
 		if (!sub_cmd)
 			return (NULL); // ERROR: Expected list after '(' in subshell
 		cmd = make_subshell_command(sub_cmd);
@@ -205,6 +202,22 @@ t_command	*parse_command()
 	return (cmd);
 }
 
+t_command	*parse_compound_list(void)
+{
+	t_command	*list_cmd;
+
+	parse_newline_list();
+	list_cmd = parse_list();
+	if (!list_cmd)
+		return (NULL);
+	if (get_current_token()->token_type == T_NL)
+	{
+		get_next_token();
+		parse_newline_list();
+	}
+	return (list_cmd);
+}
+
 t_command	*parse_list()
 {
 	t_command		*left;
@@ -214,13 +227,16 @@ t_command	*parse_list()
 	left = parse_pipeline();
 	if (!left)
 		return (NULL);
-	while (get_current_token()->token_type == T_AND_IF || get_current_token()->token_type == T_OR_IF)
+	while (get_current_token()->token_type == T_AND_IF || get_current_token()->token_type == T_OR_IF || get_current_token()->token_type == T_NL)
 	{
 		if (get_current_token()->token_type == T_AND_IF)
 			cnt_type = CNT_AND_AND;
-		else
+		else if (get_current_token()->token_type == T_OR_IF)
 			cnt_type = CNT_OR_OR;
+		else
+			cnt_type = CNT_NL;
 		get_next_token();
+		parse_newline_list();
 		right = parse_pipeline();
 		if (!right)
 			return (NULL); // ERROR: Expected pipeline after connector in list
@@ -231,31 +247,19 @@ t_command	*parse_list()
 	return (left);
 }
 
-t_command	*parse_simple_list()
+void	parse_newline_list(void)
 {
-	t_command	*left;
-	t_command	*right;
-	t_cnt_type	connector;
-
-	left = parse_pipeline();
-	if (!left)
-		return (NULL);
-	while (get_current_token()->token_type == T_AND_IF
-		|| get_current_token()->token_type == T_OR_IF)
-	{
-		if (get_current_token()->token_type == T_AND_IF)
-			connector = CNT_AND_AND;
-		else
-			connector = CNT_OR_OR;
+	while (get_current_token()->token_type == T_NL)
 		get_next_token();
-		right = parse_pipeline();
-		if (!right)
-			return (NULL); // ERROR: Expected pipeline after connector in simple_list
-		left = command_connect(left, right, connector);
-		if (!left)
-			return (NULL);
-	}
-	return (left);
+}
+
+int parse_list_terminator(void)
+{
+	if (get_current_token()->token_type == T_NL)
+		return (get_next_token(), 1);
+	if (get_current_token()->token_type == T_EOF)
+		return (1);
+	return (0);
 }
 
 t_command	*parse_pipeline()

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/25 00:26:58 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/25 14:51:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ char	*cnt_type_to_string(t_cnt_type cnt_type)
 		return ("or");
 	else if (cnt_type == CNT_PIPE)
 		return ("pipe");
+	else if (cnt_type == CNT_NL)
+		return ("newline");
 	else
 		return ("unknown");
 }
@@ -188,17 +190,20 @@ void print_command(t_command *command, int cmd_count, int tab_count)
 #define green "\033[0;32m"
 #define red "\033[31m"
 #define defaultcolor "\033[0;0m"
+#include "executor.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	// t_token	*token;
+	(void)(argc);
+	(void)(argv);
 
 	char	*input;
 	// void	*err_check;
 
 	//input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo \"Heredoc içerik\") && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)";
 
-	input = "cat << \"deneme\" > ismet.txt";
+	input = "cat << z";
 
 	// char *input = "echo hello | grep h | cat > abc";
 	char *err_check = init_lexer(input);
@@ -213,7 +218,8 @@ int	main(void)
 	}*/
 
 	t_command *command = parse_inputunit();
-	print_command(command, 1, 1);
+	execute_ast(command,&env);
 	ft_free();
 	return (0);
 }
+

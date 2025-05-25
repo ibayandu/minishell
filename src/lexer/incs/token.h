@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/22 19:31:51 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 11:57:27 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef enum s_token_type
 	T_PIPE,
 	T_LPARANTHESE,
 	T_RPARANTHESE,
+	T_NL,
 	T_EOF
 }					t_token_type;
 

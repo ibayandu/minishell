@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/21 19:29:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 11:51:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef enum e_cnt_type
 {
 	CNT_PIPE,
 	CNT_AND_AND,
-	CNT_OR_OR
+	CNT_OR_OR,
+	CNT_NL
 
 }	t_cnt_type;
 

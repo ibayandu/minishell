@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:26:22 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/20 22:27:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 09:20:02 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_command	*make_subshell_command(t_command *command);
 
 t_word_list	*make_word_list(t_word *word, t_word_list *wlink);
 t_command	*make_bare_simple_command();
-t_command	*make_simple_command(t_element element, t_command *command);
+t_command	*make_simple_command(t_element *element, t_command *command);
 t_command	*clean_simple_command(t_command *command);
 
 t_redirect	*make_redirection(t_word *source, t_redir_type redir_type, t_word *dest_and_filename);

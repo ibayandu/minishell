@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:40:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/20 18:39:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 09:22:40 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,19 @@ t_command	*make_bare_simple_command()
 	return (command);
 }
 
-t_command	*make_simple_command(t_element element, t_command *command)
+t_command	*make_simple_command(t_element *element, t_command *command)
 {
 	if (command == 0)
 		command = make_bare_simple_command();
-	if (element.word)
-		command->value.simple->words = make_word_list(element.word, command->value.simple->words);
-	else if (element.redirect)
+	if (element && element->word)
+		command->value.simple->words = make_word_list(element->word, command->value.simple->words);
+	else if (element->redirect)
 	{
-		t_redirect	*r = element.redirect;
+		t_redirect	*r = element->redirect;
 		while (r->next)
 			r = r->next;
 		r->next = command->value.simple->redirects;
-		command->value.simple->redirects = element.redirect;
+		command->value.simple->redirects = element->redirect;
 	}
 	return (command);
 }

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:29:55 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 19:30:41 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/25 12:06:14 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_isspace(int c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
-		|| c == '\f');
+	return (c == ' ' || c == '\t' || c == '\r' || c == '\v' || c == '\f');
 }

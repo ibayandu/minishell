@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:19:37 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/16 20:04:45 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 01:14:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ void	ft_clear_block(t_memblock **head)
 	{
 		temp = node->next;
 		if (node->data)
+		{
 			free(node->data);
+			node->data = NULL;
+		}
 		free(node);
 		node = temp;
 	}
