@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/25 00:26:58 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/05/25 11:53:37 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ const char	*token_type_to_string2(t_token_type type)
 		return ("T_LPARANTHESE");
 	else if (type == T_RPARANTHESE)
 		return ("T_RPARANTHESE");
+	else if (type == T_NL)
+		return ("newline");
 	else if (type == T_EOF)
 		return ("T_EOF");
 	else
@@ -191,26 +193,26 @@ void print_command(t_command *command, int cmd_count, int tab_count)
 
 int	main(void)
 {
-	// t_token	*token;
+	t_token	*token;
 
 	char	*input;
 	// void	*err_check;
 
 	//input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo \"Heredoc içerik\") && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)";
 
-	input = "cat << \"deneme\" > ismet.txt";
+	input = readline("ismet>");
 
 	// char *input = "echo hello | grep h | cat > abc";
 	char *err_check = init_lexer(input);
 	if (!err_check)
 		printf("Hata Var\n");
-	/*while ((token = get_current_token()))
-	{
-		printf(yellow "Token Type: " blue "%-13s " yellow "Value: " green "%-35s" yellow "Token Flag" red "%d" defaultcolor "\n",
-			token_type_to_string2(token->token_type), token->value,
-			token->flags);
-		get_next_token();
-	}*/
+	// while ((token = get_current_token()))
+	// {
+	// 	printf(yellow "Token Type: " blue "%-13s " yellow "Value: " green "%-35s" yellow "Token Flag" red "%d" defaultcolor "\n",
+	// 		token_type_to_string2(token->token_type), token->value,
+	// 		token->flags);
+	// 	get_next_token();
+	// }
 
 	t_command *command = parse_inputunit();
 	print_command(command, 1, 1);

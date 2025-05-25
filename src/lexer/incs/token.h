@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/22 19:31:51 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 10:25:46 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-#include "libft.h"
+# include "libft.h"
 
 # define F_DOLLAR 1
 # define F_QUOTED 2
@@ -39,6 +39,7 @@ typedef enum s_token_type
 	T_PIPE,
 	T_LPARANTHESE,
 	T_RPARANTHESE,
+	T_NL,
 	T_EOF
 }					t_token_type;
 

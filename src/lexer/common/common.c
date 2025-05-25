@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:51:38 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/22 21:05:21 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/05/25 10:28:47 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token_type	is_number(char *str)
 	while (str[++i])
 	{
 		if (!ft_isdigit(str[i]))
-			break;
+			break ;
 	}
 	if (ft_strncmp(str + i, "<<", 2) == 0)
 		return (T_NUMBER_DLESS);
@@ -60,6 +60,8 @@ t_token_type	get_token_type(char *str)
 		return (T_LPARANTHESE);
 	else if (ft_strncmp(str, ")", 1) == 0)
 		return (T_RPARANTHESE);
+	else if (ft_strncmp(str, "\n", 1) == 0)
+		return (T_NL);
 	else if (is_number(str))
 		return (is_number(str));
 	return (T_WORD);
