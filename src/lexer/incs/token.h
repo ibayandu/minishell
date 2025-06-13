@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/25 11:57:27 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/12 19:36:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-#include "libft.h"
+# include "libft.h"
 
 # define F_DOLLAR 1
 # define F_QUOTED 2

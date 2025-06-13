@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   ft_panic.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/13 01:56:45 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/06/12 20:51:38 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/13 02:09:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "lexer.h"
+#include "libft.h"
 
-# include <stddef.h>
-# include "structs.h"
+void	*ft_panic(void)
+{
+	const char	*token_value = get_current_token()->value;
 
-size_t		ft_mbrlen(const char *s, size_t max_len);
-int			ft_charflag(char c, int flag);
-t_word_list	*ft_revword(t_word_list *list);
-t_redirect	*ft_revredir(t_redirect *list);
-char		*string_quote_removal(char *string);
-void		*ft_panic(void);
-
-#endif // UTILS_H
+	if (ft_strncmp(token_value, "\n", 1) == 0)
+		token_value = "newline";
+	ft_putendl_fd(ft_strjoin(ft_strjoin(
+				ft_strdup("minishell: syntax error near unexpected token `"),
+				token_value), "'"), STDERR_FILENO);
+	ft_free();
+	exit(2);
+	return (NULL);
+}

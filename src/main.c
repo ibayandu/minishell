@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/25 14:51:45 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/13 03:45:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void print_command(t_command *command, int cmd_count, int tab_count)
 #define defaultcolor "\033[0;0m"
 #include "executor.h"
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv)
 {
 	// t_token	*token;
 	(void)(argc);
@@ -201,9 +201,9 @@ int	main(int argc, char **argv, char **env)
 	char	*input;
 	// void	*err_check;
 
-	//input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo \"Heredoc içerik\") && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)";
+	input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo << delim && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)\n";
 
-	input = "cat << z";
+	//input = "cat << (";
 
 	// char *input = "echo hello | grep h | cat > abc";
 	char *err_check = init_lexer(input);
@@ -218,7 +218,7 @@ int	main(int argc, char **argv, char **env)
 	}*/
 
 	t_command *command = parse_inputunit();
-	execute_ast(command,&env);
+	print_command(command, 0, 1);
 	ft_free();
 	return (0);
 }

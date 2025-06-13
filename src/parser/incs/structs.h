@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/25 11:51:06 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/12 20:04:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ typedef enum e_cmd_type
 	CMD_SIMPLE,
 	CMD_CONNECT,
 	CMD_SUBSHELL
-
 }	t_cmd_type;
 
 typedef enum e_cnt_type
@@ -29,7 +28,6 @@ typedef enum e_cnt_type
 	CNT_AND_AND,
 	CNT_OR_OR,
 	CNT_NL
-
 }	t_cnt_type;
 
 typedef enum e_redir_type
@@ -38,9 +36,7 @@ typedef enum e_redir_type
 	REDIR_INPUT,
 	REDIR_APPEND,
 	REDIR_UNTIL
-
 }	t_redir_type;
-
 
 typedef struct s_word
 {
@@ -63,7 +59,7 @@ typedef struct s_redirect
 	t_word				*redirector;
 	t_word				*redirectee;
 	t_redir_type		redir_type;
-	struct s_redirect		*next;
+	struct s_redirect	*next;
 
 }	t_redirect;
 
@@ -109,8 +105,6 @@ typedef struct s_command
 		t_simple_cmd	*simple;
 		t_subshell_cmd	*subshell;
 	} value;
-
 }	t_command;
-
 
 #endif // STRUCTS_H

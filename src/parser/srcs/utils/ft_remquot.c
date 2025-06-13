@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/25 00:44:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/13 02:08:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*string_extract_single_quoted(char *string, int *sindex, int allowesc)
 	char	*t;
 	int		pass_next;
 
-	if (MB_CUR_MAX >  1)
+	if (MB_CUR_MAX > 1)
 		slen = ft_strlen(string + *sindex) + *sindex;
 	else
 		slen = 0;
@@ -33,12 +33,12 @@ char	*string_extract_single_quoted(char *string, int *sindex, int allowesc)
 		{
 			pass_next = 0;
 			i += ft_mbrlen(string + i, slen - i);
-			continue;
+			continue ;
 		}
 		if (allowesc && string[i] == '\\')
 			pass_next++;
 		else if (string[i] == '\'')
-			break;
+			break ;
 		i += ft_mbrlen(string + i, slen - i);
 	}
 	t = ft_substr(string, *sindex, i);
@@ -48,26 +48,24 @@ char	*string_extract_single_quoted(char *string, int *sindex, int allowesc)
 	return (t);
 }
 
-char	*string_quote_removal(char *string, int quoted)
+char	*string_quote_removal(char *string)
 {
 	size_t			slen;
 	char			*r;
 	char			*result_string;
 	char			*temp;
-	char			*send;
 	int				sindex;
 	int				tindex;
 	int				dquote;
 	unsigned char	c;
 
 	slen = ft_strlen(string);
-	send = string + slen;
 	result_string = ft_malloc(slen + 1);
 	r = result_string;
 	dquote = 0;
 	sindex = 0;
 	c = string[sindex];
-	while(c)
+	while (c)
 	{
 		if (c == '\\')
 		{
@@ -75,20 +73,20 @@ char	*string_quote_removal(char *string, int quoted)
 			if (c == 0)
 			{
 				*r++ = '\\';
-				continue;
+				continue ;
 			}
-			if (((quoted & (Q_HERE_DOCUMENT | Q_DOUBLE_QUOTES)) || dquote) && ft_charflag(c, CBSDQUOTE))
+			if (dquote && ft_charflag(c, CBSDQUOTE))
 				*r++ = '\\';
 			*(r)++ = string[sindex];
 			sindex++;
 		}
 		else if (c == '\'')
 		{
-			if ((quoted & (Q_HERE_DOCUMENT|Q_DOUBLE_QUOTES)) || dquote)
+			if (dquote)
 			{
 				*r++ = c;
 				sindex++;
-				continue;
+				continue ;
 			}
 			tindex = sindex + 1;
 			temp = string_extract_single_quoted(string, &tindex, 0);

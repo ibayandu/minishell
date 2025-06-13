@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:51:38 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/25 11:57:42 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/12 21:11:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token_type	is_number(char *str)
 	while (str[++i])
 	{
 		if (!ft_isdigit(str[i]))
-			break;
+			break ;
 	}
 	if (ft_strncmp(str + i, "<<", 2) == 0)
 		return (T_NUMBER_DLESS);

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 22:17:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/13 03:44:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ t_token	*get_next_token(void)
 		return (NULL);
 	return ((t_token *)(*token_list)->content);
 }
-t_token *get_current_token()
+
+t_token	*get_current_token(void)
 {
 	t_list	**token_list;
 
@@ -108,7 +109,8 @@ t_token *get_current_token()
 		return (NULL);
 	return ((t_token *)(*token_list)->content);
 }
-int consume_token(t_token_type type)
+
+int	consume_token(t_token_type type)
 {
 	if (type == get_current_token()->token_type)
 	{
@@ -116,8 +118,5 @@ int consume_token(t_token_type type)
 		return (1);
 	}
 	else
-	{
-		//TODO: HATA vericez.
 		return (0);
-	}
 }
