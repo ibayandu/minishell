@@ -1,5 +1,6 @@
- - Add wildcard token for word
- - Add builtin token for builtin command words
+ - Add wildcard flag for word
+ - Add builtin flag for builtin command words
+ - Add token for $?
  - Configure read_a_line function to add "\n" at the end of input.
  Also use it every place that u need to use readline function.
  Until then, u should use "\n" at the end of your inputs.

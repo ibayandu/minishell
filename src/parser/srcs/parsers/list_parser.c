@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:37:31 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/13 02:52:37 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/14 02:29:32 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,15 @@ t_command	*parse_inputunit(void)
 {
 	t_command	*cmd;
 
-	cmd = NULL;
-	if (get_current_token()->token_type == T_EOF
-		|| get_current_token()->token_type == T_NL)
-		return (NULL);
+	parse_newline_list();
 	cmd = parse_list();
-	if (cmd && !parse_list_terminator())
-		return (NULL);
-	else if (!cmd && (get_current_token()->token_type != T_EOF
-			|| get_current_token()->token_type != T_NL))
-		return (NULL);
-	return (cmd);
+	if (!cmd)
+		return (ft_panic());
+	if (get_current_token()->token_type == T_NL)
+		return (cmd);
+	return (ft_panic());
 }
+
 
 t_command	*parse_compound_list(void)
 {
@@ -38,8 +35,6 @@ t_command	*parse_compound_list(void)
 
 	parse_newline_list();
 	list_cmd = parse_list();
-	if (!list_cmd)
-		return (NULL);
 	if (get_current_token()->token_type == T_NL)
 	{
 		get_next_token();
@@ -55,8 +50,6 @@ t_command	*parse_list(void)
 	t_cnt_type		cnt_type;
 
 	left = parse_pipeline();
-	if (!left)
-		return (NULL);
 	while (get_current_token()->token_type == T_AND_IF
 		|| get_current_token()->token_type == T_OR_IF
 		|| get_current_token()->token_type == T_NL)
@@ -73,8 +66,6 @@ t_command	*parse_list(void)
 		if (!right)
 			return (ft_panic());
 		left = command_connect(left, right, cnt_type);
-		if (!left)
-			return (NULL);
 	}
 	return (left);
 }
@@ -83,13 +74,4 @@ void	parse_newline_list(void)
 {
 	while (get_current_token()->token_type == T_NL)
 		get_next_token();
-}
-
-int	parse_list_terminator(void)
-{
-	if (get_current_token()->token_type == T_NL)
-		return (get_next_token(), 1);
-	if (get_current_token()->token_type == T_EOF)
-		return (1);
-	return (0);
 }

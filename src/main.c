@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/13 11:39:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/14 02:52:29 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,9 +201,11 @@ int	main(int argc, char **argv)
 	char	*input;
 	// void	*err_check;
 
-	input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo << delim && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)\n";
+	input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo << delim) && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)\n";
 
 	//input = "cat << (";
+
+	//input = "\n\n\n\necho hi";
 
 	// char *input = "echo hello | grep h | cat > abc";
 	char *err_check = init_lexer(input);

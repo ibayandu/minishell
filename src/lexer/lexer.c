@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/13 03:44:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/14 02:07:10 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,6 @@ static t_list	*lexer(char *input)
 			input += ft_strlen(token->value);
 		}
 	}
-	token = create_token(T_EOF, NULL);
-	if (token)
-		ft_lstadd_back(&tokens, ft_lstnew(token));
 	return (tokens);
 }
 

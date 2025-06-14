@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/13 01:56:45 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/14 02:09:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 # include <stddef.h>
 # include "structs.h"
 
-size_t		ft_mbrlen(const char *s, size_t max_len);
-int			ft_charflag(char c, int flag);
-t_word_list	*ft_revword(t_word_list *list);
-t_redirect	*ft_revredir(t_redirect *list);
-char		*string_quote_removal(char *string);
-void		*ft_panic(void);
+size_t			ft_mbrlen(const char *s, size_t max_len);
+int				ft_charflag(char c, int flag);
+t_word_list		*ft_revword(t_word_list *list);
+t_redirect		*ft_revredir(t_redirect *list);
+char			*string_quote_removal(char *string);
+void			*ft_panic(void);
+t_redir_type	ft_get_redir(void);
 
 #endif // UTILS_H

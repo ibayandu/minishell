@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/12 20:04:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/14 02:26:21 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef enum e_cnt_type
 
 typedef enum e_redir_type
 {
+	REDIR_IGNORE,
 	REDIR_OUTPUT,
 	REDIR_INPUT,
 	REDIR_APPEND,

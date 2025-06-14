@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:48:41 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/12 20:03:17 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/14 02:29:38 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ t_command	*parse_list(void);
 t_command	*parse_simple_list(void);
 t_command	*parse_pipeline(void);
 t_command	*parse_compound_list(void);
-int			parse_list_terminator(void);
 void		parse_newline_list(void);
 
 #endif // PARSERS_H
