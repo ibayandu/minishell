@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   flags.h                                            :+:      :+:    :+:   */
+/*   ft_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 20:45:57 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/15 23:42:37 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/06/16 00:49:26 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/16 01:01:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FLAGS_H
-# define FLAGS_H
+#include <readline/readline.h>
+#include <readline/history.h>
+#include "collector.h"
 
-// Character Flags
-# define CBSDQUOTE 0x0040
-# define HEREDOC_MAX 16
+char	*ft_readline(char *prompt)
+{
+	char	*ret;
 
-#endif // FLAGS_H
+	ret = ft_absorb(readline(prompt));
+	if (ret)
+		add_history(ret);
+	return (ret);
+}

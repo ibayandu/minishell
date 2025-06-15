@@ -6,12 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/14 02:26:21 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 00:39:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+# include "flags.h"
 
 typedef struct s_command	t_command;
 
@@ -24,6 +26,7 @@ typedef enum e_cmd_type
 
 typedef enum e_cnt_type
 {
+	CNT_IGNORE,
 	CNT_PIPE,
 	CNT_AND_AND,
 	CNT_OR_OR,
@@ -107,5 +110,12 @@ typedef struct s_command
 		t_subshell_cmd	*subshell;
 	} value;
 }	t_command;
+
+typedef struct s_minishell
+{
+	t_redirect	*redir_stack[HEREDOC_MAX];
+	int			need_here_doc;
+
+}	t_minishell;
 
 #endif // STRUCTS_H

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 01:53:45 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/14 02:08:41 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 00:33:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 t_redir_type	ft_get_redir(void)
 {
-	t_redir_type redir_type;
+	t_redir_type	redir_type;
 
 	redir_type = 0;
 	if (get_current_token()->token_type == T_GREAT

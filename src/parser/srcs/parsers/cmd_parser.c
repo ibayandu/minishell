@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:34 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/14 02:32:38 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/15 23:50:47 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "parsers.h"
 #include "utils.h"
 
-t_element	*parse_simple_command_element(void)
+t_element	*parse_simple_command_element(t_minishell *minishell)
 {
 	t_element	*elem;
 
@@ -27,23 +27,29 @@ t_element	*parse_simple_command_element(void)
 		get_next_token();
 	}
 	else
-		elem->redirect = parse_redirection();
+	{
+		elem->redirect = parse_redirection(minishell);
+		if (!elem->redirect)
+			return (NULL);
+	}
 	return (elem);
 }
 
-t_command	*parse_simple_command(void)
+t_command	*parse_simple_command(t_minishell *minishell)
 {
 	t_command		*cmd;
 	int				element_parsed;
 	t_element		*element;
 
-	cmd = make_bare_simple_command();
 	element_parsed = 0;
+	cmd = make_bare_simple_command();
 	while (1)
 	{
 		if (get_current_token()->token_type == T_WORD || ft_get_redir())
 		{
-			element = parse_simple_command_element();
+			element = parse_simple_command_element(minishell);
+			if (!element)
+				return (NULL);
 			element_parsed = 1;
 			cmd = make_simple_command(element, cmd);
 		}
@@ -51,11 +57,11 @@ t_command	*parse_simple_command(void)
 			break ;
 	}
 	if (!element_parsed)
-		return (ft_panic());
+		return (ft_panic(), NULL);
 	return (clean_simple_command(cmd));
 }
 
-t_command	*parse_command(void)
+t_command	*parse_command(t_minishell *minishell)
 {
 	t_command	*cmd;
 	t_command	*sub_cmd;
@@ -65,36 +71,40 @@ t_command	*parse_command(void)
 	if (get_current_token()->token_type == T_LPARANTHESE)
 	{
 		get_next_token();
-		sub_cmd = parse_compound_list();
+		sub_cmd = parse_compound_list(minishell);
 		if (!sub_cmd)
-			return (ft_panic());
+			return (NULL);
 		cmd = make_subshell_command(sub_cmd);
 		if (!consume_token(T_RPARANTHESE))
-			return (ft_panic());
+			return (ft_panic(), NULL);
 		if (ft_get_redir())
 		{
-			redirects = parse_redirection_list();
+			redirects = parse_redirection_list(minishell);
+			if (!redirects)
+				return (NULL);
 			cmd->redirects = ft_revredir(redirects);
 		}
 	}
 	else
-		cmd = parse_simple_command();
+		cmd = parse_simple_command(minishell);
 	return (cmd);
 }
 
-t_command	*parse_pipeline(void)
+t_command	*parse_pipeline(t_minishell *minishell)
 {
 	t_command	*left;
 	t_command	*right;
 
-	left = parse_command();
+	left = parse_command(minishell);
+	if (!left)
+		return (NULL);
 	while (get_current_token()->token_type == T_PIPE)
 	{
 		get_next_token();
 		parse_newline_list();
-		right = parse_command();
+		right = parse_command(minishell);
 		if (!right)
-			return (ft_panic());
+			return (NULL);
 		left = command_connect(left, right, CNT_PIPE);
 	}
 	return (left);

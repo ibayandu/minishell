@@ -7,16 +7,14 @@
 
 %start inputunit
 
-%left T_NL T_EOF
+%left T_NL
 %left T_AND_IF T_OR_IF
 %right T_PIPE
-%%
 
-inputunit:	list list_terminator
-		|	T_NL
-		|	error T_NL
-		|	error T_EOF
-		|	T_EOF
+%%
+inputunit:	newline_list
+		|	newline_list list T_NL
+		|	newline_list error T_NL
 		;
 
 redirection:	T_GREAT T_WORD
@@ -34,8 +32,8 @@ simple_command_element: T_WORD
 					;
 
 redirection_list: redirection
-			|	redirection_list redirection
-			;
+				|	redirection_list redirection
+				;
 
 simple_command:	simple_command_element
 			|	simple_command simple_command_element
@@ -60,12 +58,7 @@ newline_list:
 			|	newline_list T_NL
 			;
 
-list_terminator: T_NL
-				| T_EOF
-				;
-
-pipeline:	pipeline T_PIPE pipeline
+pipeline:	pipeline T_PIPE newline_list pipeline
 		|	command
 		;
 %%
-

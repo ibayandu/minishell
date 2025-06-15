@@ -6,13 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/14 02:52:29 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 01:00:42 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft.h"
 #include "parsers.h"
+#include "makers.h"
 #include <stdio.h>
 #include <readline/history.h>
 #include <readline/readline.h>
@@ -205,7 +206,7 @@ int	main(int argc, char **argv)
 
 	//input = "cat << (";
 
-	//input = "\n\n\n\necho hi";
+	//input = "echo hi\necho bay\n\n";
 
 	// char *input = "echo hello | grep h | cat > abc";
 	char *err_check = init_lexer(input);
@@ -219,9 +220,13 @@ int	main(int argc, char **argv)
 		get_next_token();
 	}*/
 
-	t_command *command = parse_inputunit();
+	t_minishell	*const	minishell = &(t_minishell){0};
+
+	t_command *command = parse_inputunit(minishell);
+	gather_here_documents(minishell);
 	print_command(command, 0, 1);
 	ft_free();
 	return (0);
 }
+
 

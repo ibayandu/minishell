@@ -6,12 +6,10 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/13 03:31:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 00:54:08 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include "utils.h"
@@ -43,16 +41,6 @@ t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
 	return (temp);
 }
 
-char	*read_a_line(char	*prompt)
-{
-	char	*ret;
-
-	ret = ft_absorb(readline(prompt));
-	if (ret)
-		add_history(ret);
-	return (ret);
-}
-
 void	document_done(char *document, int document_index, t_redirect *temp)
 {
 	if (document)
@@ -80,17 +68,14 @@ void	make_here_document(t_redirect *temp)
 	document_size = 0;
 	temp->here_doc_eof = string_quote_removal(temp->redirectee->word);
 	if (!temp->here_doc_eof)
-	{
-		temp->here_doc_eof = ft_malloc(1);
-		temp->here_doc_eof[0] = '\0';
-		return (document_done(document, document_index, temp));
-	}
-	full_line = read_a_line("> ");
+		return (temp->here_doc_eof = ft_strdup(""),
+			document_done(document, document_index, temp));
+	full_line = ft_readline("> ");
 	while (full_line)
 	{
-		if (*full_line == 0)
+		if (!*full_line)
 		{
-			full_line = read_a_line("> ");
+			full_line = ft_readline("> ");
 			continue ;
 		}
 		if (ft_strncmp(full_line, temp->here_doc_eof,
@@ -108,7 +93,7 @@ void	make_here_document(t_redirect *temp)
 		ft_memcpy(document + document_index, full_line, len);
 		ft_memcpy(document + document_index + len, "\n", 1);
 		document_index += len + 1;
-		full_line = read_a_line("> ");
+		full_line = ft_readline("> ");
 	}
 	if (full_line == 0)
 		ft_putendl_fd(ft_strjoin(ft_strjoin(
@@ -116,4 +101,17 @@ void	make_here_document(t_redirect *temp)
 					delimited by end of file (wanted `",
 					temp->here_doc_eof), "')"), STDERR_FILENO);
 	document_done(document, document_index, temp);
+}
+
+void	gather_here_documents(t_minishell *minishell)
+{
+	int	r;
+
+	r = 0;
+	while (minishell->need_here_doc > 0)
+	{
+		make_here_document (minishell->redir_stack[r++]);
+		minishell->need_here_doc--;
+		minishell->redir_stack[r - 1] = 0;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:26:22 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/12 20:02:20 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/15 23:57:04 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ t_command	*clean_simple_command(t_command *command);
 t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
 				t_word *dest_and_filename);
 void		make_here_document(t_redirect *temp);
+void		gather_here_documents(t_minishell *minishell);
 
 #endif // MAKERS_H

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/14 02:09:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 00:51:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int				ft_charflag(char c, int flag);
 t_word_list		*ft_revword(t_word_list *list);
 t_redirect		*ft_revredir(t_redirect *list);
 char			*string_quote_removal(char *string);
-void			*ft_panic(void);
+void			ft_panic(void);
 t_redir_type	ft_get_redir(void);
+t_cnt_type		ft_get_cnt(void);
+char			*ft_readline(char *prompt);
 
 #endif // UTILS_H
