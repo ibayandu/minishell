@@ -8,8 +8,8 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 VPATH = srcs:srcs/makers:srcs/utils:srcs/parsers
 SRCS = cmd_parser.c list_parser.c redir_parser.c cmd_maker.c redir_maker.c simple_maker.c \
-		word_maker.c ft_listrev.c ft_remquot.c ft_mbrlen.c ft_charflag.c ft_panic.c \
-		ft_get_redir.c ft_get_cnt.c ft_readline.c
+		word_maker.c ft_listrev.c ft_remquot.c ft_mbrlen.c ft_panic.c ft_get_redir.c \
+		ft_get_cnt.c ft_readline.c
 
 OBJS_DIR = build/objs
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)

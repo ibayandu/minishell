@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/16 15:53:43 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 18:48:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include "parsers.h"
 #include "makers.h"
 #include <stdio.h>
-#include <readline/history.h>
-#include <readline/readline.h>
 
 void print_command(t_command *command, int cmd_count, int tab_count);
 
@@ -204,9 +202,11 @@ int	main(int argc, char **argv)
 
 	input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo << delim) && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)\n";
 
-	input = "cat << \"😄\"\n";
+	input = "cat << abidik'gubiiiii      dik'\n";
 
 	//input = "echo hi\necho bay\n\n";
+
+	//input = "cat << 1 && cat << 2 && cat << 3 && cat << 4 && cat << 5 && cat << 6 && cat << 7 && cat << 8 && cat << 9 && cat << 10 && cat << 11 && cat << 12 && cat << 13 && cat << 14 && cat << 15 && cat << 16 && cat << 17";
 
 	// char *input = "echo hello | grep h | cat > abc";
 	char *err_check = init_lexer(input);

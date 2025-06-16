@@ -6,14 +6,13 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/13 01:55:18 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 18:26:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include "utils.h"
 #include "libft.h"
-#include "flags.h"
 
 t_word	*alloc_word_desc(void)
 {

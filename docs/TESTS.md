@@ -52,3 +52,34 @@ $> cat << 😄
 > 😄
 dsds
 dsdsfdgf
+
+---------------------
+
+$> cat << abidik'gubiiiii      dik'
+> dsadşadöa
+> dösalşdaşabidikgubiiiii      dikdsadsa
+> abidik'gubiiiii      dik'dlfmelfmes
+> abidik'gubiiiii      dik
+> abidikgubiiiii      dik
+dsadşadöa
+dösalşdaşabidikgubiiiii      dikdsadsa
+abidik'gubiiiii      dik'dlfmelfmes
+abidik'gubiiiii      dik
+
+----------------------
+
+$> cat << dimi"abidik'gubiiiii      dik'"blabla
+> dimi"abidik'gubiiiii      dik'blabla
+> dimiabidik'gubiiiii      dik'blabla
+dimi"abidik'gubiiiii      dik'blabla
+
+-----------------------
+
+$> cat << 1 && cat << 2 && cat << 3 && cat << 4 && cat << 5 && cat << 6 && cat << 7 && cat << 8 && cat << 9 && cat << 10 && cat << 11 && cat << 12 && cat << 13 && cat << 14 && cat << 15 && cat << 16
+>...
+
+-----------------------
+
+$> cat << 1 && cat << 2 && cat << 3 && cat << 4 && cat << 5 && cat << 6 && cat << 7 && cat << 8 && cat << 9 && cat << 10 && cat << 11 && cat << 12 && cat << 13 && cat << 14 && cat << 15 && cat << 16 && cat << 17
+
+

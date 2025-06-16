@@ -6,20 +6,20 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 15:50:10 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 18:45:21 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "utils.h"
-#include "flags.h"
 
-char	*string_extract_single_quoted(char *string, int *sindex)
+void	string_extract_single_quoted(char *string, int *sindex, char **r)
 {
 	int		i;
 	size_t	slen;
 	char	*t;
 
+	(*sindex)++;
 	if (MB_CUR_MAX > 1)
 		slen = ft_strlen(string + *sindex) + *sindex;
 	else
@@ -35,54 +35,32 @@ char	*string_extract_single_quoted(char *string, int *sindex)
 	if (string[i])
 		i++;
 	*sindex = i;
-	return (t);
+	if (t)
+	{
+		ft_strlcpy(*r, t, ft_strlen(t));
+		*r += ft_strlen(*r);
+	}
 }
 
 char	*string_quote_removal(char *string)
 {
-	char			*r;
-	char			*result_string;
-	char			*temp;
-	int				sindex;
-	int				tindex;
-	int				dquote;
-	unsigned char	c;
+	char	*r;
+	char	*result_string;
+	int		sindex;
+	int		dquote;
 
 	result_string = ft_malloc(ft_strlen(string) + 1);
 	r = result_string;
 	dquote = 0;
 	sindex = 0;
-	c = string[sindex];
-	while (c)
+	while (string[sindex])
 	{
-		if (c == '\'')
-		{
-			if (dquote)
-			{
-				*r++ = c;
-				sindex++;
-				continue ;
-			}
-			tindex = sindex + 1;
-			temp = string_extract_single_quoted(string, &tindex);
-			if (temp)
-			{
-				ft_strlcpy(r, temp, ft_strlen(temp));
-				r += ft_strlen(r);
-			}
-			sindex = tindex;
-		}
-		else if (c == '"')
-		{
-			dquote = 1 - dquote;
-			sindex++;
-		}
+		if (string[sindex] == '\'' && !dquote)
+			string_extract_single_quoted(string, &sindex, &r);
+		else if (string[sindex] == '"')
+			dquote = 1 - dquote + (0 * sindex++);
 		else
-		{
-			*(r)++ = string[sindex];
-			sindex++;
-		}
-		c = string[sindex];
+			*r++ = string[sindex++];
 	}
 	*r = '\0';
 	return (result_string);

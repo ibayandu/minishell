@@ -6,13 +6,12 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:37:01 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/13 01:54:47 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 18:26:32 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include "structs.h"
-#include "flags.h"
 #include "collector.h"
 
 t_command	*make_command(t_cmd_type type, t_simple_cmd *pointer)

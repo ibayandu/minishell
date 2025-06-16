@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:33:07 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 00:48:20 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 18:24:55 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 #include "makers.h"
 #include "parsers.h"
 #include "utils.h"
+
+static void	push_heredoc(t_redirect *r, t_minishell *minishell)
+{
+	if (minishell->need_here_doc >= HEREDOC_MAX)
+	{
+		ft_putendl_fd("minishell: maximum here-document count exceeded",
+			STDERR_FILENO);
+		ft_free();
+		exit(2);
+	}
+	minishell->redir_stack[minishell->need_here_doc++] = r;
+}
 
 t_redirect	*parse_redirection(t_minishell *minishell)
 {
@@ -40,7 +52,7 @@ t_redirect	*parse_redirection(t_minishell *minishell)
 		return (ft_panic(), NULL);
 	redirect = make_redirection(source, redir_type, dest);
 	if (get_next_token() && redir_type == REDIR_UNTIL)
-		minishell->redir_stack[minishell->need_here_doc++] = redirect;
+		push_heredoc(redirect, minishell);
 	return (redirect);
 }
 
