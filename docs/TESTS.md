@@ -12,7 +12,7 @@ $> echo $a$HOME$a
 
 --------------------
 
->$ echo */*/deneme* && ( echo "Başlangiç: $(date)" && echo << delim) && echo "Alt
+$> echo */*/deneme* && ( echo "Başlangiç: $(date)" && echo << delim) && echo "Alt
 işlem başarıli" || echo "Alt işlem başarısız" | grep "içerik" || ech
 o "Eşleşme bulunamadı" 123> output.txt 2> deneme.txt && cat < || ech
 o "Yeni dosyaya yazılan içerik" | (export a=deneme && echo $a)
@@ -28,9 +28,27 @@ bash: syntax error near unexpected token `||'
 
 --------------------
 
->$ echo a ||
+$> echo a ||
 > echo b ||
 > echo c
 a
 
 ---------------------
+
+$> cat << (
+bash: syntax error near unexpected token `('
+
+---------------------
+
+$> cat << a
+>
+bash: warning: here-document at line 49 delimited by end-of-file (wanted `a')
+
+---------------------
+
+$> cat << 😄
+> dsds
+> dsdsfdgf
+> 😄
+dsds
+dsdsfdgf

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/16 01:00:42 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 15:53:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ int	main(int argc, char **argv)
 
 	input = " echo */*/deneme* && ( echo \"Başlangiç: $(date)\" && echo << delim) && echo \"Alt işlem başarıli\" || echo \"Alt işlem başarısız\" | grep \"içerik\" || echo \"Eşleşme bulunamadı\" 123> output.txt 2> deneme.txt && cat < output.txt || echo \"Yeni dosyaya yazılan içerik\" | (export a=deneme && echo $a)\n";
 
-	//input = "cat << (";
+	input = "cat << \"😄\"\n";
 
 	//input = "echo hi\necho bay\n\n";
 

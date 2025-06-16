@@ -4,7 +4,7 @@ AR = ar rcs
 MKDIR = mkdir -p
 
 IFLAGS = -I ./incs
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 
 VPATH = srcs
 SRCS = utils.c collector.c

@@ -6,13 +6,13 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 00:49:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 01:01:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 15:13:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "collector.h"
+#include "libft.h"
 
 char	*ft_readline(char *prompt)
 {
@@ -20,6 +20,9 @@ char	*ft_readline(char *prompt)
 
 	ret = ft_absorb(readline(prompt));
 	if (ret)
+	{
+		ret = ft_strjoin(ret, "\n");
 		add_history(ret);
+	}
 	return (ret);
 }

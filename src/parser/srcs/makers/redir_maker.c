@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 00:54:08 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 15:36:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,35 +41,32 @@ t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
 	return (temp);
 }
 
-void	document_done(char *document, int document_index, t_redirect *temp)
+void	document_done(char *document, t_redirect *temp)
 {
-	if (document)
-		document[document_index] = '\0';
-	else
-	{
-		document = ft_malloc(1);
-		document[0] = '\0';
-	}
+	if (!document)
+		document = ft_strdup("");
 	temp->redirectee->word = document;
+}
+
+void	document_warning(char *here_doc_eof)
+{
+	char	*text;
+
+	text = "minishell: warning: here-document delimited by end of file";
+	ft_putendl_fd(ft_strjoin(ft_strjoin(ft_strjoin(text, " (wanted `"),
+				here_doc_eof), "')"), STDERR_FILENO);
 }
 
 void	make_here_document(t_redirect *temp)
 {
 	char	*document;
 	char	*full_line;
-	int		document_index;
-	int		document_size;
-	int		len;
 
-	if (temp->redir_type != REDIR_UNTIL)
-		return ;
 	document = NULL;
-	document_index = 0;
-	document_size = 0;
 	temp->here_doc_eof = string_quote_removal(temp->redirectee->word);
 	if (!temp->here_doc_eof)
 		return (temp->here_doc_eof = ft_strdup(""),
-			document_done(document, document_index, temp));
+			document_done(document, temp));
 	full_line = ft_readline("> ");
 	while (full_line)
 	{
@@ -79,28 +76,14 @@ void	make_here_document(t_redirect *temp)
 			continue ;
 		}
 		if (ft_strncmp(full_line, temp->here_doc_eof,
-				ft_strlen(temp->here_doc_eof)) == 0)
-			return (document_done(document, document_index, temp));
-		len = ft_strlen(full_line);
-		if (len + document_index >= document_size)
-		{
-			if (document_size)
-				document_size = 2 * (document_size + len) + 1;
-			else
-				document_size = len + 3;
-			document = ft_realloc(document, document_size);
-		}
-		ft_memcpy(document + document_index, full_line, len);
-		ft_memcpy(document + document_index + len, "\n", 1);
-		document_index += len + 1;
+				ft_strlen(temp->here_doc_eof) + 1) == '\n')
+			return (document_done(document, temp));
+		document = ft_strjoin(document, full_line);
 		full_line = ft_readline("> ");
 	}
-	if (full_line == 0)
-		ft_putendl_fd(ft_strjoin(ft_strjoin(
-					"minishell: warning: here-document \
-					delimited by end of file (wanted `",
-					temp->here_doc_eof), "')"), STDERR_FILENO);
-	document_done(document, document_index, temp);
+	if (!full_line)
+		document_warning(temp->here_doc_eof);
+	document_done(document, temp);
 }
 
 void	gather_here_documents(t_minishell *minishell)
