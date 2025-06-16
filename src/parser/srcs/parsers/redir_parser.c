@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:33:07 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 18:24:55 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 19:24:50 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,17 @@ t_redirect	*parse_redirection_list(t_minishell *minishell)
 		head = current;
 	}
 	return (head);
+}
+
+void	gather_here_documents(t_minishell *minishell)
+{
+	int	r;
+
+	r = 0;
+	while (minishell->need_here_doc > 0)
+	{
+		make_here_document (minishell->redir_stack[r++]);
+		minishell->need_here_doc--;
+		minishell->redir_stack[r - 1] = 0;
+	}
 }

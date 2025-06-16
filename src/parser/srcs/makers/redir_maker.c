@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 15:36:34 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 19:24:25 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,4 @@ void	make_here_document(t_redirect *temp)
 	if (!full_line)
 		document_warning(temp->here_doc_eof);
 	document_done(document, temp);
-}
-
-void	gather_here_documents(t_minishell *minishell)
-{
-	int	r;
-
-	r = 0;
-	while (minishell->need_here_doc > 0)
-	{
-		make_here_document (minishell->redir_stack[r++]);
-		minishell->need_here_doc--;
-		minishell->redir_stack[r - 1] = 0;
-	}
 }

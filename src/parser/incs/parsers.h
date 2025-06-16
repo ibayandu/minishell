@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:48:41 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/15 23:45:04 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 19:25:16 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ t_command	*parse_simple_list(t_minishell *minishell);
 t_command	*parse_pipeline(t_minishell *minishell);
 t_command	*parse_compound_list(t_minishell *minishell);
 void		parse_newline_list(void);
+void		gather_here_documents(t_minishell *minishell);
 
 #endif // PARSERS_H
