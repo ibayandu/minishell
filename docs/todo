@@ -8,3 +8,4 @@
  - Handle Ctrl + D action on repl loop. U should exit on direct Ctrl + D and ignore on any prompt.
  - Decide similar approach on directory structor for total structs and definations
  - Close the 3 to MAX_FD fd's on new process with fork
+ - Add Assignment Builtin flag for export
