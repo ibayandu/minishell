@@ -1,31 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_charflag.c                                      :+:      :+:    :+:   */
+/*   quote.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 23:37:00 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/19 15:37:35 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/06/17 20:40:08 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/17 21:02:56 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "flags.h"
 #include "libft.h"
+#include "structs.h"
 
-static int	ft_charflags(unsigned char c)
-{
-	int f;
-
-	f = 0;
-	if (c == '$' || c == '"')
-		f |= CBSDQUOTE;
-	return f;
-}
-
-int	ft_charflag(char c, int flag)
-{
-	int	flags;
-	flags = ft_charflags((unsigned char)c);
-	return ((flags & flag) != 0);
-}

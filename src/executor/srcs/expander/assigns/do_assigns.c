@@ -1,35 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   do_assigns.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/12 11:47:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/16 14:39:48 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/06/17 19:43:00 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/17 19:55:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "makers.h"
+#include "token.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+t_word_list	*separate_out_assignments(t_word_list *tlist, t_word_list **assign_list)
 {
-	char	*result;
-	size_t	s1len;
-	size_t	s2len;
-	size_t	total_len;
+	t_word_list	*vp;
+	t_word_list	*lp;
 
-	if (!s2)
+	if (!tlist)
 		return (NULL);
-	if (!s1)
-		s1 = ft_strdup("");
-	s2len = ft_strlen(s2);
-	s1len = ft_strlen(s1);
-	total_len = s1len + s2len;
-	result = (char *)ft_malloc((total_len * sizeof(char)) + 1);
-	if (!result)
+	*assign_list = NULL;
+	lp = tlist;
+	vp = lp;
+	while (lp && (lp->word->flags & F_ASSIGNMENT))
+	{
+		vp = lp;
+		lp = lp->next;
+	}
+	if (lp != tlist)
+	{
+		*assign_list = tlist;
+		vp->next = NULL;
+		tlist = lp;
+	}
+	if (!tlist)
 		return (NULL);
-	ft_strlcpy(result, s1, s1len + 1);
-	ft_strlcpy((result + s1len), s2, s2len + 1);
-	return (result);
+	return (tlist);
 }

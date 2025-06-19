@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspace.c                                       :+:      :+:    :+:   */
+/*   ft_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 21:29:55 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/19 20:53:02 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/06/16 00:49:26 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/16 15:13:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isspace(int c)
+#include <readline/readline.h>
+#include <readline/history.h>
+#include "libft.h"
+
+char	*ft_readline(char *prompt)
 {
-	return (c == ' ' || c == '\t' || c == '\r' || c == '\v' || c == '\f');
+	char	*ret;
+
+	ret = ft_absorb(readline(prompt));
+	if (ret)
+	{
+		ret = ft_strjoin(ret, "\n");
+		add_history(ret);
+	}
+	return (ret);
 }

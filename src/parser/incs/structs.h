@@ -6,12 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/21 19:29:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 18:06:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+# define HEREDOC_MAX 16
 
 typedef struct s_command	t_command;
 
@@ -20,26 +22,25 @@ typedef enum e_cmd_type
 	CMD_SIMPLE,
 	CMD_CONNECT,
 	CMD_SUBSHELL
-
 }	t_cmd_type;
 
 typedef enum e_cnt_type
 {
+	CNT_IGNORE,
 	CNT_PIPE,
 	CNT_AND_AND,
-	CNT_OR_OR
-
+	CNT_OR_OR,
+	CNT_NL
 }	t_cnt_type;
 
 typedef enum e_redir_type
 {
+	REDIR_IGNORE,
 	REDIR_OUTPUT,
 	REDIR_INPUT,
 	REDIR_APPEND,
 	REDIR_UNTIL
-
 }	t_redir_type;
-
 
 typedef struct s_word
 {
@@ -62,7 +63,7 @@ typedef struct s_redirect
 	t_word				*redirector;
 	t_word				*redirectee;
 	t_redir_type		redir_type;
-	struct s_redirect		*next;
+	struct s_redirect	*next;
 
 }	t_redirect;
 
@@ -108,8 +109,13 @@ typedef struct s_command
 		t_simple_cmd	*simple;
 		t_subshell_cmd	*subshell;
 	} value;
-
 }	t_command;
 
+typedef struct s_minishell
+{
+	t_redirect	*redir_stack[HEREDOC_MAX];
+	int			need_here_doc;
+
+}	t_minishell;
 
 #endif // STRUCTS_H

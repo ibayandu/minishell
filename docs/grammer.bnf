@@ -1,60 +1,64 @@
-%token <word> WORD
-%token AND_AND OR_OR GREATER_GREATER LESS_LESS NUMBER_GREATER NUMBER_LESS NUMBER_GREATER_GREATER NUMBER_LESS NUMBER_LESS_LESS
+%token <word> T_WORD
+%token T_AND_IF T_OR_IF T_GREATER_GREATER T_LESS_LESS T_NUMBER_GREATER T_NUMBER_LESS T_NUMBER_GREATER_GREATER T_NUMBER_LESS T_NUMBER_LESS_LESS T_NL T_PIPE T_LPARANTHESE T_RPARANTHESE T_LESS T_GREAT
 
-%type <command> inputunit command pipeline list simple_list simple_command
+%type <command> inputunit command pipeline list simple_command compound_list
 %type <redirect> redirection redirection_list
 %type <element> simple_command_element
 
 %start inputunit
 
-%left EOF
-%left AND_AND OR_OR
-%right '|'
-%%
+%left T_NL
+%left T_AND_IF T_OR_IF
+%right T_PIPE
 
-inputunit:	simple_list EOF
-		|	error EOF
-		|	EOF
+%%
+inputunit:	newline_list
+		|	newline_list list T_NL
+		|	newline_list error T_NL
 		;
 
-redirection:	'>' WORD
-			|	'<' WORD
-			|	NUMBER_GREATER WORD
-			|	NUMBER_LESS WORD
-			|	GREATER_GREATER WORD
-			|	NUMBER_GREATER_GREATER WORD
-			|	LESS_LESS WORD
-			|	NUMBER_LESS_LESS WORD
+redirection:	T_GREAT T_WORD
+			|	T_LESS T_WORD
+			|	T_NUMBER_GREATER T_WORD
+			|	T_NUMBER_LESS T_WORD
+			|	T_GREATER_GREATER T_WORD
+			|	T_NUMBER_GREATER_GREATER T_WORD
+			|	T_LESS_LESS T_WORD
+			|	T_NUMBER_LESS_LESS T_WORD
 			;
 
-simple_command_element: WORD
+simple_command_element: T_WORD
 					|	redirection
 					;
 
 redirection_list: redirection
-			|	redirection_list redirection
-			;
+				|	redirection_list redirection
+				;
 
 simple_command:	simple_command_element
 			|	simple_command simple_command_element
 			;
 
 command:	simple_command
-		|	'(' list ')'
-		|	'(' list ')' redirection_list
+		|	T_LPARANTHESE compound_list T_RPARANTHESE
+		|	T_LPARANTHESE compound_list T_RPARANTHESE redirection_list
 		;
 
-list:	list AND_AND list
-	|	list OR_OR list
+compound_list:	newline_list list
+			|	newline_list list T_NL newline_list
+			;
+
+list:	list T_AND_IF newline_list list
+	|	list T_OR_IF newline_list list
+	|	list T_NL newline_list list
 	|	pipeline
 	;
 
-simple_list:	simple_list AND_AND simple_list
-			|	simple_list OR_OR simple_list
-			|	pipeline
+newline_list:
+			|	newline_list T_NL
 			;
 
-pipeline:	pipeline '|' pipeline
+pipeline:	pipeline T_PIPE newline_list pipeline
 		|	command
 		;
 %%

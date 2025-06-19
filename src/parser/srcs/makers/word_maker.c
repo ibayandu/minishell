@@ -6,22 +6,19 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/20 18:36:06 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/16 18:26:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include "utils.h"
 #include "libft.h"
-#include "flags.h"
 
-t_word	*alloc_word_desc()
+t_word	*alloc_word_desc(void)
 {
 	t_word	*temp;
 
 	temp = ft_malloc(sizeof(t_word));
-	if (!temp)
-		return (NULL);
 	temp->flags = 0;
 	temp->word = 0;
 	return (temp);
@@ -62,6 +59,5 @@ t_word	*make_word_from_token(int token)
 
 	tokenizer[0] = token;
 	tokenizer[1] = '\0';
-
 	return (make_word(tokenizer, 0));
 }

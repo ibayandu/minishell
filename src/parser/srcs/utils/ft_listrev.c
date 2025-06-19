@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:24:49 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/20 18:47:37 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/12 20:57:57 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,3 @@ t_redirect	*ft_revredir(t_redirect *list)
 	}
 	return (prev);
 }
-

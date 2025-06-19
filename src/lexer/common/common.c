@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:51:38 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/25 10:28:47 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/19 20:52:22 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ t_token_type	get_token_type(char *str)
 		return (T_LPARANTHESE);
 	else if (ft_strncmp(str, ")", 1) == 0)
 		return (T_RPARANTHESE);
+	else if (ft_strncmp(str, "\n", 1) == 0)
+		return (T_NL);
 	else if (ft_strncmp(str, "\n", 1) == 0)
 		return (T_NL);
 	else if (is_number(str))

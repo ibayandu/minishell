@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_create.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:14 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/24 19:01:57 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:38:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /// dosyasının içinde bulabilirsin.
 t_token	*create_token(t_token_type type, char *value)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = ft_malloc(sizeof(t_token));
 	if (!token)

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/19 22:17:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/15 20:23:16 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,7 @@ static t_list	*lexer(char *input)
 			input += ft_strlen(token->value);
 		}
 	}
-	token = create_token(T_EOF, NULL);
-	if (token)
-		ft_lstadd_back(&tokens, ft_lstnew(token));
+	((t_token *)(ft_lstlast(tokens)->content))->flags = 1;
 	return (tokens);
 }
 
@@ -66,7 +64,7 @@ static t_list	*lexer(char *input)
  */
 void	*init_lexer(char *input)
 {
-	static t_list	*tokenlist = NULL;
+	static t_list	*tokenlist;
 
 	if (input)
 	{
@@ -92,12 +90,12 @@ t_token	*get_next_token(void)
 	token_list = init_lexer(NULL);
 	if (!token_list)
 		return (NULL);
-	*token_list = (*token_list)->next;
-	if (!(*token_list))
-		return (NULL);
+	if ((*token_list)->next)
+		*token_list = (*token_list)->next;
 	return ((t_token *)(*token_list)->content);
 }
-t_token *get_current_token()
+
+t_token	*get_current_token(void)
 {
 	t_list	**token_list;
 
@@ -108,7 +106,8 @@ t_token *get_current_token()
 		return (NULL);
 	return ((t_token *)(*token_list)->content);
 }
-int consume_token(t_token_type type)
+
+int	consume_token(t_token_type type)
 {
 	if (type == get_current_token()->token_type)
 	{
@@ -116,8 +115,5 @@ int consume_token(t_token_type type)
 		return (1);
 	}
 	else
-	{
-		//TODO: HATA vericez.
 		return (0);
-	}
 }
