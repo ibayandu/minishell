@@ -3,7 +3,7 @@ RM = rm -rf
 AR = ar rcs
 MKDIR = mkdir -p
 
-IFLAGS = -I./incs -I../lexer -I../libs/collector/incs -I../libs/libft/incs -I../lexer/incs
+IFLAGS = -I../. -I./incs -I../lexer -I../libs/collector/incs -I../libs/libft/incs -I../lexer/incs
 CFLAGS = -Wall -Werror -Wextra -g
 
 VPATH = srcs:srcs/makers:srcs/utils:srcs/parsers

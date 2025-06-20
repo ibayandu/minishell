@@ -1,7 +1,7 @@
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs
+CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs -I..
 
 VPATH = srcs
 

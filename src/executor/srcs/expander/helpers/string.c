@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 23:20:56 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/18 05:18:49 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/19 21:12:54 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "utils.h"
 
-char	*string_extract_simple(char *string, size_t slen, size_t *sindex, const char *charlist)
+char	*string_extract_verbatim(char *string, size_t slen, size_t *sindex, const char *charlist)
 {
 	char	*temp;
 	int		i;

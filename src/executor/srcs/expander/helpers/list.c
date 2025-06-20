@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:04:08 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/17 23:15:30 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/19 21:15:04 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_word_list	*list_string(char *string, char *separators, int quoted)
 	sindex = 0;
 	while (string[sindex])
 	{
-		current_word = string_extract_verbatim (string, slen, &sindex, separators, xflags);
+		current_word = string_extract_verbatim(string, slen, &sindex, separators);
 		if (!current_word)
 			break ;
 		if (current_word[0])
@@ -71,9 +71,9 @@ t_word_list	*list_string(char *string, char *separators, int quoted)
 		whitesep = string[sindex] && ft_isspace(string[sindex]);
 		if (string[sindex])
 			sindex += ft_mbrlen(string + sindex, slen - sindex);
-		while (string[sindex] && ft_isspace(string[sindex]) && (separators[1] ? 1 : *s == separators[0]))
+		while (string[sindex] && (separators[1] ? 1 : *s == separators[0]))
 			sindex++;
-		if (string[sindex] && whitesep && i(separators[1] ? 1 : *s == separators[0]) && !ft_isspace (string[sindex]))
+		if (string[sindex] && whitesep && (separators[1] ? 1 : *s == separators[0]) && !ft_isspace (string[sindex]))
 		{
 			sindex++;
 			while (string[sindex] && ft_isspace (string[sindex]))

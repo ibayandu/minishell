@@ -6,14 +6,12 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:40 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/16 18:06:18 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/19 23:01:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
-
-# define HEREDOC_MAX 16
 
 typedef struct s_command	t_command;
 
@@ -110,12 +108,5 @@ typedef struct s_command
 		t_subshell_cmd	*subshell;
 	} value;
 }	t_command;
-
-typedef struct s_minishell
-{
-	t_redirect	*redir_stack[HEREDOC_MAX];
-	int			need_here_doc;
-
-}	t_minishell;
 
 #endif // STRUCTS_H

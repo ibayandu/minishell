@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/17 21:10:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/19 21:11:26 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 			else
 				exp_jump_to_top_level (FORCE_EOF);
 		}
-		if (expanded_something && (tlist->word->flags & F_NOSPLIT) == 0)
+		if (expanded_something && !(tlist->word->flags & F_NOSPLIT))
 			temp_list = word_list_split (expanded);
 		else
 			temp_list = expanded;
