@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/20 05:03:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 12:40:42 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ int	main(void)
 		if (minishell->need_here_doc)
 			gather_here_documents(minishell);
 		if (cmd)
+		{
 			execute_command(cmd);
+			print_command(cmd, 0, 1);
+		}
 		cmdline = ft_repl();
 	}
 	ft_free();

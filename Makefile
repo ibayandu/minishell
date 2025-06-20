@@ -35,7 +35,7 @@ all:
 
 program: ${NAME}
 
-$(NAME):  $(OBJS) $(PARSER) $(LEXER) $(LIBFT) $(COLLECTOR) $(EXECUTOR)
+$(NAME):  $(OBJS) $(EXECUTOR) $(PARSER) $(LEXER) $(LIBFT) $(COLLECTOR)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 clean:
 	@rm -rf src/build

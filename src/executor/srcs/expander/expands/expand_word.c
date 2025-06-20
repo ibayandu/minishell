@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 06:37:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 13:02:46 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,11 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 	t_word_list	*new_list;
 	t_word_list	*next;
 	t_word_list	*temp_list;
-	t_word_list	*wcmd;
 	int			expanded_something;
 
-	wcmd = NULL;
 	new_list = NULL;
 	while (tlist)
 	{
-		if (tlist->word->flags & F_ASSNBLTIN)
-			wcmd = tlist;
 		next = tlist->next;
 		expanded_something = 0;
 		expanded = expand_word_internal(tlist->word, 0, 0, &expanded_something);
@@ -76,9 +72,9 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 			// else
 			// 	exp_jump_to_top_level (FORCE_EOF);
 		}
-		if (expanded_something && !(tlist->word->flags & F_NOSPLIT))
-			temp_list = word_list_split (expanded);
-		else
+	//	if (expanded_something && !(tlist->word->flags & F_NOSPLIT))
+	//		temp_list = word_list_split (expanded);
+	//	else
 			temp_list = expanded;
 		expanded = ft_revword(temp_list);
 		new_list = list_append(expanded, new_list);
@@ -92,34 +88,18 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 t_word_list	*expand_word_list(t_word_list *list, int is_redir)
 {
 	t_word_list	*new_list;
-	t_word_list	*assign_list;
 
+	(void)is_redir;
 	if (!list)
 		return (NULL);
-	assign_list = NULL;
-	new_list = separate_out_assignments(copy_word_list(list), &assign_list);
-	if (!new_list)
-	{
-		do_assignment_statements (assign_list, NULL, 1);
-		assign_list = NULL;
-		return (NULL);
-	}
-	new_list = shell_expand_word_list(new_list);
-	if (new_list)
-	{
-		if (!is_redir)
-			new_list = glob_expand_word_list(new_list);
-		else
-			new_list = dequote_list(new_list);
-	}
-	if (assign_list)
-	{
-		if (new_list && new_list->word)
-			do_assignment_statements(assign_list, new_list->word->word, !new_list);
-		else
-			do_assignment_statements(assign_list, NULL, !new_list);
-		assign_list = NULL;
-	}
+	new_list = shell_expand_word_list(copy_word_list(list));
+	// if (new_list)
+	// {
+	// 	if (!is_redir)
+	// 		new_list = glob_expand_word_list(new_list);
+	// 	else
+	// 		new_list = dequote_list(new_list);
+	// }
 	return (new_list);
 }
 
