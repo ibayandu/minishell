@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/19 21:11:26 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 06:37:40 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 		next = tlist->next;
 		expanded_something = 0;
 		expanded = expand_word_internal(tlist->word, 0, 0, &expanded_something);
-		if (expanded == &expand_word_error || expanded == &expand_word_fatal)
+		if (!expanded /*expanded == &expand_word_error || expanded == &expand_word_fatal */)
 		{
 			tlist->word->word = NULL;
-			last_command_exit_value = EXECUTION_FAILURE;
-			if (expanded == &expand_word_error)
-				exp_jump_to_top_level (DISCARD);
-			else
-				exp_jump_to_top_level (FORCE_EOF);
+			// last_command_exit_value = EXECUTION_FAILURE;
+			// if (expanded == &expand_word_error)
+			// 	exp_jump_to_top_level (DISCARD);
+			// else
+			// 	exp_jump_to_top_level (FORCE_EOF);
 		}
 		if (expanded_something && !(tlist->word->flags & F_NOSPLIT))
 			temp_list = word_list_split (expanded);
