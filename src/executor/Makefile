@@ -5,7 +5,7 @@ CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser
 
 VPATH = srcs:srcs/expander:srcs/expander/expands:srcs/expander/helpers
 
-SRCS = executor.c expand_word.c list.c string.c
+SRCS = executor.c #expand_word.c list.c string.c
 
 OBJS = $(SRCS:%.c=build/objs/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 15:01:02 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 20:07:50 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 	{
 		next = tlist->next;
 		expanded_something = 0;
-		expanded = expand_word_internal(tlist->word, 0, 0, &expanded_something);
+		expanded = expand_word_internal(tlist->word, 0, &expanded_something);
 		if (!expanded /*expanded == &expand_word_error || expanded == &expand_word_fatal */)
 		{
 			tlist->word->word = NULL;

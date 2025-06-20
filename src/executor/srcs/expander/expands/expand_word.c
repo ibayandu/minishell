@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:01:10 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 16:14:17 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 16:24:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_word_list	*expand_word_internal(t_word *word, int quoted, int isexp, int *cont
 		cached_quoted_dollar_at = copy_word_list (list);
 		return (list);
 	}
-	istring_size = DEFAULT_INITIAL_ARRAY_SIZE
+	istring_size = DEFAULT_INITIAL_ARRAY_SIZE;
 	istring = (char *)xmalloc(istring_size);
 	istring_index = 0;
 	istring[istring_index] = '\0';
