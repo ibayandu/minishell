@@ -5,39 +5,88 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/17 23:20:56 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/18 05:18:49 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/20 18:52:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "utils.h"
+#include "structs.h"
 
-char	*string_extract_simple(char *string, size_t slen, size_t *sindex, const char *charlist)
+char	*string_list_internal (t_word_list *list)
 {
-	char	*temp;
-	int		i;
+	t_word_list	*t;
+	char		*result;
+	char		*r;
+	size_t		word_len;
+	size_t		sep_len;
+	size_t		result_size;
 
-	if (charlist[0] == '\'' && charlist[1] == '\0')
+	if (!list)
+		return (NULL);
+	if (!list->next)
+		return (ft_strdup(list->word->word));
+	sep_len = 1;
+	result_size = 0;
+	t = list;
+	while (t)
 	{
-		string_extract_single_quoted(string, sindex, &temp);
-		(*sindex)--;
-		return (temp);
+		if (t != list)
+			result_size += sep_len;
+		result_size += ft_strlen(t->word->word);
+		t = t->next;
 	}
-	if (!*charlist)
+	r = result = ft_malloc (result_size + 1);
+	t = list;
+	while (t)
 	{
-		temp = ft_substr(string, *sindex, slen);
-		*sindex = slen;
-		return (temp);
+		if (t != list && sep_len)
+		{
+			if (sep_len > 1)
+			{
+				ft_memset(r, " ", sep_len);
+				r += sep_len;
+			}
+			else
+				*r++ = ' ';
+		}
+		word_len = ft_strlen(t->word->word);
+		ft_memset(r, t->word->word, word_len);
+		r += word_len;
+		t = t->next;
 	}
+	*r = '\0';
+	return (result);
+}
+
+char	*string_extract_double_quoted(char *string, int *sindex)
+{
+	size_t	slen;
+	int		j;
+	int		i;
+	char	*temp;
+
+	slen = ft_strlen(string + *sindex) + *sindex;
+	temp = ft_malloc(1 + slen - *sindex);
+	j = 0;
 	i = *sindex;
-	while (i < (int)slen && string[i])
+	while (string[i])
 	{
-		if (ft_strchr(charlist, string[i]))
-			break ;
-		i++;
+		if (string[i] != '"')
+		{
+			temp[j++] = string[i++];
+			continue;
+		}
+		else
+		{
+			i++;
+			continue;
+		}
+		break;
 	}
-	temp = ft_substr(string, *sindex, i);
+	temp[j] = '\0';
+	if (string[i])
+		i++;
 	*sindex = i;
 	return (temp);
 }

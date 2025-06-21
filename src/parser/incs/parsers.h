@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:48:41 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 19:25:16 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/19 23:03:24 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PARSERS_H
 
 # include "structs.h"
+# include "minishell.h"
 
 t_command	*parse_inputunit(t_minishell *minishell);
 t_redirect	*parse_redirection(t_minishell *minishell);

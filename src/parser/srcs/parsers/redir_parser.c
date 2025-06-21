@@ -6,13 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:33:07 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 19:24:50 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 04:26:14 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "makers.h"
 #include "parsers.h"
+#include "minishell.h"
 #include "utils.h"
 
 static void	push_heredoc(t_redirect *r, t_minishell *minishell)
@@ -35,7 +36,7 @@ t_redirect	*parse_redirection(t_minishell *minishell)
 	t_redir_type	redir_type;
 
 	source = NULL;
-	redir_type = ft_get_redir();
+	redir_type = ft_get_redir(get_current_token());
 	if (get_current_token()->token_type == T_NUMBER_LESS
 		|| get_current_token()->token_type == T_NUMBER_GREAT
 		|| get_current_token()->token_type == T_NUMBER_DGREAT
@@ -49,7 +50,7 @@ t_redirect	*parse_redirection(t_minishell *minishell)
 		dest = make_word(get_current_token()->value,
 				get_current_token()->flags);
 	else
-		return (ft_panic(), NULL);
+		return (ft_panic(get_current_token()), NULL);
 	redirect = make_redirection(source, redir_type, dest);
 	if (get_next_token() && redir_type == REDIR_UNTIL)
 		push_heredoc(redirect, minishell);
@@ -67,7 +68,7 @@ t_redirect	*parse_redirection_list(t_minishell *minishell)
 	head = current;
 	while (1)
 	{
-		if (!ft_get_redir())
+		if (!ft_get_redir(get_current_token()))
 			break ;
 		current = parse_redirection(minishell);
 		if (!current)
@@ -87,6 +88,6 @@ void	gather_here_documents(t_minishell *minishell)
 	{
 		make_here_document (minishell->redir_stack[r++]);
 		minishell->need_here_doc--;
-		minishell->redir_stack[r - 1] = 0;
+		minishell->redir_stack[r - 1] = NULL;
 	}
 }

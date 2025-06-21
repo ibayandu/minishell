@@ -6,15 +6,21 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/17 21:08:18 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 15:08:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
-#include "structs.h"
+# include <stddef.h>
+# include "structs.h"
 
-t_word_list	*list_append(t_word_list *head, t_word_list *tail);
+# define DEFAULT_INITIAL_ARRAY_SIZE 112
+# define UNQUOTED 0
+# define PARTIALLY_QUOTED 1
+# define WHOLLY_QUOTED 2
+
+t_word_list	*expand_word_list(t_word_list *list, int is_redir);
 
 #endif /* EXPANDER_H*/

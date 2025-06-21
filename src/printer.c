@@ -32,8 +32,6 @@ const char	*token_type_to_string(t_token_type type)
 		return ("T_LPARANTHESE");
 	else if (type == T_RPARANTHESE)
 		return ("T_RPARANTHESE");
-	else if (type == T_EOF)
-		return ("T_EOF");
 	else
 		return ("UNKNOWN");
 }

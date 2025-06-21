@@ -1,9 +1,9 @@
-MAKEFLAGS+=--no-print-directory
+MAKEFLAGS += --no-print-directory
 
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-IFLAGS = -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser/incs -Isrc/libs/collector/incs -Isrc/executor/incs
+IFLAGS = -Isrc -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser/incs -Isrc/libs/collector/incs -Isrc/executor/incs
 LFLAGS = -lreadline
 
 VPATH = src
@@ -35,7 +35,7 @@ all:
 
 program: ${NAME}
 
-$(NAME):  $(OBJS) $(PARSER) $(LEXER) $(LIBFT) $(COLLECTOR) $(EXECUTOR)
+$(NAME):  $(OBJS) $(EXECUTOR) $(PARSER) $(LEXER) $(LIBFT) $(COLLECTOR)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 clean:
 	@rm -rf src/build

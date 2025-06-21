@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 00:49:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/16 15:13:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 10:04:51 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ char	*ft_readline(char *prompt)
 
 	ret = ft_absorb(readline(prompt));
 	if (ret)
-	{
 		ret = ft_strjoin(ret, "\n");
-		add_history(ret);
-	}
 	return (ret);
 }

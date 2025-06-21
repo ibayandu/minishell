@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/19 20:52:38 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/20 02:30:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef enum s_token_type
 	T_LPARANTHESE,
 	T_RPARANTHESE,
 	T_NL,
-	T_EOF
 }					t_token_type;
 
 /// @brief token listesini temsil eden bir yapı.
@@ -54,3 +53,5 @@ typedef struct s_token
 }					t_token;
 
 #endif // TOKEN_H
+
+

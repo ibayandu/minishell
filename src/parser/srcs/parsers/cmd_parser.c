@@ -6,13 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:34 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/15 23:50:47 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/20 04:51:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "makers.h"
 #include "parsers.h"
+#include "minishell.h"
 #include "utils.h"
 
 t_element	*parse_simple_command_element(t_minishell *minishell)
@@ -45,7 +46,8 @@ t_command	*parse_simple_command(t_minishell *minishell)
 	cmd = make_bare_simple_command();
 	while (1)
 	{
-		if (get_current_token()->token_type == T_WORD || ft_get_redir())
+		if (get_current_token()->token_type == T_WORD
+			|| ft_get_redir(get_current_token()))
 		{
 			element = parse_simple_command_element(minishell);
 			if (!element)
@@ -57,7 +59,7 @@ t_command	*parse_simple_command(t_minishell *minishell)
 			break ;
 	}
 	if (!element_parsed)
-		return (ft_panic(), NULL);
+		return (ft_panic(get_current_token()), NULL);
 	return (clean_simple_command(cmd));
 }
 
@@ -76,8 +78,8 @@ t_command	*parse_command(t_minishell *minishell)
 			return (NULL);
 		cmd = make_subshell_command(sub_cmd);
 		if (!consume_token(T_RPARANTHESE))
-			return (ft_panic(), NULL);
-		if (ft_get_redir())
+			return (ft_panic(get_current_token()), NULL);
+		if (ft_get_redir(get_current_token()))
 		{
 			redirects = parse_redirection_list(minishell);
 			if (!redirects)
