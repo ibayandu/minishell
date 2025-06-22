@@ -6,16 +6,18 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:55:25 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 05:31:24 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 07:38:40 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec_utils.h"
+#include "expander.h"
 
-static void	apply_output_redirection(t_redirect *r)
+static void	apply_output_redirection(t_redirect *r, t_minishell *minishell)
 {
 	int	fd;
-
+	
+	r->redirectee->word = expand_word_list(r->redirectee->word, 1, minishell);
 	if (r->redir_type == REDIR_OUTPUT)
 		fd = open(r->redirectee->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (r->redir_type == REDIR_APPEND)
@@ -31,10 +33,11 @@ static void	apply_output_redirection(t_redirect *r)
 		perror(ft_strjoin("minishell: ", r->redirectee->word));
 }
 
-static void	apply_heredoc_redirection(t_redirect *r)
+static void	apply_heredoc_redirection(t_redirect *r, t_minishell *minishell)
 {
 	int	pipefd[2];
 
+	r->redirectee->word = expand_word_list(r->redirectee->word, 1, minishell);
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
@@ -46,10 +49,11 @@ static void	apply_heredoc_redirection(t_redirect *r)
 	close(pipefd[0]);
 }
 
-static void	apply_input_redirection(t_redirect *r)
+static void	apply_input_redirection(t_redirect *r, t_minishell *minishell)
 {
 	int	fd;
 
+	r->redirectee->word = expand_word_list(r->redirectee->word, 1, minishell);
 	if (r->redir_type == REDIR_INPUT)
 	{
 		fd = open(r->redirectee->word, O_RDONLY);
@@ -62,17 +66,17 @@ static void	apply_input_redirection(t_redirect *r)
 		close(fd);
 	}
 	else if (r->redir_type == REDIR_UNTIL)
-		apply_heredoc_redirection(r);
+		apply_heredoc_redirection(r, minishell);
 }
 
-void	apply_redirections(t_redirect *r)
+void	apply_redirections(t_redirect *r, t_minishell *minishell)
 {
 	while (r)
 	{
 		if (r->redir_type == REDIR_OUTPUT || r->redir_type == REDIR_APPEND)
-			apply_output_redirection(r);
+			apply_output_redirection(r, minishell);
 		else if (r->redir_type == REDIR_INPUT || r->redir_type == REDIR_UNTIL)
-			apply_input_redirection(r);
+			apply_input_redirection(r, minishell);
 		r = r->next;
 	}
 }

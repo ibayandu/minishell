@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 14:21:03 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 07:20:51 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 07:31:04 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EXECUTOR_H
 
 # include "structs.h"
+# include "minishell.h"
 
 int	execute_command(t_command *cmd, t_minishell *minishell);
 

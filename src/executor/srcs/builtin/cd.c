@@ -6,18 +6,23 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 03:29:10 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 07:50:06 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "expander.h"
 
-static int	change_directory(const char *path)
+static int	change_directory(const char *path, t_minishell *minishell)
 {
-	char	cwd[4096];
-	char	*oldpwd;
+	char		cwd[4096];
+	char		*oldpwd;
+	t_variable	*v;
 
-	oldpwd = getenv("PWD");
+	oldpwd = NULL;
+	v = find_variable_internal("PWD", minishell);
+	if (v);
+		oldpwd = v->value;
 	if (chdir(path) != 0)
 	{
 		perror(ft_strjoin("minishell: cd: ", path));

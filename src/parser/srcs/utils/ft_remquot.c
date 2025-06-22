@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remquot.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/21 21:01:37 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 07:30:33 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 char	*string_extract_single_quoted(char *string, int *sindex)
 {
 	int		i;
-	size_t	slen;
 	char	*t;
 
 	(*sindex)++;
-	slen = 0;
 	i = *sindex;
 	while (string[i])
 	{
