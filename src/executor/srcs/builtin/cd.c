@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:50:06 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 08:37:05 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static int	change_directory(const char *path, t_minishell *minishell)
 		return (1);
 	}
 	if (oldpwd)
-		ft_putenv(ft_strjoin("OLDPWD=", oldpwd));
+		bind_variable("OLDPWD", oldpwd, minishell);
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		ft_putenv(ft_strjoin("PWD=", cwd));
+		bind_variable("PWD", cwd, minishell);
 	else
 	{
 		perror("getcwd");
@@ -40,14 +40,18 @@ static int	change_directory(const char *path, t_minishell *minishell)
 	return (0);
 }
 
-int	builtin_cd(char **argv)
+int	builtin_cd(char **argv, t_minishell *minishell)
 {
 	const char	*path;
 	char		*home;
+	t_variable	*v;
 
+	home = NULL;
 	if (argv[1] == NULL)
 	{
-		home = getenv("HOME");
+		v = find_variable_internal("HOME", minishell);
+		if (v)
+			home = v->value;
 		if (!home)
 		{
 			ft_putendl_fd("minishell: cd: HOME not set", 2);
@@ -57,5 +61,5 @@ int	builtin_cd(char **argv)
 	}
 	else
 		path = argv[1];
-	return (change_directory(path));
+	return (change_directory(path, minishell));
 }

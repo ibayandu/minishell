@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:25:40 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 08:33:48 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*ft_repl(void)
 {
 	char	*line;
 	char	*ps1;
-	// char	*decoded;
 
 	ps1 = getenv("PS1");
 	if (!ps1)
@@ -30,7 +29,6 @@ char	*ft_repl(void)
 	{
 		ps1 = ft_strtrim(ps1, "\"'");
 		ps1 = decode_prompt(ps1);
-		// ps1 = decoded;
 	}
 	line = ft_absorb(readline(ps1));
 	if (line == NULL)
@@ -62,7 +60,7 @@ int	main(void)
 			gather_here_documents(minishell);
 		if (cmd)
 		{
-			execute_command(cmd);
+			execute_command(cmd, minishell);
 			// print_command(cmd, 0, 1);
 		}
 		cmdline = ft_repl();

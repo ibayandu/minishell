@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_simple.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:41:02 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 08:42:41 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minish
 		return (1);
 	if (is_builtin(cmd->words->word->word))
 	{
-		run_builtin(cmd);
+		run_builtin(cmd, minishell);
 		return (0);
 	}
 	pid = fork();
