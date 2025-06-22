@@ -10,4 +10,5 @@
  - Close the 3 to MAX_FD fd's on new process with fork
  - Add Assignment Builtin flag for export
  - The builtin redirections are missing
- - builtin pipes won't working
+ - Track the minishell->last_command_exit_value
+ - Handle _="command_name" env variable with flags on t_variable

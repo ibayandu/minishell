@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 20:02:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 00:13:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,8 @@ void	adjust_shell_level(int change, t_minishell *minishell)
 		new_level[2] = (old_level % 10) + '0';
 		new_level[3] = '\0';
 	}
-	temp_var = bind_variable ("SHLVL", new_level, minishell);
+	unbind_variable("SHLVL", minishell);
+	temp_var = bind_variable("SHLVL", new_level, minishell);
 }
 
 void	set_home_var(t_minishell *minishell)

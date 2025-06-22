@@ -87,4 +87,10 @@ $> cat << 1 && cat << 2 && cat << 3 && cat << 4 && cat << 5 && cat << 6 && cat <
 $> echo $
 $
 
+------------------------
 
+$> export "ğğüdsadsaş"=7
+bash: export: `ğğüdsadsaş=7': not a valid identifier
+$> export "dsad"=7
+
+------------------------

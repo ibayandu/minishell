@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 22:23:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 00:09:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,21 @@ static char	*ft_get_key(char *arg)
 	ret = ft_strdup(arg);
 	i = ft_strchr(ret, '=') - ret;
 	ret[i] = '\0';
-	return (ret);
+	if (*ret && legal_identifier(ret))
+		return (ret);
+	return (NULL);
 }
 
 static int	ft_export_with_value(char *arg, t_minishell *minishell)
 {
+	char	*key;
+
+	key = ft_get_key(arg);
+	if (!key)
+	{
+		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
+		return (1);
+	}
 	unbind_variable(ft_get_key(arg), minishell);
 	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1, minishell))
 	{
@@ -98,6 +108,11 @@ static int	ft_export_without_value(char *arg, t_minishell *minishell)
 	char		*val;
 	t_variable	*v;
 
+	if (!ft_get_key(arg))
+	{
+		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
+		return (1);
+	}
 	val = NULL;
 	v = find_variable_internal(arg, minishell);
 	if (v)
@@ -135,4 +150,3 @@ int	builtin_export(char **argv, t_minishell *minishell)
 	}
 	return (0);
 }
-//todo key verilmediğinde hata vermiyor örnek olarak export =5 dediğinde çalışıyor yani saçma veya export = çalışıyor bu da saçma

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 20:02:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 23:51:12 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,16 @@
 #include "printer.c"
 #include "init.c"
 
-char	*ft_repl(void)
+char	*ft_repl(t_minishell *minishell)
 {
-	char	*line;
-	char	*ps1;
+	char		*line;
+	char		*ps1;
+	t_variable	*v;
 
 	ps1 = PS1;
+	v = find_variable_internal("PS1", minishell);
+	if (v)
+		ps1 = v->value;
 	ps1 = ft_strtrim(ps1, "\"'");
 	ps1 = decode_prompt(ps1);
 	line = ft_absorb(readline(ps1));
@@ -45,7 +49,7 @@ int	main(void)
 	extern char			**environ;
 
 	initialize_shell_variables(environ, minishell);
-	cmdline = ft_repl();
+	cmdline = ft_repl(minishell);
 	while (cmdline)
 	{
 		if (!init_lexer(ft_strjoin(cmdline, "\n")))
@@ -58,7 +62,7 @@ int	main(void)
 			execute_command(cmd, minishell);
 			// print_command(cmd, 0, 1);
 		}
-		cmdline = ft_repl();
+		cmdline = ft_repl(minishell);
 	}
 	ft_free();
 	return (0);
