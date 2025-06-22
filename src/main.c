@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/20 12:40:42 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 06:48:41 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "parsers.h"
 #include "printer.c"
 #include "executor.h"
+#include "init.c"
 
 char	*ft_repl()
 {
@@ -37,8 +38,11 @@ int	main(void)
 	t_minishell	*const	minishell = &(t_minishell){0};
 	t_command			*cmd;
 	char				*cmdline;
+	extern char			**environ;
 
+	initialize_shell_variables(environ, minishell);
 	cmdline = ft_repl();
+	printf("%s\n", find_variable_internal("PWD", minishell)->value);
 	while (cmdline)
 	{
 		if (!init_lexer(ft_strjoin(cmdline, "\n")))
@@ -48,7 +52,7 @@ int	main(void)
 			gather_here_documents(minishell);
 		if (cmd)
 		{
-			execute_command(cmd);
+			execute_command(cmd, minishell);
 			print_command(cmd, 0, 1);
 		}
 		cmdline = ft_repl();

@@ -1,11 +1,11 @@
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs -I.. -I../lexer/incs
+CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs -I.. -I../lexer/incs 
 
 VPATH = srcs:srcs/expander:srcs/expander/expands:srcs/expander/helpers
 
-SRCS = executor.c #expand_word.c list.c string.c
+SRCS = execute_cmd.c expand_word.c expand_list.c split.c string.c expand_param.c
 
 OBJS = $(SRCS:%.c=build/objs/%.o)
 
