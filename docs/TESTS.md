@@ -14,7 +14,7 @@ $> echo $a$HOME$a
 
 $> echo */*/deneme* && ( echo "Başlangiç: $(date)" && echo << delim) && echo "Alt
 işlem başarıli" || echo "Alt işlem başarısız" | grep "içerik" || ech
-o "Eşleşme bulunamadı" 123> output.txt 2> deneme.txt && cat < || ech
+o "Eşleşme bulunamadı" 123> output.txt 2> deneme.txt && cat < a || ech
 o "Yeni dosyaya yazılan içerik" | (export a=deneme && echo $a)
 bash: syntax error near unexpected token `||'
 > fghjkl

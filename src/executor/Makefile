@@ -3,9 +3,10 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g
 CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs -I.. -I../lexer/incs
 
-VPATH = srcs:srcs/expander:srcs/expander/expands:srcs/expander/helpers
+VPATH = srcs:srcs/expander:srcs/expander/expands:srcs/expander/helpers:srcs/execute:srcs/utils:srcs/builtin
 
-SRCS = executor.c #expand_word.c list.c string.c
+SRCS = executor.c ft_execvp.c execute_connect.c execute_simple.c execute_subshell.c apply_redirections.c build_argv.c ft_execvp.c\
+		builtin.c cd.c echo.c env.c exit.c export.c pwd.c unset.c putenv.c
 
 OBJS = $(SRCS:%.c=build/objs/%.o)
 

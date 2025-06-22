@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 13:50:29 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/21 20:04:41 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/06/22 02:48:18 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/06/22 04:35:24 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
-#include "exec_utils.h"
+#include "builtin.h"
 
-int	execute_command(t_command *cmd)
+int	builtin_pwd(void)
 {
-	if (!cmd)
+	char	cwd[4096];
+
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		printf("%s\n", cwd);
 		return (0);
-	if (cmd->redirects)
-		apply_redirections(cmd->redirects);
-	if (cmd->type == CMD_SIMPLE)
-		return (execute_simple(cmd->value.simple, cmd->redirects));
-	if (cmd->type == CMD_CONNECT)
-		return (execute_connect(cmd->value.connection));
-	if (cmd->type == CMD_SUBSHELL)
-		return (execute_subshell(cmd->value.subshell, cmd->redirects));
+	}
+	perror("pwd");
 	return (1);
 }

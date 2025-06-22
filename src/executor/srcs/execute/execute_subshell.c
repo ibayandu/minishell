@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
+/*   execute_subshell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 13:50:29 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/21 20:04:41 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/06/21 19:35:37 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
-#include "exec_utils.h"
 
-int	execute_command(t_command *cmd)
+int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects)
 {
-	if (!cmd)
-		return (0);
-	if (cmd->redirects)
-		apply_redirections(cmd->redirects);
-	if (cmd->type == CMD_SIMPLE)
-		return (execute_simple(cmd->value.simple, cmd->redirects));
-	if (cmd->type == CMD_CONNECT)
-		return (execute_connect(cmd->value.connection));
-	if (cmd->type == CMD_SUBSHELL)
-		return (execute_subshell(cmd->value.subshell, cmd->redirects));
-	return (1);
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		apply_redirections(redirects);
+		exit(execute_command(subshell->command));
+	}
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
 }

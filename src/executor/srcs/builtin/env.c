@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 14:21:03 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 05:09:05 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/06/22 02:47:02 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/06/22 03:37:19 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#include "builtin.h"
 
-# include "structs.h"
+int	builtin_env(void)
+{
+	extern char	**environ;
+	char		**env;
 
-int	execute_command(t_command *cmd);
-
-#endif // EXECUTOR_H
+	env = environ;
+	while (*env != NULL)
+		printf("%s\n", *env++);
+	return (0);
+}

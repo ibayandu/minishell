@@ -8,7 +8,7 @@ LFLAGS = -lreadline
 
 VPATH = src
 
-SRCS = main.c
+SRCS = main.c decode_prompt.c
 
 LIBFT = libs/libft/build/libs/libft.a
 COLLECTOR = libs/collector/build/libs/collector.a

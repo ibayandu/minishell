@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:37:31 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 05:05:26 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/21 16:52:05 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_command	*parse_list(t_minishell *minishell)
 		cnt_type = ft_get_cnt(get_current_token());
 		get_next_token();
 		parse_newline_list();
-		if (get_current_token()->token_type != T_NL || cnt_type != T_NL)
+		if (get_current_token()->token_type != T_NL || cnt_type != CNT_NL)
 		{
 			right = parse_pipeline(minishell);
 			if (!right)

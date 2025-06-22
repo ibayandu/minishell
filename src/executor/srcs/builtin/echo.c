@@ -1,20 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 14:21:03 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 05:09:05 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/06/22 02:45:20 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/06/22 03:31:58 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#include "builtin.h"
 
-# include "structs.h"
+int	builtin_echo(char **args)
+{
+	int	i;
+	int	newline;
 
-int	execute_command(t_command *cmd);
-
-#endif // EXECUTOR_H
+	i = 1;
+	newline = 1;
+	while (args[i] && ft_strncmp(args[i], "-n", 3) == 0)
+	{
+		newline = 0;
+		i++;
+	}
+	while (args[i])
+	{
+		printf("%s", args[i]);
+		if (args[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (newline)
+		printf("\n");
+	return (0);
+}
