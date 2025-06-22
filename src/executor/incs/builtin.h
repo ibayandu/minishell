@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:58 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 08:42:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 18:11:23 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int	run_builtin(t_simple_cmd *cmd, t_minishell *minishell);
 int	ft_putenv(char *env_entry);
 
 int	builtin_cd(char **argv, t_minishell *minishell);
-int	builtin_export(char **args);
-int	builtin_unset(char **args);
+int	builtin_export(char **argv, t_minishell *minishell);
+int	builtin_unset(char **argv, t_minishell *minishell);
 int	builtin_exit(char **args);
 int	builtin_echo(char **args);
 int	builtin_pwd(void);
-int	builtin_env(void);
+int	builtin_env(t_minishell *minishell);
 
 #endif // BUILTIN_H

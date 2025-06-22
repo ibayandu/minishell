@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 08:39:13 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 21:31:13 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ t_variable	*bind_variable_internal(const char *name, char *value, t_hash *table,
 		if (!entry)
 			return (entry);
 	}
-	else if (!entry)
+	else
 	{
 		entry = make_new_variable(name, table, minishell);
 		entry->value = make_variable_value(value);
@@ -281,7 +281,66 @@ t_variable	*bind_variable(const char *name, char *value, t_minishell *minishell)
 	return (bind_variable_internal(name, value, minishell->global_variables->table, minishell));
 }
 
-t_variable	*set_if_not (char *name, char *value, t_minishell *minishell)
+t_bucket	*hash_remove (const char *string, t_hash *table)
+{
+	int				bucket;
+	t_bucket		*prev;
+	t_bucket		*temp;
+	unsigned int	hv;
+
+	if (!table || (table ? table->nentries : 0) == 0)
+		return (NULL);
+	hv = hash_string(string);
+	bucket = (hv & (table->nbuckets - 1));
+	prev = NULL;
+	for (temp = table->bucket_array[bucket]; temp; temp = temp->next)
+	{
+		if (hv == temp->khash && ft_strncmp(temp->key, string, ft_strlen(string)) == 0)
+		{
+			if (prev)
+				prev->next = temp->next;
+			else
+				table->bucket_array[bucket] = temp->next;
+			table->nentries--;
+			return (temp);
+		}
+		prev = temp;
+	}
+	return (NULL);
+}
+
+int	makunbound(const char *name, t_context *vc)
+{
+	t_bucket	*elt;
+	t_context	*v;
+
+	elt = NULL;
+	v = vc;
+	while (v)
+	{
+		elt = hash_remove(name, v->table);
+		if (elt)
+			break ;
+		v = v->down;
+	}
+	if (!elt)
+		return (-1);
+	return (0);
+}
+
+int	unbind_variable(const char *name, t_minishell *minishell)
+{
+	t_variable	*v;
+	int r;
+
+	r = 1;
+	v = find_variable_internal(name, minishell);
+	if (v)
+		r = makunbound(name, minishell->global_variables);
+	return (r);
+}
+
+t_variable	*set_if_not(char *name, char *value, t_minishell *minishell)
 {
 	t_variable	*v;
 
@@ -315,7 +374,7 @@ t_word	*param_expand(char *string, int *sindex, int *expanded_something, t_minis
 		t_index = zindex;
 		while ((c = string[zindex]) && (ft_isalnum(c) || c == '_'))
 			zindex++;
-		temp1 = (zindex > t_index) ? ft_substr(string, t_index, zindex) : NULL;
+		temp1 = (zindex > t_index) ? ft_substr(string, t_index, zindex - t_index) : NULL;
 		if (!temp1 || !*temp1)
 		{
 			temp = ft_strdup("$");

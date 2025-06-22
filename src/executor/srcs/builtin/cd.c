@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 08:37:05 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 18:52:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	change_directory(const char *path, t_minishell *minishell)
 
 	oldpwd = NULL;
 	v = find_variable_internal("PWD", minishell);
-	if (v);
+	if (v)
 		oldpwd = v->value;
 	if (chdir(path) != 0)
 	{

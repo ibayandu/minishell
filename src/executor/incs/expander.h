@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 08:41:10 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 19:41:02 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # define DEFAULT_HASH_BUCKETS 128
 # define FNV_OFFSET 2166136261
 
+t_variable	*set_if_not(char *name, char *value, t_minishell *minishell);
+int			legal_identifier(char *name);
+void		create_variable_tables(t_minishell *minishell);
 t_word_list	*expand_word_list(t_word_list *list, int is_redir, t_minishell *minishell);
 t_word_list	*word_list_split(t_word_list *list);
 t_word_list	*expand_word_internal(t_word *word, int quoted, int *expanded_something, t_minishell *minishell);
@@ -30,5 +33,8 @@ char		*string_list_internal(t_word_list *list);
 t_variable	*find_variable_internal(const char *name, t_minishell *minishell);
 t_word		*param_expand(char *string, int *sindex, int *expanded_something, t_minishell *minishell);
 t_variable	*bind_variable(const char *name, char *value, t_minishell *minishell);
+char		**make_var_export_array(t_context *vcxt);
+int			unbind_variable(const char *name, t_minishell *minishell);
+t_word_list	*list_string(char *string, char *seperators);
 
 #endif /* EXPANDER_H*/

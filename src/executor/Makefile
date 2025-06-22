@@ -1,13 +1,13 @@
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs -I.. -I../lexer/incs 
+CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs -I.. -I../lexer/incs
 
 VPATH = srcs:srcs/expander:srcs/expander/expands:srcs/expander/helpers:srcs/execute:srcs/utils:srcs/builtin
 
-SRCS = executor.c ft_execvp.c execute_connect.c execute_simple.c execute_subshell.c apply_redirections.c build_argv.c ft_execvp.c\
-		builtin.c cd.c echo.c env.c exit.c export.c pwd.c unset.c putenv.c
-SRCS += expand_word.c expand_list.c split.c string.c expand_param.c
+SRCS = executor.c ft_execvp.c execute_connect.c execute_simple.c execute_subshell.c apply_redirections.c build_argv.c ft_execvp.c \
+		builtin.c cd.c echo.c env.c exit.c export.c pwd.c unset.c expand_word.c expand_list.c split.c string.c expand_param.c \
+		list.c
 
 OBJS = $(SRCS:%.c=build/objs/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 08:42:41 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 22:24:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, char **argv,
 		apply_redirections(redirects, minishell);
 	if (cmd->redirects)
 		apply_redirections(cmd->redirects, minishell);
-	ft_execvp(argv[0], argv);
+	ft_execvp(argv[0], argv, minishell);
 	ft_putendl_fd(ft_strjoin(argv[0], ": command not found"), 2);
 	exit(127);
 }

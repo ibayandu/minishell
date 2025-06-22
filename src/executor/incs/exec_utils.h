@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:42:31 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:17:52 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@
 
 void	apply_redirections(t_redirect *r, t_minishell *minishell);
 char	**build_argv(t_word_list *words);
-int		ft_execvp(const char *file, char *const argv[]);
+int		ft_execvp(const char *file, char *const argv[], t_minishell *minishell);
 
 #endif // EXEC_UTILS_H

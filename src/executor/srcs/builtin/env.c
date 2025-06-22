@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:47:02 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 03:37:19 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:22:55 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "expander.h"
 #include "builtin.h"
 
-int	builtin_env(void)
+int	builtin_env(t_minishell *minishell)
 {
-	extern char	**environ;
 	char		**env;
 
-	env = environ;
+	env = make_var_export_array(minishell->global_variables);
 	while (*env != NULL)
-		printf("%s\n", *env++);
+		ft_putendl_fd(*env++, 1);
 	return (0);
 }

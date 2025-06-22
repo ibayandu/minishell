@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 08:38:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 20:02:40 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,8 +255,6 @@ void	initialize_shell_variables(char **env, t_minishell *minishell)
 	set_pwd(minishell);
 	temp_var = set_if_not("PATH", DEFAULT_PATH_VALUE, minishell);
 	temp_var = set_if_not("TERM", "dumb", minishell);
-	set_if_not("PS1", PS1, minishell);
-	set_if_not("PS2", PS2, minishell);
 	adjust_shell_level(1, minishell);
 	set_home_var(minishell);
 	set_shell_var(minishell);

@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execvp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 20:03:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 05:07:59 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:20:01 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 #include "exec_utils.h"
+#include "expander.h"
 #include <errno.h>
 
 static char	*build_full_path(const char *dir, const char *file)
@@ -57,9 +58,9 @@ static char	*find_in_path(const char *file)
 	return (NULL);
 }
 
-int	ft_execvp(const char *file, char *const argv[])
+int	ft_execvp(const char *file, char *const argv[], t_minishell *minishell)
 {
-	extern char	**environ;
+	char	**env;
 	char		*path;
 	int			result;
 
@@ -68,12 +69,13 @@ int	ft_execvp(const char *file, char *const argv[])
 		errno = ENOENT;
 		return (-1);
 	}
+	env = make_var_export_array(minishell->global_variables);
 	if (ft_strchr(file, '/'))
-		return (execve(file, argv, environ));
+		return (execve(file, argv, env));
 	path = find_in_path(file);
 	if (path)
 	{
-		result = execve(path, argv, environ);
+		result = execve(path, argv, env);
 		return (result);
 	}
 	errno = ENOENT;

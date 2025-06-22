@@ -9,3 +9,5 @@
  - Decide similar approach on directory structor for total structs and definations
  - Close the 3 to MAX_FD fd's on new process with fork
  - Add Assignment Builtin flag for export
+ - The builtin redirections are missing
+ - builtin pipes won't working

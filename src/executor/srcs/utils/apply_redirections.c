@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_redirections.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:55:25 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:38:40 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:51:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 static void	apply_output_redirection(t_redirect *r, t_minishell *minishell)
 {
 	int	fd;
-	
-	r->redirectee->word = expand_word_list(r->redirectee->word, 1, minishell);
+
+	r->redirectee->word = string_list_internal(expand_word_list(list_string(r->redirectee->word, " \t\n"), 1, minishell));
 	if (r->redir_type == REDIR_OUTPUT)
 		fd = open(r->redirectee->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (r->redir_type == REDIR_APPEND)
@@ -37,7 +37,7 @@ static void	apply_heredoc_redirection(t_redirect *r, t_minishell *minishell)
 {
 	int	pipefd[2];
 
-	r->redirectee->word = expand_word_list(r->redirectee->word, 1, minishell);
+	r->redirectee->word = string_list_internal(expand_word_list(list_string(r->redirectee->word, " \t\n"), 1, minishell));
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
@@ -53,7 +53,7 @@ static void	apply_input_redirection(t_redirect *r, t_minishell *minishell)
 {
 	int	fd;
 
-	r->redirectee->word = expand_word_list(r->redirectee->word, 1, minishell);
+	r->redirectee->word = string_list_internal(expand_word_list(list_string(r->redirectee->word, " \t\n"), 1, minishell));
 	if (r->redir_type == REDIR_INPUT)
 	{
 		fd = open(r->redirectee->word, O_RDONLY);

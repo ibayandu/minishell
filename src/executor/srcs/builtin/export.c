@@ -3,28 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 05:23:00 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:23:36 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "expander.h"
 
-static void	list_env(void)
+size_t	count_strings(char **arr)
 {
-	extern char	**environ;
+	size_t	count;
+
+	count = 0;
+	while (arr && arr[count])
+		count++;
+	return (count);
+}
+
+char	**sort_strings(char **input)
+{
+	size_t	count;
+	size_t	i;
+	char	*tmp;
+	size_t	j;
+
+	count = count_strings(input);
+	if (!count)
+		return (NULL);
+	char **sorted = ft_malloc((count + 1) * sizeof(char *));
+	if (!sorted)
+		return NULL;
+	i = -1;
+	while (++i < count)
+		sorted[i] = ft_strdup(input[i]);
+	sorted[count] = NULL;
+
+	i = -1;
+	while (++i < count - 1)
+	{
+		j = -1;
+		while (++j < count - 1 - i)
+		{
+			if (ft_strncmp(sorted[j], sorted[j + 1], ft_strlen(sorted[j + 1])) > 0)
+			{
+				tmp = sorted[j];
+				sorted[j] = sorted[j + 1];
+				sorted[j + 1] = tmp;
+			}
+		}
+	}
+
+	return sorted;
+}
+
+static void	list_env(t_minishell *minishell)
+{
+	char	**env;
 	int			i;
 
 	i = 0;
-	while (environ[i])
-		printf("declare -x %s\n", environ[i++]);
+	env = make_var_export_array(minishell->global_variables);
+	env = sort_strings(env);
+	while (env && env[i])
+		ft_putendl_fd(ft_strjoin(ft_strjoin("declare -x \"", env[i++]), "\""), 1);
 }
 
-static int	ft_export_with_value(char *arg)
+static char	*ft_get_key(char *arg)
 {
-	if (ft_putenv(ft_strdup(arg)) != 0)
+	int		i;
+	char	*ret;
+
+	ret = ft_strdup(arg);
+	i = ft_strchr(ret, '=') - ret;
+	ret[i] = '\0';
+	return (ret);
+}
+
+static int	ft_export_with_value(char *arg, t_minishell *minishell)
+{
+	unbind_variable(ft_get_key(arg), minishell);
+	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1, minishell))
 	{
 		perror("export");
 		return (1);
@@ -32,51 +93,28 @@ static int	ft_export_with_value(char *arg)
 	return (0);
 }
 
-static char	*ft_create_env_string(char *key, char *val)
+static int	ft_export_without_value(char *arg, t_minishell *minishell)
 {
-	size_t	len;
-	char	*str;
+	char		*val;
+	t_variable	*v;
 
-	if (val)
-	{
-		len = ft_strlen(key) + ft_strlen(val) + 2;
-		str = ft_malloc(len);
-		if (!str)
-			return (NULL);
-		str = ft_strjoin(key, "=");
-		str = ft_strjoin(str, val);
-	}
-	else
-	{
-		str = ft_malloc(ft_strlen(key) + 2);
-		if (!str)
-			return (NULL);
-		str = ft_strjoin(key, "=");
-	}
-	return (str);
-}
-
-static int	ft_export_without_value(char *arg)
-{
-	char	*val;
-	char	*str;
-
-	val = getenv(arg);
-	str = ft_create_env_string(arg, val);
-	if (!str)
+	val = NULL;
+	v = find_variable_internal(arg, minishell);
+	if (v)
+		val = v->value;
+	if (!bind_variable(arg, val, minishell))
 		return (1);
-	ft_putenv(str);
 	return (0);
 }
 
-int	builtin_export(char **argv)
+int	builtin_export(char **argv, t_minishell *minishell)
 {
 	int		i;
 	char	*eq;
 
 	if (!argv[1])
 	{
-		list_env();
+		list_env(minishell);
 		return (0);
 	}
 	i = 1;
@@ -85,12 +123,12 @@ int	builtin_export(char **argv)
 		eq = ft_strchr(argv[i], '=');
 		if (eq)
 		{
-			if (ft_export_with_value(argv[i]) != 0)
+			if (ft_export_with_value(argv[i], minishell) != 0)
 				return (1);
 		}
 		else
 		{
-			if (ft_export_without_value(argv[i]) != 0)
+			if (ft_export_without_value(argv[i], minishell) != 0)
 				return (1);
 		}
 		i++;

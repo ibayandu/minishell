@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 06:10:44 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 23:45:59 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 			minishell->last_command_exit_value = 1;
 			return (NULL);
 		}
-		temp_list = word_list_split(expanded);
+		if (expanded_something)
+			temp_list = word_list_split(expanded);
+		else
+			temp_list = expanded;
 		expanded = ft_revword(temp_list);
 		new_list = list_append(expanded, new_list);
 		tlist = next;
