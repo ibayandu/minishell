@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 10:05:03 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/21 21:00:05 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ t_redir_type	ft_get_redir(t_token *token);
 char			*ft_readline(char *prompt);
 t_cnt_type		ft_get_cnt(t_token *token);
 size_t			add_mbqchar_body(char **dst, const char *src, size_t *si, size_t srcsize);
-void			string_extract_single_quoted(char *string, int *sindex, char **r);
+char			*string_extract_single_quoted(char *string, int *sindex);
 
 #endif // UTILS_H

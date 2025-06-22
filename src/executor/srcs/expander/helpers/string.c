@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 18:52:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/21 18:54:05 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "structs.h"
 
-char	*string_list_internal (t_word_list *list)
+char	*string_list_internal(t_word_list *list)
 {
 	t_word_list	*t;
 	char		*result;
@@ -44,14 +44,14 @@ char	*string_list_internal (t_word_list *list)
 		{
 			if (sep_len > 1)
 			{
-				ft_memset(r, " ", sep_len);
+				ft_strlcpy(r, " ", sep_len);
 				r += sep_len;
 			}
 			else
 				*r++ = ' ';
 		}
 		word_len = ft_strlen(t->word->word);
-		ft_memset(r, t->word->word, word_len);
+		ft_strlcpy(r, t->word->word, word_len);
 		r += word_len;
 		t = t->next;
 	}

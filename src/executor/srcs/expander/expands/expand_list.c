@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_word_list.c                                 :+:      :+:    :+:   */
+/*   expand_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 20:07:50 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 06:10:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_word_list	*copy_word_list(t_word_list *list)
 	return (new_list);
 }
 
-t_word_list	*shell_expand_word_list(t_word_list *tlist)
+t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 {
 	t_word_list	*expanded;
 	t_word_list	*new_list;
@@ -75,20 +75,14 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 	{
 		next = tlist->next;
 		expanded_something = 0;
-		expanded = expand_word_internal(tlist->word, 0, &expanded_something);
-		if (!expanded /*expanded == &expand_word_error || expanded == &expand_word_fatal */)
+		expanded = expand_word_internal(tlist->word, 0, &expanded_something, minishell);
+		if (!expanded)
 		{
 			tlist->word->word = NULL;
-			// last_command_exit_value = EXECUTION_FAILURE;
-			// if (expanded == &expand_word_error)
-			// 	exp_jump_to_top_level (DISCARD);
-			// else
-			// 	exp_jump_to_top_level (FORCE_EOF);
+			minishell->last_command_exit_value = 1;
+			return (NULL);
 		}
-	//	if (expanded_something && !(tlist->word->flags & F_NOSPLIT))
-	//		temp_list = word_list_split (expanded);
-	//	else
-			temp_list = expanded;
+		temp_list = word_list_split(expanded);
 		expanded = ft_revword(temp_list);
 		new_list = list_append(expanded, new_list);
 		tlist = next;
@@ -98,21 +92,16 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist)
 	return (new_list);
 }
 
-t_word_list	*expand_word_list(t_word_list *list, int is_redir)
+t_word_list	*expand_word_list(t_word_list *list, int is_redir, t_minishell *minishell)
 {
 	t_word_list	*new_list;
 
 	(void)is_redir;
 	if (!list)
 		return (NULL);
-	new_list = shell_expand_word_list(copy_word_list(list));
-	// if (new_list)
-	// {
-	// 	if (!is_redir)
-	// 		new_list = glob_expand_word_list(new_list);
-	// 	else
-	// 		new_list = dequote_list(new_list);
-	// }
+	new_list = shell_expand_word_list(copy_word_list(list), minishell);
+// 	if (new_list && !is_redir)
+// 		new_list = glob_expand_word_list(new_list);
 	return (new_list);
 }
 

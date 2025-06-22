@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/20 02:30:44 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/21 19:15:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 # define F_DOUBLE_QUOTE 8
 # define F_ASSIGNMENT 16
 # define F_STAR 32
-# define F_ASSNBLTIN 64
-# define F_NOSPLIT 128
+# define F_BUILTIN 64
 
 /// @brief token türlerini temsil eden enum.
 typedef enum s_token_type
