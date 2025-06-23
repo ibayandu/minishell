@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 15:18:34 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 18:44:39 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@
 
 // Globbing Flags
 # define GX_MARKDIRS 1
-# define GX_MATCHDIRS 8
-# define GX_ALLDIRS 16
-# define GX_NULLDIR 256
-# define GX_ADDCURDIR 512
-# define GX_RECURSE 2048
-# define GX_SYMLINK 4096
+# define GX_MATCHDIRS 2
+# define GX_ALLDIRS 4
+# define GX_NULLDIR 16
+# define GX_ADDCURDIR 256
+# define GX_RECURSE 512
+# define GX_SYMLINK 1024
 
 // Make Path Flags
 # define MP_DOTILDE 1
@@ -45,7 +45,7 @@ typedef struct s_glob
 }	t_glob;
 
 t_word_list *list_append(t_word_list *head, t_word_list *tail);
-char		**strvec_sort(char **input);
+char		**strvec_sort(char **input, int is_asc);
 t_variable	*set_if_not(char *name, char *value, t_minishell *minishell);
 int			legal_identifier(char *name);
 void		create_variable_tables(t_minishell *minishell);

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 13:30:38 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 22:13:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,30 @@ size_t	count_strings(char **arr)
 	return (count);
 }
 
-char	**strvec_sort(char **input)
+char	**strvec_sort(char **input, int is_asc)
 {
-	size_t	count;
-	size_t	i;
-	char	*tmp;
-	size_t	j;
+	size_t count;
 
 	count = count_strings(input);
-	if (!count)
-		return (NULL);
+	if (count == 0)
+		return NULL;
+
 	char **sorted = ft_malloc((count + 1) * sizeof(char *));
 	if (!sorted)
 		return NULL;
-	i = -1;
-	while (++i < count)
+	for (size_t i = 0; i < count; i++)
 		sorted[i] = ft_strdup(input[i]);
 	sorted[count] = NULL;
-
-	i = -1;
-	while (++i < count - 1)
+	for (size_t i = 0; i + 1 < count; i++)
 	{
-		j = -1;
-		while (++j < count - 1 - i)
+		for (size_t j = 0; j + 1 < count - i; j++)
 		{
-			if (ft_strncmp(sorted[j], sorted[j + 1], ft_strlen(sorted[j + 1])) > 0)
+			int cmp = ft_strcmp(sorted[j], sorted[j+1]);
+			if ((is_asc && cmp > 0) || (!is_asc && cmp < 0))
 			{
-				tmp = sorted[j];
-				sorted[j] = sorted[j + 1];
-				sorted[j + 1] = tmp;
+				char *tmp = sorted[j];
+				sorted[j] = sorted[j+1];
+				sorted[j+1] = tmp;
 			}
 		}
 	}
@@ -66,7 +61,7 @@ static void	list_env(t_minishell *minishell)
 
 	i = 0;
 	env = make_var_export_array(minishell->global_variables);
-	env = strvec_sort(env);
+	env = strvec_sort(env, 1);
 	while (env && env[i])
 		ft_putendl_fd(ft_strjoin(ft_strjoin("declare -x \"", env[i++]), "\""), 1);
 }
@@ -77,7 +72,7 @@ static char	*ft_get_key(char *arg)
 	char	*ret;
 
 	ret = ft_strdup(arg);
-	i = ft_strchr(ret, '=') - ret;
+	i = ret - ft_strchr(ret, '=');
 	ret[i] = '\0';
 	if (*ret && legal_identifier(ret))
 		return (ret);
@@ -105,19 +100,7 @@ static int	ft_export_with_value(char *arg, t_minishell *minishell)
 
 static int	ft_export_without_value(char *arg, t_minishell *minishell)
 {
-	char		*val;
-	t_variable	*v;
-
-	if (!ft_get_key(arg))
-	{
-		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
-		return (1);
-	}
-	val = NULL;
-	v = find_variable_internal(arg, minishell);
-	if (v)
-		val = v->value;
-	if (!bind_variable(arg, val, minishell))
+	if (!bind_variable(arg, "", minishell))
 		return (1);
 	return (0);
 }

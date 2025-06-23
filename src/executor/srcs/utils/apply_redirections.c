@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:55:25 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 18:51:22 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 21:47:50 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,10 @@ static void	apply_output_redirection(t_redirect *r, t_minishell *minishell)
 		perror(ft_strjoin("minishell: ", r->redirectee->word));
 }
 
-static void	apply_heredoc_redirection(t_redirect *r, t_minishell *minishell)
+static void	apply_heredoc_redirection(t_redirect *r)
 {
 	int	pipefd[2];
 
-	r->redirectee->word = string_list_internal(expand_word_list(list_string(r->redirectee->word, " \t\n"), 1, minishell));
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
@@ -53,7 +52,7 @@ static void	apply_input_redirection(t_redirect *r, t_minishell *minishell)
 {
 	int	fd;
 
-	r->redirectee->word = string_list_internal(expand_word_list(list_string(r->redirectee->word, " \t\n"), 1, minishell));
+	r->redirectee->word = string_list_internal(expand_word_list(list_string(r->redirectee->word, " \t"), 1, minishell));
 	if (r->redir_type == REDIR_INPUT)
 	{
 		fd = open(r->redirectee->word, O_RDONLY);
@@ -66,7 +65,7 @@ static void	apply_input_redirection(t_redirect *r, t_minishell *minishell)
 		close(fd);
 	}
 	else if (r->redir_type == REDIR_UNTIL)
-		apply_heredoc_redirection(r, minishell);
+		apply_heredoc_redirection(r);
 }
 
 void	apply_redirections(t_redirect *r, t_minishell *minishell)

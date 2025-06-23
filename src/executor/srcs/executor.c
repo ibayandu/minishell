@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 13:50:29 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 18:37:47 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 20:45:30 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	execute_command(t_command *cmd, t_minishell *minishell)
 {
 	if (!cmd)
 		return (0);
-	if (cmd->redirects)
-		apply_redirections(cmd->redirects, minishell);
 	if (cmd->type == CMD_SIMPLE)
 		return (execute_simple(cmd->value.simple, cmd->redirects, minishell));
 	if (cmd->type == CMD_CONNECT)

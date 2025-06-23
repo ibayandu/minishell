@@ -175,9 +175,9 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 	DIR				*d;
 	struct dirent	*dp;
 	t_glob			*lastlink;
-	// t_glob			*e;
-	// t_glob			*dirlist;
-	// int				ndirs;
+	t_glob			*e;
+	t_glob			*dirlist;
+	int				ndirs;
 	t_glob			*nextlink;
 	char			*nextname;
 	char			*npat;
@@ -231,10 +231,10 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 		dirlen = ft_strlen(dir);
 		nextname = ft_malloc(dirlen + patlen + 2);
 		npat = ft_malloc(patlen + 1);
-		ft_strlcpy(npat, pat, ft_strlen(pat));
-		ft_strlcpy(nextname, dir, ft_strlen(dir));
+		ft_strcpy(npat, pat);
+		ft_strcpy(nextname, dir);
 		nextname[dirlen++] = '/';
-		ft_strlcpy (nextname + dirlen, npat, ft_strlen(npat));
+		ft_strcpy (nextname + dirlen, npat);
 		if (access(nextname, F_OK) >= 0)
 		{
 			nextlink = ft_malloc(sizeof(t_glob));
@@ -269,41 +269,43 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 				continue;
 
 			/* If we're only interested in directories, don't bother with files */
-			if (flags & (GX_ALLDIRS))
+			if (flags & (GX_MATCHDIRS|GX_ALLDIRS))
 			{
 				pflags = (flags & GX_ALLDIRS) ? MP_RMDOT : 0;
 				if (flags & GX_NULLDIR)
 					pflags |= MP_IGNDOT;
 				subdir = sh_makepath(dir, dp->d_name, pflags, minishell);
 				isdir = glob_testdir (subdir);
+				if (isdir < 0 && (flags & GX_MATCHDIRS))
+					continue;
 			}
-			// if (flags & GX_ALLDIRS)
-			// {
-			// 	if (isdir == 0)
-			// 	{
-			// 		dirlist = finddirs(pat, subdir, (flags & ~GX_ADDCURDIR), &e, &ndirs, minishell);
-			// 		if (ndirs)
-			// 		{
-			// 			if (!firstmalloc)
-			// 				firstmalloc = e;
-			// 			e->next = lastlink;
-			// 			lastlink = dirlist;
-			// 			count += ndirs;
-			// 		}
-			// 	}
+			if (flags & GX_ALLDIRS)
+			{
+				if (isdir == 0)
+				{
+					dirlist = finddirs(pat, subdir, (flags & ~GX_ADDCURDIR), &e, &ndirs, minishell);
+					if (ndirs)
+					{
+						if (!firstmalloc)
+							firstmalloc = e;
+						e->next = lastlink;
+						lastlink = dirlist;
+						count += ndirs;
+					}
+				}
 
-			// 	nextlink = ft_malloc(sizeof(t_glob));
-			// 	if (!firstmalloc)
-			// 		firstmalloc = nextlink;
-			// 	sdlen = ft_strlen(subdir);
-			// 	nextname = ft_malloc(sdlen + 1);
-			// 	nextlink->next = lastlink;
-			// 	lastlink = nextlink;
-			// 	nextlink->name = nextname;
-			// 	ft_memcpy(nextname, subdir, sdlen + 1);
-			// 	++count;
-			// 	continue;
-			// }
+				nextlink = ft_malloc(sizeof(t_glob));
+				if (!firstmalloc)
+					firstmalloc = nextlink;
+				sdlen = ft_strlen(subdir);
+				nextname = ft_malloc(sdlen + 1);
+				nextlink->next = lastlink;
+				lastlink = nextlink;
+				nextlink->name = nextname;
+				ft_memcpy(nextname, subdir, sdlen + 1);
+				++count;
+				continue;
+			}
 			if (strmatch (pat, dp->d_name) == 0)
 			{
 				nextlink = ft_malloc(sizeof(t_glob));
@@ -398,12 +400,12 @@ char	**glob_dir_to_array(char *dir, char **array, int flags)
 	{
 		/* 3 == 1 for NUL, 1 for slash at end of DIR, 1 for GX_MARKDIRS */
 		result[i] = ft_malloc(l + ft_strlen (array[i]) + 3);
-		ft_strlcpy(result[i], dir, ft_strlen(dir));
+		ft_strcpy(result[i], dir);
 		if (add_slash)
 			result[i][l] = '/';
 		if (array[i][0])
 		{
-			ft_strlcpy(result[i] + l + add_slash, array[i], ft_strlen(array[i]));
+			ft_strcpy(result[i] + l + add_slash, array[i]);
 			if (flags & GX_MARKDIRS)
 			{
 				if ((stat (result[i], &sb) == 0) && S_ISDIR (sb.st_mode))
@@ -681,7 +683,7 @@ char	**shell_glob_filename (const char *pathname, t_minishell *minishell)
 	if (results)
 	{
 		if (results && results[0])
-			strvec_sort(results);
+			results = strvec_sort(results, 1);
 		else
 			results = NULL;
 	}

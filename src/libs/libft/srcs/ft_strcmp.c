@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_subshell.c                                 :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 20:34:02 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/06/23 18:37:14 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/23 18:37:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
-
-int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects, t_minishell *minishell)
+int	ft_strcmp(char *s1, char *s2)
 {
-	pid_t	pid;
-	int		status;
+	int	i;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		apply_redirections(redirects, minishell);
-		exit(execute_command(subshell->command, minishell));
-	}
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

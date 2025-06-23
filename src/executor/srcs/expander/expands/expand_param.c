@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 21:31:13 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 16:30:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,16 @@
 
 unsigned int	hash_string(const char *s)
 {
-	unsigned int i;
+	unsigned int	i;
+	int				j;
 
 	i = FNV_OFFSET;
-	while (*s)
+	j = 0;
+	while (s[j])
 	{
 		i += (i<<1) + (i<<4) + (i<<7) + (i<<8) + (i<<24);
-		i ^= *s;
-		s++;
+		i ^= s[j];
+		j++;
 	}
 	return (i);
 }
@@ -129,11 +131,14 @@ void	create_variable_tables(t_minishell *minishell)
 
 int	legal_identifier(char *name)
 {
+	int	i;
+
+	i = 0;
 	if (!name)
-		return (0);
-	while (ft_isalnum(*name) || *name == '_')
-		name++;
-	return (!*name);
+		return (i);
+	while (ft_isalnum(name[i]) || name[i] == '_')
+		i++;
+	return (!name[i]);
 }
 
 void	hash_rehash(t_hash *table, int nsize)
@@ -224,64 +229,32 @@ char	*make_variable_value(char *value)
 		if (*value)
 			retval = ft_strdup(value);
 		else
-		{
-			retval = ft_malloc(1);
-			retval[0] = '\0';
-		}
+			retval = ft_strdup("");
 	}
 	else
 		retval = NULL;
-	return retval;
-}
-
-t_variable	*bind_variable_internal(const char *name, char *value, t_hash *table, t_minishell *minishell)
-{
-	t_variable	*entry;
-	t_bucket	*bucket;
-
-	entry = NULL;
-	bucket = hash_search(name, table);
-	if (bucket)
-		entry = bucket->data;
-	if (entry)
-	{
-		entry = find_variable_internal(entry->name, minishell);
-		if (!entry)
-			return (entry);
-	}
-	else
-	{
-		entry = make_new_variable(name, table, minishell);
-		entry->value = make_variable_value(value);
-	}
-	return (entry);
+	return (retval);
 }
 
 t_variable	*bind_variable(const char *name, char *value, t_minishell *minishell)
 {
-	t_variable	*v;
-	t_context	*vc;
-	t_context	*nvc;
-	t_bucket	*b;
+	t_variable	*entry;
+	t_bucket	*bucket;
 
 	if (!minishell->global_variables)
 		create_variable_tables(minishell);
-	vc = minishell->global_variables;
-	while (vc)
-	{
-		v = NULL;
-		b = hash_search(name, vc->table);
-		if (b)
-			v = b->data;
-		nvc = vc;
-		if (v)
-			return (bind_variable_internal(v->name, value, nvc->table, minishell));
-		vc = vc->down;
-	}
-	return (bind_variable_internal(name, value, minishell->global_variables->table, minishell));
+	entry = NULL;
+	bucket = hash_search(name, minishell->global_variables->table);
+	if (bucket)
+		entry = bucket->data;
+	if (entry)
+		return (entry);
+	entry = make_new_variable(name, minishell->global_variables->table, minishell);
+	entry->value = make_variable_value(value);
+	return (entry);
 }
 
-t_bucket	*hash_remove (const char *string, t_hash *table)
+t_bucket	*hash_remove(const char *string, t_hash *table)
 {
 	int				bucket;
 	t_bucket		*prev;
@@ -348,7 +321,7 @@ t_variable	*set_if_not(char *name, char *value, t_minishell *minishell)
 		create_variable_tables(minishell);
 	v = find_variable_internal(name, minishell);
 	if (!v)
-		v = bind_variable_internal(name, value, minishell->global_variables->table, minishell);
+		v = bind_variable(name, value, minishell);
 	return (v);
 }
 

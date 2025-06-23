@@ -6,24 +6,24 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 06:29:32 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 14:56:43 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 16:40:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <limits.h>
 #include <pwd.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <unistd.h>
+#include <x86_64-linux-gnu/bits/local_lim.h>
 
 #define ESC 27
 
 // Ev dizinini '~' ile kısaltan yardımcı
 static char	*get_short_pwd(void)
 {
-	char	cwd[4096];
+	char	cwd[PATH_MAX];
 	char	*home;
 	size_t	home_len;
 	char	*short_pwd;
@@ -62,7 +62,6 @@ static char	*get_basename(const char *path)
 	{
 		tmp = ft_strndup(path, slash - path);
 		res = get_basename(tmp);
-		free(tmp);
 		return (res);
 	}
 	else
@@ -189,16 +188,12 @@ char	*decode_prompt(const char *ps1)
 	tmp[j] = '\0';
 	// 2) Kaçış dizilerini gerçek karakterlere çevir
 	decoded = replace_escape_sequences(tmp);
-	free(tmp);
 	if (!decoded)
 		return (NULL);
 	// 3) PS1 özel kısaltmalarını işleme
 	result = ft_malloc(ft_strlen(decoded) * 4 + 1); // geniş yer ayırdık
 	if (!result)
-	{
-		free(decoded);
 		return (NULL);
-	}
 	i = 0;
 	j = 0;
 	while (decoded[i])
@@ -224,20 +219,11 @@ char	*decode_prompt(const char *ps1)
 				if (!short_pwd)
 					sub = ft_strdup("?");
 				else
-				{
 					sub = get_basename(short_pwd);
-					free(short_pwd);
-				}
 				break ;
 			}
 			case 's': // shell adı
 				sub = ft_strdup("minishell");
-				break ;
-			case '$': // root ise #, değilse $
-				if (geteuid() == 0)
-					sub = ft_strdup("#");
-				else
-					sub = ft_strdup("$");
 				break ;
 			case '\\': // ters eğik çizgi
 				result[j++] = '\\';
@@ -256,7 +242,6 @@ char	*decode_prompt(const char *ps1)
 				sub_len = ft_strlen(sub);
 				ft_memcpy(result + j, sub, sub_len);
 				j += sub_len;
-				free(sub);
 			}
 			if (decoded[i])
 				i++;
@@ -265,6 +250,5 @@ char	*decode_prompt(const char *ps1)
 			result[j++] = decoded[i++];
 	}
 	result[j] = '\0';
-	free(decoded);
 	return (result);
 }
