@@ -2,14 +2,21 @@
 #include <dirent.h>
 #include "makers.h"
 #include "libft.h"
+#include "utils.h"
+#include <glob.h>
 #include "expander.h"
+
+char	**glob_vector(char *pat, char *dir, int flags, t_minishell *minishell);
 
 int	unquoted_glob_pattern_p(char *string)
 {
-	int		c;
+	int		i;
 
-	while (c = *string++)
-		if (c == '*')
+	if (!string)
+		return (0);
+	i = -1;
+	while (string[++i])
+		if (string[i] == '*')
 			return (1);
 	return (0);
 }
@@ -32,13 +39,14 @@ int	glob_testdir(char *dir)
 
 char	*sh_makepath(const char *path, const char *dir, int flags, t_minishell *minishell)
 {
-	int		dirlen;
-	int		pathlen;
-	char	*ret;
-	char	*xpath;
-	char	*xdir;
-	char	*r;
-	char	*s;
+	int			dirlen;
+	int			pathlen;
+	char		*ret;
+	t_variable	*v;
+	char		*xpath;
+	char		*xdir;
+	char		*r;
+	char		*s;
 
 	if (!path || !*path)
 	{
@@ -47,7 +55,10 @@ char	*sh_makepath(const char *path, const char *dir, int flags, t_minishell *min
 			xpath = ft_strdup(getcwd(0,0));
 			if (!xpath)
 			{
-				ret = find_variable_internal("PWD", minishell);
+				ret = NULL;
+				v = find_variable_internal("PWD", minishell);
+				if (v)
+					ret = v->value;
 				if (ret)
 					xpath = ft_strdup(ret);
 			}
@@ -57,7 +68,7 @@ char	*sh_makepath(const char *path, const char *dir, int flags, t_minishell *min
 				pathlen = 1;
 			}
 			else
-				pathlen = strlen (xpath);
+				pathlen = ft_strlen(xpath);
 		}
 		else
 		{
@@ -72,10 +83,10 @@ char	*sh_makepath(const char *path, const char *dir, int flags, t_minishell *min
 	}
 	else
 	{
-		xpath = path;
+		xpath = (char *)path;
 		pathlen = ft_strlen(xpath);
 	}
-	xdir = dir;
+	xdir = (char *)dir;
 	dirlen = ft_strlen(xdir);
 	if ((flags & MP_RMDOT) && dir[0] == '.' && dir[1] == '/')
 	{
@@ -89,7 +100,7 @@ char	*sh_makepath(const char *path, const char *dir, int flags, t_minishell *min
 	if (s > xpath && s[-1] != '/')
 		*r++ = '/';
 	s = xdir;
-	while (*r++ = *s++)
+	while ((*r++ = *s++))
 		;
 	return (ret);
 }
@@ -97,7 +108,6 @@ char	*sh_makepath(const char *path, const char *dir, int flags, t_minishell *min
 t_glob	*finddirs (char *pat, char *sdir, int flags, t_glob **ep, int *np, t_minishell *minishell)
 {
 	char	**r;
-	char	*n;
 	int		ndirs;
 	t_glob	*ret;
 	t_glob	*e;
@@ -116,19 +126,6 @@ t_glob	*finddirs (char *pat, char *sdir, int flags, t_glob **ep, int *np, t_mini
 	for (ndirs = 0; r[ndirs] != 0; ndirs++)
 	{
 		g = ft_malloc(sizeof(t_glob));
-		if (!g)
-		{
-			while (ret)
-			{
-				g = ret->next;
-				ret = g;
-			}
-			if (np)
-				*np = 0;
-			if (ep)
-				*ep = 0;
-			return (&finddirs_error_return);
-		}
 		if (!e)
 			e = g;
 		g->next = ret;
@@ -140,6 +137,37 @@ t_glob	*finddirs (char *pat, char *sdir, int flags, t_glob **ep, int *np, t_mini
 	if (np)
 		*np = ndirs;
 	return ret;
+}
+
+int strmatch(const char *pattern, const char *string)
+{
+	/* If we reach end of pattern, success only if string also finished */
+	if (*pattern == '\0')
+		return *string != '\0';
+
+	/* Handle '*' wildcard: matches zero or more characters */
+	if (*pattern == '*') {
+		/* Skip consecutive '*' for efficiency */
+		while (*pattern == '*')
+			pattern++;
+		/* If pattern is now at end, it's a match */
+		if (*pattern == '\0')
+			return 0;
+		/* Try to match the rest of the pattern at each position in string */
+		for (; *string != '\0'; string++) {
+			if (strmatch(pattern, string) == 0)
+				return 0;
+		}
+		/* Also allow '*' to match empty tail */
+		return strmatch(pattern, string);
+	}
+
+	/* Literal character: must match exactly */
+	if (*string != '\0' && *pattern == *string)
+		return strmatch(pattern + 1, string + 1);
+
+	/* No match */
+	return 1;
 }
 
 char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
@@ -163,15 +191,11 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 	int				patlen;
 	char			**name_vector;
 	unsigned int	i;
-	int				mflags;
 	int				pflags;
-	int				hasglob;
 	int				nalloca;
 	t_glob			*firstmalloc;
 	t_glob			*tmplink;
-	char			*convfn;
 	int				dirlen;
-	struct stat		finfo;
 
 	lastlink = 0;
 	count = 0;
@@ -185,7 +209,7 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 	if (!pat || !*pat)
 	{
 		if (glob_testdir(dir) < 0)
-			return (&glob_error_return);
+			return (NULL);
 		nextlink = ft_malloc(sizeof(t_glob));
 		nextlink->next = NULL;
 		nextname = ft_malloc(1);
@@ -197,23 +221,20 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 	}
 	patlen = (pat && *pat) ? ft_strlen(pat) : 0;
 	/* If the filename pattern (PAT) does not contain any globbing characters,
-		or contains a pattern with only backslash escapes (hasglob == 2),
 		we can dispense with reading the directory, and just see if there is
 		a filename `DIR/PAT'.  If there is, and we can access it, just make the
 		vector to return and bail immediately. */
-	hasglob = 0;
-	if (skip == 0 && ((hasglob = internal_glob_pattern_p (pat)) == 0 || hasglob == 2))
+	if (skip == 0 && unquoted_glob_pattern_p(pat) == 0)
 	{
 		if (glob_testdir(dir) < 0)
-			return (&glob_error_return);
+			return (NULL);
 		dirlen = ft_strlen(dir);
 		nextname = ft_malloc(dirlen + patlen + 2);
 		npat = ft_malloc(patlen + 1);
-		ft_strcpy(npat, pat);
-		dequote_pathname (npat);
-		ft_strcpy(nextname, dir);
+		ft_strlcpy(npat, pat, ft_strlen(pat));
+		ft_strlcpy(nextname, dir, ft_strlen(dir));
 		nextname[dirlen++] = '/';
-		ft_strcpy (nextname + dirlen, npat);
+		ft_strlcpy (nextname + dirlen, npat, ft_strlen(npat));
 		if (access(nextname, F_OK) >= 0)
 		{
 			nextlink = ft_malloc(sizeof(t_glob));
@@ -231,10 +252,9 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 		that DIR is a directory and punt if it's not. */
 		d = opendir(dir);
 		if (!d)
-			return (&glob_error_return);
+			return (NULL);
 		/* Compute the flags that will be passed to strmatch().  We don't
 		need to do this every time through the loop. */
-		mflags = FNM_DOTDOT | FNM_PATHNAME;
 		add_current = ((flags & (GX_ALLDIRS|GX_ADDCURDIR)) == (GX_ALLDIRS|GX_ADDCURDIR));
 
 		/* Scan the directory, finding all names that match	 For each name that matches, allocate a struct globval
@@ -245,18 +265,18 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 			dp = readdir(d);
 			if (!dp)
 				break;
-			if (skipname(pat, dp->d_name, flags))
+			if (pat[0] != '.' && dp->d_name[0] == '.' && (dp->d_name[1] == 0 || (dp->d_name[1] == '.' && dp->d_name[2] == 0)))
 				continue;
 
 			/* If we're only interested in directories, don't bother with files */
-			if (flags & (GX_MATCHDIRS|GX_ALLDIRS))
+			if (flags & GX_ALLDIRS)
 			{
 				pflags = (flags & GX_ALLDIRS) ? MP_RMDOT : 0;
 				if (flags & GX_NULLDIR)
 					pflags |= MP_IGNDOT;
 				subdir = sh_makepath(dir, dp->d_name, pflags, minishell);
 				isdir = glob_testdir (subdir);
-				if (isdir < 0 && (flags & GX_MATCHDIRS))
+				if (isdir < 0)
 					continue;
 			}
 			if (flags & GX_ALLDIRS)
@@ -264,11 +284,6 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 				if (isdir == 0)
 				{
 					dirlist = finddirs(pat, subdir, (flags & ~GX_ADDCURDIR), &e, &ndirs, minishell);
-					if (dirlist == &finddirs_error_return)
-					{
-						lose = 1;
-						break;
-					}
 					if (ndirs)
 					{
 						if (!firstmalloc)
@@ -291,139 +306,125 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 				++count;
 				continue;
 			}
-			if (strmatch (pat, dp->d_name, mflags) != FNM_NOMATCH)
+			if (strmatch (pat, dp->d_name) == 0)
 			{
-				if (nalloca < ALLOCA_MAX)
-				{
-				nextlink = (struct globval *) alloca (sizeof (struct globval));
-				nalloca += sizeof (struct globval);
-				}
-				else
-				{
-				nextlink = (struct globval *) malloc (sizeof (struct globval));
+				nextlink = ft_malloc(sizeof(t_glob));
 				if (firstmalloc == 0)
 					firstmalloc = nextlink;
-				}
-
-				nextname = (char *) malloc (D_NAMLEN (dp) + 1);
-				if (nextlink == 0 || nextname == 0)
-				{
-				/* We free NEXTLINK here, since it won't be added to the
-					LASTLINK chain. If we used malloc, and it returned non-
-					NULL, firstmalloc will be set to something valid. If it's
-					NEXTLINK, reset it before we free NEXTLINK to avoid
-					duplicate frees. If not, it will be taken care of by the
-					loop below with TMPLINK. */
-				if (firstmalloc)
-					{
-					if (firstmalloc == nextlink)
-					firstmalloc = 0;
-					FREE (nextlink);
-					}
-				FREE (nextname);
-				lose = 1;
-				break;
-				}
+				nextname = ft_malloc(ft_strlen(dp->d_name) + 1);
 				nextlink->next = lastlink;
 				lastlink = nextlink;
 				nextlink->name = nextname;
-				bcopy (dp->d_name, nextname, D_NAMLEN (dp) + 1);
+				ft_memcpy(nextname, dp->d_name, ft_strlen(dp->d_name) + 1);
 				++count;
 			}
 		}
-
-		(void) closedir (d);
-		}
+		closedir (d);
+	}
 
 	/* compat: if GX_ADDCURDIR, add the passed directory also.  Add an empty
 		directory name as a placeholder if GX_NULLDIR (in which case the passed
 		directory name is "."). */
 	if (add_current && lose == 0)
-		{
-		sdlen = strlen (dir);
-		nextname = (char *)malloc (sdlen + 1);
-		nextlink = (struct globval *) malloc (sizeof (struct globval));
-		if (nextlink == 0 || nextname == 0)
-		{
-		FREE (nextlink);
-		FREE (nextname);
-		lose = 1;
-		}
-		else
-		{
+	{
+		sdlen = ft_strlen(dir);
+		nextname = ft_malloc(sdlen + 1);
+		nextlink = ft_malloc(sizeof(t_glob));
 		nextlink->name = nextname;
 		nextlink->next = lastlink;
 		lastlink = nextlink;
 		if (flags & GX_NULLDIR)
 			nextname[0] = '\0';
 		else
-			bcopy (dir, nextname, sdlen + 1);
+			ft_memcpy(nextname, dir, sdlen + 1);
 		++count;
-		}
-		}
-
-	if (lose == 0)
-		{
-		name_vector = (char **) malloc ((count + 1) * sizeof (char *));
-		lose |= name_vector == NULL;
-		}
-
-	/* Have we run out of memory or been interrupted? */
-	if (lose)
-		{
-		tmplink = 0;
-
-		/* Here free the strings we have got.  */
-		while (lastlink)
-		{
-		/* Since we build the list in reverse order, the first N entries
-			will be allocated with malloc, if firstmalloc is set, from
-			lastlink to firstmalloc. */
-		if (firstmalloc)
-			{
-			if (lastlink == firstmalloc)
-			firstmalloc = 0;
-			tmplink = lastlink;
-			}
-		else
-			tmplink = 0;
-		free (lastlink->name);
-		lastlink = lastlink->next;
-		FREE (tmplink);
-		}
-
-		/* Don't call QUIT; here; let higher layers deal with it. */
-
-		return ((char **)NULL);
-		}
+	}
+	name_vector = ft_malloc((count + 1) * sizeof(char *));
 
 	/* Copy the name pointers from the linked list into the vector.  */
 	for (tmplink = lastlink, i = 0; i < count; ++i)
-		{
+	{
 		name_vector[i] = tmplink->name;
 		tmplink = tmplink->next;
-		}
-
+	}
 	name_vector[count] = NULL;
-
 	/* If we allocated some of the struct globvals, free them now. */
 	if (firstmalloc)
 	{
 		tmplink = 0;
 		while (lastlink)
 		{
-		tmplink = lastlink;
-		if (lastlink == firstmalloc)
-			lastlink = firstmalloc = 0;
-		else
-			lastlink = lastlink->next;
-		free (tmplink);
+			tmplink = lastlink;
+			if (lastlink == firstmalloc)
+				lastlink = firstmalloc = 0;
+			else
+				lastlink = lastlink->next;
 		}
 	}
 	return (name_vector);
 }
 
-char	**glob_filename(char *pathname, int flags)
+char	**glob_dir_to_array(char *dir, char **array, int flags)
+{
+	unsigned int	i;
+	unsigned int	l;
+	int				add_slash;
+	char			**result;
+	char			*new;
+	struct stat		sb;
+
+	l = ft_strlen(dir);
+	if (l == 0)
+	{
+		if (flags & GX_MARKDIRS)
+			for (i = 0; array[i]; i++)
+			{
+				if ((stat (array[i], &sb) == 0) && S_ISDIR (sb.st_mode))
+				{
+					l = ft_strlen (array[i]);
+					new = ft_realloc(array[i], l + 2);
+					new[l] = '/';
+					new[l+1] = '\0';
+					array[i] = new;
+				}
+			}
+		return (array);
+	}
+	add_slash = dir[l - 1] != '/';
+	i = 0;
+	while (array[i] != NULL)
+		++i;
+	result = ft_malloc((i + 1) * sizeof (char *));
+
+	for (i = 0; array[i] != NULL; i++)
+	{
+		/* 3 == 1 for NUL, 1 for slash at end of DIR, 1 for GX_MARKDIRS */
+		result[i] = ft_malloc(l + ft_strlen (array[i]) + 3);
+		ft_strlcpy(result[i], dir, ft_strlen(dir));
+		if (add_slash)
+			result[i][l] = '/';
+		if (array[i][0])
+		{
+			ft_strlcpy(result[i] + l + add_slash, array[i], ft_strlen(array[i]));
+			if (flags & GX_MARKDIRS)
+			{
+				if ((stat (result[i], &sb) == 0) && S_ISDIR (sb.st_mode))
+				{
+					size_t rlen;
+					rlen = ft_strlen (result[i]);
+					result[i][rlen] = '/';
+					result[i][rlen+1] = '\0';
+				}
+			}
+		}
+		else
+			result[i][l+add_slash] = '\0';
+	}
+	result[i] = NULL;
+	return (result);
+}
+
+char	**glob_filename(char *pathname, int flags, t_minishell *minishell)
 {
 	char			**result;
 	char			**new_result;
@@ -431,10 +432,8 @@ char	**glob_filename(char *pathname, int flags)
 	char			*directory_name;
 	char			*filename;
 	char			*dname;
-	char			*fn;
 	int				directory_len;
 	int				dflags;
-	int				hasglob;
 	char			**directories;
 	char			*d;
 	char			*p;
@@ -446,14 +445,11 @@ char	**glob_filename(char *pathname, int flags)
 	int				free_dirname;
 	char			**temp_results;
 	int				shouldbreak;
-	int				dlen;
-	int				i;
 	int				n;
-	char			**temp_results;
 
 	result = ft_malloc(sizeof(char *));
 	result_size = 1;
-	result[0] = '\0';
+	result[0] = NULL;
 	directory_name = NULL;
 	filename = ft_strrchr(pathname, '/');
 	if (!filename)
@@ -467,13 +463,12 @@ char	**glob_filename(char *pathname, int flags)
 	{
 		directory_len = (filename - pathname) + 1;
 		directory_name = ft_malloc(directory_len + 1);
-		ft_memcopy(directory_name, pathname, directory_len);
+		ft_memcpy(directory_name, pathname, directory_len);
 		directory_name[directory_len] = '\0';
 		free_dirname = 1;
 		++filename;
 	}
-	hasglob = 0;
-	if (directory_len > 0 && (hasglob = unquoted_glob_pattern_p(directory_name)) == 1)
+	if (directory_len > 0 && unquoted_glob_pattern_p(directory_name) == 1)
 	{
 		all_starstar = 0;
 		last_starstar = 0;
@@ -526,13 +521,13 @@ char	**glob_filename(char *pathname, int flags)
 			directory_len -= 3;
 		if (d[directory_len - 1] == '/')
 			d[directory_len - 1] = '\0';
-		directories = glob_filename(d, dflags|GX_RECURSE);
+		directories = glob_filename(d, dflags|GX_RECURSE, minishell);
 		if (free_dirname)
 			directory_name = NULL;
-		else if (directories == &glob_error_return)
-			return (&glob_error_return);
+		else if (directories == NULL)
+			return (NULL);
 		else if (*directories == NULL)
-			return (&glob_error_return);
+			return (NULL);
 
 		/* If we have something like [star][star]/[star][star], it's no use to
 			glob **, then do it again, and throw half the results away.  */
@@ -574,7 +569,7 @@ char	**glob_filename(char *pathname, int flags)
 				if (glob_testdir (dname) == -2 && glob_testdir (dname) == 0)
 				{
 					if (filename[0] != 0)
-						temp_results = &glob_error_return;		/* skip */
+						temp_results = NULL;		/* skip */
 					else
 					{
 						/* Construct array to pass to glob_dir_to_array */
@@ -586,10 +581,10 @@ char	**glob_filename(char *pathname, int flags)
 					}
 				}
 				else
-					temp_results = glob_vector (filename, dname, dflags);
+					temp_results = glob_vector (filename, dname, dflags, minishell);
 			}
 			else
-				temp_results = glob_vector (filename, dname, dflags);
+				temp_results = glob_vector (filename, dname, dflags, minishell);
 			if (temp_results)
 			{
 				char **array;
@@ -650,27 +645,6 @@ char	**glob_filename(char *pathname, int flags)
 	if (!*filename)
 	{
 		result = ft_realloc(result, 2 * sizeof(char *));
-		/* If we have a directory name with quoted characters, and we are
-		being called recursively to glob the directory portion of a pathname,
-		we need to dequote the directory name before returning it so the
-		caller can read the directory */
-		if (directory_len > 0 && hasglob == 2 && (flags & GX_RECURSE) != 0)
-		{
-			dequote_pathname (directory_name);
-			directory_len = ft_strlen(directory_name);
-		}
-		/* We could check whether or not the dequoted directory_name is a
-		directory and return it here, returning the original directory_name
-		if not, but we don't do that. We do return the dequoted directory
-		name if we're not being called recursively and the dequoted name
-		corresponds to an actual directory. For better backwards compatibility,
-		we can return &glob_error_return unconditionally in this case. */
-		if (directory_len > 0 && hasglob == 2 && (flags & GX_RECURSE) == 0)
-		{
-			dequote_pathname (directory_name);
-			if (glob_testdir(directory_name) < 0)
-				return (&glob_error_return);
-		}
 		result[0] = ft_malloc(directory_len + 1);
 		ft_memcpy(result[0], directory_name, directory_len + 1);
 		result[1] = NULL;
@@ -678,12 +652,6 @@ char	**glob_filename(char *pathname, int flags)
 	}
 	else
 	{
-		/* There are no unquoted globbing characters in DIRECTORY_NAME.
-		Dequote it before we try to open the directory since there may
-		be quoted globbing characters which should be treated verbatim. */
-		if (directory_len > 0)
-			dequote_pathname (directory_name);
-
 		/* Just return what glob_vector () returns appended to the
 		directory name. */
 		/* If flags & GX_ALLDIRS, we're called recursively */
@@ -696,58 +664,37 @@ char	**glob_filename(char *pathname, int flags)
 			if (directory_len == 0 && (flags & GX_ALLDIRS) == 0)
 				dflags &= ~GX_ADDCURDIR;
 		}
-		temp_results = glob_vector(filename, (directory_len == 0 ? "." : directory_name), dflags);
-		if (!temp_results || temp_results == &glob_error_return)
-		{
-			QUIT;
+		temp_results = glob_vector(filename, (directory_len == 0 ? "." : directory_name), dflags, minishell);
+		if (!temp_results || temp_results == NULL)
 			return (temp_results);
-		}
 		result = glob_dir_to_array((dflags & GX_ALLDIRS) ? "" : directory_name, temp_results, flags);
 		return (result);
 	}
-	QUIT;
 	return (NULL);
 }
 
-char	**shell_glob_filename (const char *pathname, int qflags)
+char	**shell_glob_filename (const char *pathname, t_minishell *minishell)
 {
 	char	*temp;
 	char	**results;
-	int		gflags;
-	int		quoted_pattern;
 
-	noglob_dot_filenames = 0;
-	glob_dot_filenames == 0;
-	temp = pathname;
-	gflags = GX_GLOBSTAR;
-	results = glob_filename(temp, gflags);
-	if (results && ((GLOB_FAILED (results)) == 0))
+	temp = (char *)pathname;
+	results = glob_filename(temp, 0, minishell);
+	if (results)
 	{
-		if (should_ignore_glob_matches ())
-			ignore_glob_matches (results);
 		if (results && results[0])
-			strvec_sort (results, 1);
+			strvec_sort(results);
 		else
-			results = &glob_error_return;
+			results = NULL;
 	}
 	return (results);
 }
 
-int	unquoted_glob_pattern_p(char *string)
-{
-	int		c;
-
-	while (c = *string++)
-		if (c == '*')
-			return (1);
-	return (0);
-}
-
-t_word_list	*glob_expand_word_list(t_word_list *tlist)
+t_word_list	*glob_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 {
 	char		**glob_array;
-	char		*temp_string;
 	int			glob_index;
+	int			allow_null_glob_expansion;
 	t_word_list	*glob_list;
 	t_word_list	*output_list;
 	t_word_list	*disposables;
@@ -757,21 +704,17 @@ t_word_list	*glob_expand_word_list(t_word_list *tlist)
 	output_list = NULL;
 	disposables = NULL;
 	glob_array = NULL;
+	allow_null_glob_expansion = 0;
 	while (tlist)
 	{
 		next = tlist->next;
 		if (unquoted_glob_pattern_p (tlist->word->word))
 		{
-			glob_array = shell_glob_filename (tlist->word->word, QGLOB_CTLESC);
-			if (glob_array == 0 || GLOB_FAILED(glob_array))
+			glob_array = shell_glob_filename (tlist->word->word, minishell);
+			if (!glob_array)
 			{
 				glob_array = ft_malloc(sizeof (char *));
 				glob_array[0] = NULL;
-			}
-			if (glob_array[0] == NULL)
-			{
-				temp_string = dequote_string (tlist->word->word);
-				tlist->word->word = temp_string;
 			}
 			glob_list = NULL;
 			glob_index = 0;
@@ -781,34 +724,38 @@ t_word_list	*glob_expand_word_list(t_word_list *tlist)
 				glob_list = make_word_list(tword, glob_list);
 				glob_index++;
 			}
-
 			if (glob_list)
 			{
 				output_list = list_append(glob_list, output_list);
-				PREPEND_LIST (tlist, disposables);
+				tlist->next = disposables;
+				disposables = tlist;
 			}
-			else if (fail_glob_expansion)
-			{
-				last_command_exit_value = EXECUTION_FAILURE;
-				report_error (_("no match: %s"), tlist->word->word);
-				exp_jump_to_top_level (DISCARD);
-			}
+			// else if (fail_glob_expansion)
+			// {
+			// 	last_command_exit_value = EXECUTION_FAILURE;
+			// 	report_error (_("no match: %s"), tlist->word->word);
+			// 	exp_jump_to_top_level (DISCARD);
+			// }
 			else if (!allow_null_glob_expansion)
-				PREPEND_LIST (tlist, output_list);
+			{
+				tlist->next = output_list;
+				output_list = tlist;
+			}
 			else
-				PREPEND_LIST (tlist, disposables);
+			{
+				tlist->next = disposables;
+				disposables = tlist;
+			}
 		}
 		else
 		{
-			temp_string = dequote_string (tlist->word->word);
-			tlist->word->word = temp_string;
-			PREPEND_LIST (tlist, output_list);
+			tlist->next = output_list;
+			output_list = tlist;
 		}
-		strvec_dispose (glob_array);
 		glob_array = NULL;
 		tlist = next;
 	}
 	if (output_list)
-		output_list = ft_revword (output_list);
+		output_list = ft_revword(output_list);
 	return (output_list);
 }

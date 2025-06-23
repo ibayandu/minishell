@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 11:06:08 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 13:35:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,20 @@
 # define DEFAULT_HASH_BUCKETS 128
 # define FNV_OFFSET 2166136261
 
+// Globbing Flags
+# define GX_MARKDIRS 0x001
+# define GX_ALLDIRS 0x010
+# define GX_NULLDIR 0x100
+# define GX_ADDCURDIR 0x200
+# define GX_RECURSE 0x800
+# define GX_SYMLINK 0x1000
+
+// Make Path Flags
+# define MP_DOTILDE 0x01
+# define MP_DOCWD 0x02
+# define MP_RMDOT 0x04
+# define MP_IGNDOT 0x08
+
 typedef struct s_glob
 {
 	struct s_glob	*next;
@@ -29,6 +43,8 @@ typedef struct s_glob
 
 }	t_glob;
 
+t_word_list *list_append(t_word_list *head, t_word_list *tail);
+char		**strvec_sort(char **input);
 t_variable	*set_if_not(char *name, char *value, t_minishell *minishell);
 int			legal_identifier(char *name);
 void		create_variable_tables(t_minishell *minishell);

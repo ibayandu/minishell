@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 00:09:06 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 13:30:38 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ size_t	count_strings(char **arr)
 	return (count);
 }
 
-char	**sort_strings(char **input)
+char	**strvec_sort(char **input)
 {
 	size_t	count;
 	size_t	i;
@@ -66,7 +66,7 @@ static void	list_env(t_minishell *minishell)
 
 	i = 0;
 	env = make_var_export_array(minishell->global_variables);
-	env = sort_strings(env);
+	env = strvec_sort(env);
 	while (env && env[i])
 		ft_putendl_fd(ft_strjoin(ft_strjoin("declare -x \"", env[i++]), "\""), 1);
 }
