@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 18:52:20 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 14:14:47 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,15 @@ static int	change_directory(const char *path, t_minishell *minishell)
 		return (1);
 	}
 	if (oldpwd)
+	{
+		unbind_variable("OLDPWD", minishell);
 		bind_variable("OLDPWD", oldpwd, minishell);
+	}
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	{
+		unbind_variable("PWD", minishell);
 		bind_variable("PWD", cwd, minishell);
+	}
 	else
 	{
 		perror("getcwd");

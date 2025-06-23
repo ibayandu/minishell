@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 13:35:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 14:12:24 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ t_variable	*bind_variable(const char *name, char *value, t_minishell *minishell)
 char		**make_var_export_array(t_context *vcxt);
 int			unbind_variable(const char *name, t_minishell *minishell);
 t_word_list	*list_string(char *string, char *seperators);
+t_word_list	*glob_expand_word_list(t_word_list *tlist, t_minishell *minishell);
 
 #endif /* EXPANDER_H*/
