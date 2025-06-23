@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 14:12:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 15:18:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,19 @@
 # define FNV_OFFSET 2166136261
 
 // Globbing Flags
-# define GX_MARKDIRS 0x001
-# define GX_ALLDIRS 0x010
-# define GX_NULLDIR 0x100
-# define GX_ADDCURDIR 0x200
-# define GX_RECURSE 0x800
-# define GX_SYMLINK 0x1000
+# define GX_MARKDIRS 1
+# define GX_MATCHDIRS 8
+# define GX_ALLDIRS 16
+# define GX_NULLDIR 256
+# define GX_ADDCURDIR 512
+# define GX_RECURSE 2048
+# define GX_SYMLINK 4096
 
 // Make Path Flags
-# define MP_DOTILDE 0x01
-# define MP_DOCWD 0x02
-# define MP_RMDOT 0x04
-# define MP_IGNDOT 0x08
+# define MP_DOTILDE 1
+# define MP_DOCWD 2
+# define MP_RMDOT 4
+# define MP_IGNDOT 8
 
 typedef struct s_glob
 {

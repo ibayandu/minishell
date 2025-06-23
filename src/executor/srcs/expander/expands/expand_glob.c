@@ -175,8 +175,9 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 	DIR				*d;
 	struct dirent	*dp;
 	t_glob			*lastlink;
-	t_glob			*e;
-	t_glob			*dirlist;
+	// t_glob			*e;
+	// t_glob			*dirlist;
+	// int				ndirs;
 	t_glob			*nextlink;
 	char			*nextname;
 	char			*npat;
@@ -184,7 +185,6 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 	unsigned int	count;
 	int				lose;
 	int				skip;
-	int				ndirs;
 	int				isdir;
 	int				sdlen;
 	int				add_current;
@@ -269,43 +269,41 @@ char	**glob_vector (char *pat, char *dir, int flags, t_minishell *minishell)
 				continue;
 
 			/* If we're only interested in directories, don't bother with files */
-			if (flags & GX_ALLDIRS)
+			if (flags & (GX_ALLDIRS))
 			{
 				pflags = (flags & GX_ALLDIRS) ? MP_RMDOT : 0;
 				if (flags & GX_NULLDIR)
 					pflags |= MP_IGNDOT;
 				subdir = sh_makepath(dir, dp->d_name, pflags, minishell);
 				isdir = glob_testdir (subdir);
-				if (isdir < 0)
-					continue;
 			}
-			if (flags & GX_ALLDIRS)
-			{
-				if (isdir == 0)
-				{
-					dirlist = finddirs(pat, subdir, (flags & ~GX_ADDCURDIR), &e, &ndirs, minishell);
-					if (ndirs)
-					{
-						if (!firstmalloc)
-							firstmalloc = e;
-						e->next = lastlink;
-						lastlink = dirlist;
-						count += ndirs;
-					}
-				}
+			// if (flags & GX_ALLDIRS)
+			// {
+			// 	if (isdir == 0)
+			// 	{
+			// 		dirlist = finddirs(pat, subdir, (flags & ~GX_ADDCURDIR), &e, &ndirs, minishell);
+			// 		if (ndirs)
+			// 		{
+			// 			if (!firstmalloc)
+			// 				firstmalloc = e;
+			// 			e->next = lastlink;
+			// 			lastlink = dirlist;
+			// 			count += ndirs;
+			// 		}
+			// 	}
 
-				nextlink = ft_malloc(sizeof(t_glob));
-				if (!firstmalloc)
-					firstmalloc = nextlink;
-				sdlen = ft_strlen(subdir);
-				nextname = ft_malloc(sdlen + 1);
-				nextlink->next = lastlink;
-				lastlink = nextlink;
-				nextlink->name = nextname;
-				ft_memcpy(nextname, subdir, sdlen + 1);
-				++count;
-				continue;
-			}
+			// 	nextlink = ft_malloc(sizeof(t_glob));
+			// 	if (!firstmalloc)
+			// 		firstmalloc = nextlink;
+			// 	sdlen = ft_strlen(subdir);
+			// 	nextname = ft_malloc(sdlen + 1);
+			// 	nextlink->next = lastlink;
+			// 	lastlink = nextlink;
+			// 	nextlink->name = nextname;
+			// 	ft_memcpy(nextname, subdir, sdlen + 1);
+			// 	++count;
+			// 	continue;
+			// }
 			if (strmatch (pat, dp->d_name) == 0)
 			{
 				nextlink = ft_malloc(sizeof(t_glob));

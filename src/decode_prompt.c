@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decode_prompt.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 06:29:32 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 06:54:25 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:56:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 // Ev dizinini '~' ile kısaltan yardımcı
 static char	*get_short_pwd(void)
 {
-	char	cwd[PATH_MAX];
+	char	cwd[4096];
 	char	*home;
 	size_t	home_len;
 	char	*short_pwd;
@@ -40,7 +40,7 @@ static char	*get_short_pwd(void)
 		if (!short_pwd)
 			return (ft_strdup(cwd));
 		short_pwd[0] = '~';
-		ft_strlcpy(short_pwd + 1, cwd + home_len, ft_strlen(cwd + home_len));
+		ft_strlcpy(short_pwd + 1, cwd + home_len, ft_strlen(cwd + home_len - 1));
 		return (short_pwd);
 	}
 	return (ft_strdup(cwd));
