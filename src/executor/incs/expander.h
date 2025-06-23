@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 19:41:02 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 11:06:08 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,13 @@
 # define HASH_REHASH_MULTIPLIER 4
 # define DEFAULT_HASH_BUCKETS 128
 # define FNV_OFFSET 2166136261
+
+typedef struct s_glob
+{
+	struct s_glob	*next;
+	char			*name;
+
+}	t_glob;
 
 t_variable	*set_if_not(char *name, char *value, t_minishell *minishell);
 int			legal_identifier(char *name);
