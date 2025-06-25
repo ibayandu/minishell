@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 15:03:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/25 06:31:38 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,11 @@ t_word_list	*expand_word_list(t_word_list *list, int is_redir, t_minishell *mini
 		return (NULL);
 	new_list = shell_expand_word_list(copy_word_list(list), minishell);
 	if (new_list && !is_redir)
-		new_list = glob_expand_word_list(new_list, minishell);
+	{
+		new_list = glob_list(new_list);
+		if (new_list)
+			new_list = ft_revword(new_list);
+	}
 	return (new_list);
 }
 

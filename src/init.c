@@ -6,12 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 17:05:54 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/25 06:26:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
-#include <errno.h>
 #include "expander.h"
 #include "minishell.h"
 #include "libft.h"
@@ -36,27 +35,18 @@ int	same_file(const char *path1, const char *path2, struct stat *stp1, struct st
 	return ((stp1->st_dev == stp2->st_dev) && (stp1->st_ino == stp2->st_ino));
 }
 
-int	path_isdir(char *path)
-{
-	int l;
-	struct stat sb;
-
-	errno = 0;
-	l = stat(path, &sb) == 0 && S_ISDIR(sb.st_mode);
-	return (l);
-}
-
 char	*sh_canonpath(char *path)
 {
-	char	stub_char;
-	char	*result;
-	char	*p;
-	char	*q;
-	char	*base;
-	char	*dotdot;
-	int		rooted;
-	int		double_slash_path;
-	char	c;
+	struct stat	sb;
+	char		stub_char;
+	char		*result;
+	char		*p;
+	char		*q;
+	char		*base;
+	char		*dotdot;
+	int			rooted;
+	int			double_slash_path;
+	char		c;
 
 	result = ft_strdup(path);
 	rooted = path[0] == '/';
@@ -90,7 +80,7 @@ char	*sh_canonpath(char *path)
 			{
 				c = *q;
 				*q = '\0';
-				if(path_isdir(result) == 0)
+				if(!(stat(result, &sb) == 0 && S_ISDIR(sb.st_mode)))
 					return (NULL);
 				*q = c;
 				while (--q > dotdot && *q == '/')
@@ -113,7 +103,7 @@ char	*sh_canonpath(char *path)
 				*q++ = *p++;
 			c = *q;
 			*q = '\0';
-			if (path_isdir(result) == 0)
+			if (!(stat(result, &sb) == 0 && S_ISDIR(sb.st_mode)))
 				return ((char *)NULL);
 			*q = c;
 		}

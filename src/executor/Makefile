@@ -7,7 +7,7 @@ VPATH = srcs:srcs/expander:srcs/expander/expands:srcs/expander/helpers:srcs/exec
 
 SRCS = executor.c ft_execvp.c execute_connect.c execute_simple.c execute_subshell.c apply_redirections.c build_argv.c ft_execvp.c \
 		builtin.c cd.c echo.c env.c exit.c export.c pwd.c unset.c expand_word.c expand_list.c split.c string.c expand_param.c \
-		list.c expand_glob.c
+		list.c expand_glob.c dir.c
 
 OBJS = $(SRCS:%.c=build/objs/%.o)
 
