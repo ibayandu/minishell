@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:15:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 06:15:59 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 15:51:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_word_list	*expand_word_internal(t_word *word, int quoted, int *expanded_someth
 	istring = ft_malloc(1);
 	istring_size = 1;
 	istring_index = 0;
+	temp = NULL;
 	while (1)
 	{
 		if (!string)

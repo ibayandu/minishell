@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_simple.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:41:02 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:50:56 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, char **argv,
 		apply_redirections(redirects, minishell);
 	if (cmd->redirects)
 		apply_redirections(cmd->redirects, minishell);
-	ft_execvp(argv[0], argv);
+	ft_execvp(argv[0], argv, minishell);
 	ft_putendl_fd(ft_strjoin(argv[0], ": command not found"), 2);
 	exit(127);
 }
@@ -42,6 +42,7 @@ static int	wait_for_child(pid_t pid)
 
 int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minishell)
 {
+	int		fds[3];
 	char	**argv;
 	pid_t	pid;
 
@@ -51,7 +52,26 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minish
 		return (1);
 	if (is_builtin(cmd->words->word->word))
 	{
-		run_builtin(cmd);
+		fds[0] = dup(STDIN_FILENO);
+		fds[1] = dup(STDOUT_FILENO);
+		fds[2] = dup(STDERR_FILENO);
+		apply_redirections(cmd->redirects,minishell);
+		run_builtin(cmd, minishell);
+		if (fds[0] != -1)
+		{
+			dup2(fds[0], STDIN_FILENO);
+			close(fds[0]);
+		}
+		if (fds[1] != -1)
+		{
+			dup2(fds[1], STDOUT_FILENO);
+			close(fds[1]);
+		}
+		if (fds[2] != -1)
+		{
+			dup2(fds[2], STDERR_FILENO);
+			close(fds[2]);
+		}
 		return (0);
 	}
 	pid = fork();

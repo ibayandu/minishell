@@ -14,7 +14,7 @@ $> echo $a$HOME$a
 
 $> echo */*/deneme* && ( echo "Başlangiç: $(date)" && echo << delim) && echo "Alt
 işlem başarıli" || echo "Alt işlem başarısız" | grep "içerik" || ech
-o "Eşleşme bulunamadı" 123> output.txt 2> deneme.txt && cat < a || ech
+o "Eşleşme bulunamadı" 123> output.txt 2> deneme.txt && cat < || ech
 o "Yeni dosyaya yazılan içerik" | (export a=deneme && echo $a)
 bash: syntax error near unexpected token `||'
 > fghjkl
@@ -87,4 +87,10 @@ $> cat << 1 && cat << 2 && cat << 3 && cat << 4 && cat << 5 && cat << 6 && cat <
 $> echo $
 $
 
+------------------------
 
+$> export "ğğüdsadsaş"=7
+bash: export: `ğğüdsadsaş=7': not a valid identifier
+$> export "dsad"=7
+
+------------------------

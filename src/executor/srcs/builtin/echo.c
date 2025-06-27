@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 03:31:58 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:21:56 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ int	builtin_echo(char **args)
 	}
 	while (args[i])
 	{
-		printf("%s", args[i]);
+		ft_putstr_fd(args[i] , 1);
 		if (args[i + 1])
-			printf(" ");
+			ft_putchar_fd(' ', 1);
 		i++;
 	}
 	if (newline)
-		printf("\n");
+		ft_putchar_fd('\n', 1);
 	return (0);
 }

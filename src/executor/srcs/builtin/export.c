@@ -3,28 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 05:23:00 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/23 22:13:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "expander.h"
 
-static void	list_env(void)
+size_t	count_strings(char **arr)
 {
-	extern char	**environ;
+	size_t	count;
+
+	count = 0;
+	while (arr && arr[count])
+		count++;
+	return (count);
+}
+
+char	**strvec_sort(char **input, int is_asc)
+{
+	size_t count;
+
+	count = count_strings(input);
+	if (count == 0)
+		return NULL;
+
+	char **sorted = ft_malloc((count + 1) * sizeof(char *));
+	if (!sorted)
+		return NULL;
+	for (size_t i = 0; i < count; i++)
+		sorted[i] = ft_strdup(input[i]);
+	sorted[count] = NULL;
+	for (size_t i = 0; i + 1 < count; i++)
+	{
+		for (size_t j = 0; j + 1 < count - i; j++)
+		{
+			int cmp = ft_strcmp(sorted[j], sorted[j+1]);
+			if ((is_asc && cmp > 0) || (!is_asc && cmp < 0))
+			{
+				char *tmp = sorted[j];
+				sorted[j] = sorted[j+1];
+				sorted[j+1] = tmp;
+			}
+		}
+	}
+
+	return sorted;
+}
+
+static void	list_env(t_minishell *minishell)
+{
+	char	**env;
 	int			i;
 
 	i = 0;
-	while (environ[i])
-		printf("declare -x %s\n", environ[i++]);
+	env = make_var_export_array(minishell->global_variables);
+	env = strvec_sort(env, 1);
+	while (env && env[i])
+		ft_putendl_fd(ft_strjoin(ft_strjoin("declare -x \"", env[i++]), "\""), 1);
 }
 
-static int	ft_export_with_value(char *arg)
+static char	*ft_get_key(char *arg)
 {
-	if (ft_putenv(ft_strdup(arg)) != 0)
+	int		i;
+	char	*ret;
+
+	ret = ft_strdup(arg);
+	i = ret - ft_strchr(ret, '=');
+	ret[i] = '\0';
+	if (*ret && legal_identifier(ret))
+		return (ret);
+	return (NULL);
+}
+
+static int	ft_export_with_value(char *arg, t_minishell *minishell)
+{
+	char	*key;
+
+	key = ft_get_key(arg);
+	if (!key)
+	{
+		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
+		return (1);
+	}
+	unbind_variable(ft_get_key(arg), minishell);
+	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1, minishell))
 	{
 		perror("export");
 		return (1);
@@ -32,51 +98,21 @@ static int	ft_export_with_value(char *arg)
 	return (0);
 }
 
-static char	*ft_create_env_string(char *key, char *val)
+static int	ft_export_without_value(char *arg, t_minishell *minishell)
 {
-	size_t	len;
-	char	*str;
-
-	if (val)
-	{
-		len = ft_strlen(key) + ft_strlen(val) + 2;
-		str = ft_malloc(len);
-		if (!str)
-			return (NULL);
-		str = ft_strjoin(key, "=");
-		str = ft_strjoin(str, val);
-	}
-	else
-	{
-		str = ft_malloc(ft_strlen(key) + 2);
-		if (!str)
-			return (NULL);
-		str = ft_strjoin(key, "=");
-	}
-	return (str);
-}
-
-static int	ft_export_without_value(char *arg)
-{
-	char	*val;
-	char	*str;
-
-	val = getenv(arg);
-	str = ft_create_env_string(arg, val);
-	if (!str)
+	if (!bind_variable(arg, "", minishell))
 		return (1);
-	ft_putenv(str);
 	return (0);
 }
 
-int	builtin_export(char **argv)
+int	builtin_export(char **argv, t_minishell *minishell)
 {
 	int		i;
 	char	*eq;
 
 	if (!argv[1])
 	{
-		list_env();
+		list_env(minishell);
 		return (0);
 	}
 	i = 1;
@@ -85,16 +121,15 @@ int	builtin_export(char **argv)
 		eq = ft_strchr(argv[i], '=');
 		if (eq)
 		{
-			if (ft_export_with_value(argv[i]) != 0)
+			if (ft_export_with_value(argv[i], minishell) != 0)
 				return (1);
 		}
 		else
 		{
-			if (ft_export_without_value(argv[i]) != 0)
+			if (ft_export_without_value(argv[i], minishell) != 0)
 				return (1);
 		}
 		i++;
 	}
 	return (0);
 }
-//todo key verilmediğinde hata vermiyor örnek olarak export =5 dediğinde çalışıyor yani saçma veya export = çalışıyor bu da saçma

@@ -3,35 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:25:40 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/23 21:56:58 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "executor.h"
 #include "lexer.h"
 #include "parsers.h"
 #include "printer.c"
-#include "executor.h"
 #include "init.c"
 
-char	*ft_repl(void)
+char	*ft_repl(t_minishell *minishell)
 {
-	char	*line;
-	char	*ps1;
-	// char	*decoded;
+	char		*line;
+	char		*ps1;
+	t_variable	*v;
 
-	ps1 = getenv("PS1");
-	if (!ps1)
-		ps1 = "minishell> ";
-	else
-	{
-		ps1 = ft_strtrim(ps1, "\"'");
-		ps1 = decode_prompt(ps1);
-		// ps1 = decoded;
-	}
+	ps1 = PS1;
+	v = find_variable_internal("PS1", minishell);
+	if (v)
+		ps1 = v->value;
+	ps1 = ft_strtrim(ps1, "\"'");
+	ps1 = decode_prompt(ps1);
 	line = ft_absorb(readline(ps1));
 	if (line == NULL)
 	{
@@ -51,8 +49,7 @@ int	main(void)
 	extern char			**environ;
 
 	initialize_shell_variables(environ, minishell);
-	cmdline = ft_repl();
-	printf("%s\n", find_variable_internal("PWD", minishell)->value);
+	cmdline = ft_repl(minishell);
 	while (cmdline)
 	{
 		if (!init_lexer(ft_strjoin(cmdline, "\n")))
@@ -62,10 +59,10 @@ int	main(void)
 			gather_here_documents(minishell);
 		if (cmd)
 		{
-			execute_command(cmd);
+			execute_command(cmd, minishell);
 			// print_command(cmd, 0, 1);
 		}
-		cmdline = ft_repl();
+		cmdline = ft_repl(minishell);
 	}
 	ft_free();
 	return (0);

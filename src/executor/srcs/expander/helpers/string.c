@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/21 18:54:05 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/23 21:39:19 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*string_list_internal(t_word_list *list)
 				*r++ = ' ';
 		}
 		word_len = ft_strlen(t->word->word);
-		ft_strlcpy(r, t->word->word, word_len);
+		ft_strcpy(r, t->word->word);
 		r += word_len;
 		t = t->next;
 	}

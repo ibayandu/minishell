@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 22:14:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 07:27:04 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:51:03 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # define DEFAULT_PATH_VALUE "/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:."
 # define HEREDOC_MAX 16
+# define PS1 "minishell> " // "\\u@\\H:\\w$ "
 # define PS2 "> "
 
 typedef struct s_variable
@@ -28,6 +29,14 @@ typedef struct s_variable
 	int					context;
 
 }	t_variable;
+
+typedef struct s_var_list
+{
+	t_variable	**list;
+	int list_size;
+	int list_len;
+
+}	t_var_list;
 
 typedef struct s_bucket
 {

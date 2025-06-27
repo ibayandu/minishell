@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:04:08 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/21 21:01:56 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/22 21:35:30 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ t_word_list	*list_string(char *string, char *seperators)
 
 	sindex = 0;
 	result = NULL;
+	if (!string)
+		return (NULL);
 	while (string[sindex])
 	{
 		while (string[sindex] && ft_strchr(seperators, string[sindex]))

@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 02:47:39 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 18:55:40 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/06/23 18:17:22 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/23 18:17:24 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "expander.h"
-
-int	builtin_unset(char **argv, t_minishell *minishell)
+char	*ft_strcpy(char *dest, char *src)
 {
-	int	i;
+	int		i;
 
-	i = 1;
-	if (!argv[1])
-		return (0);
-	while (argv[i])
+	i = 0;
+	while (src[i])
 	{
-		if (unbind_variable(argv[i], minishell) != 0)
-		{
-			perror("unset");
-			return (1);
-		}
+		dest[i] = src[i];
 		i++;
 	}
-	return (0);
+	dest[i] = '\0';
+	return (dest);
 }

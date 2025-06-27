@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_subshell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:43:44 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:34:02 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 

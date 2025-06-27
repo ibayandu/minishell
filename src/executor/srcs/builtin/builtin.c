@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:21:11 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 05:11:15 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:52:09 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_builtin(const char *name)
 		|| !ft_strncmp(name, "pwd", 4));
 }
 
-int	run_builtin(t_simple_cmd *cmd)
+int	run_builtin(t_simple_cmd *cmd, t_minishell *minishell)
 {
 	const char	*name;
 	char		*errstr;
@@ -32,11 +32,11 @@ int	run_builtin(t_simple_cmd *cmd)
 		return (1);
 	name = cmd->words->word->word;
 	if (!ft_strncmp(name, "cd", 3))
-		return (builtin_cd(build_argv(cmd->words)));
+		return (builtin_cd(build_argv(cmd->words), minishell));
 	else if (!ft_strncmp(name, "export", 7))
-		return (builtin_export(build_argv(cmd->words)));
+		return (builtin_export(build_argv(cmd->words), minishell));
 	else if (!ft_strncmp(name, "unset", 6))
-		return (builtin_unset(build_argv(cmd->words)));
+		return (builtin_unset(build_argv(cmd->words), minishell));
 	else if (!ft_strncmp(name, "exit", 5))
 		return (builtin_exit(build_argv(cmd->words)));
 	else if (!ft_strncmp(name, "echo", 5))
@@ -44,7 +44,7 @@ int	run_builtin(t_simple_cmd *cmd)
 	else if (!ft_strncmp(name, "pwd", 4))
 		return (builtin_pwd());
 	else if (!ft_strncmp(name, "env", 4))
-		return (builtin_env());
+		return (builtin_env(minishell));
 	errstr = ft_strjoin(name, ": builtin not implemented");
 	ft_putendl_fd(errstr, 2);
 	return (1);
