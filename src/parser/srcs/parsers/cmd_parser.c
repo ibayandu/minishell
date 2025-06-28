@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 14:28:34 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/20 04:51:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 11:18:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_command	*parse_simple_command(t_minishell *minishell)
 			break ;
 	}
 	if (!element_parsed)
-		return (ft_panic(get_current_token()), NULL);
+		return (ft_panic(get_current_token(), minishell), NULL);
 	return (clean_simple_command(cmd));
 }
 
@@ -78,7 +78,7 @@ t_command	*parse_command(t_minishell *minishell)
 			return (NULL);
 		cmd = make_subshell_command(sub_cmd);
 		if (!consume_token(T_RPARANTHESE))
-			return (ft_panic(get_current_token()), NULL);
+			return (ft_panic(get_current_token(), minishell), NULL);
 		if (ft_get_redir(get_current_token()))
 		{
 			redirects = parse_redirection_list(minishell);

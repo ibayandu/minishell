@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_connect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 07:46:09 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/28 13:22:13 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 

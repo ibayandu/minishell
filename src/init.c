@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/25 06:26:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 11:14:46 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,9 @@ void	set_pwd(t_minishell *minishell)
 	char		*home_string;
 	char		*current_dir;
 
-	home_var = find_variable_internal("HOME", minishell);
+	home_var = find_variable("HOME", minishell);
 	home_string = home_var ? home_var->value : NULL;
-	temp_var = find_variable_internal("PWD", minishell);
+	temp_var = find_variable("PWD", minishell);
 	if (temp_var)
 		temp_string = temp_var->value;
 	if (temp_var && temp_var->value && temp_string[0] == '/' && same_file(temp_string, ".", NULL, NULL))
@@ -150,7 +150,7 @@ void	set_pwd(t_minishell *minishell)
 		if (temp_string)
 			temp_var = bind_variable ("PWD", temp_string, minishell);
 	}
-	temp_var = find_variable_internal("OLDPWD", minishell);
+	temp_var = find_variable("OLDPWD", minishell);
 	if (!temp_var || !temp_var->value)
 		temp_var = bind_variable ("OLDPWD", NULL, minishell);
 }
@@ -163,7 +163,7 @@ void	adjust_shell_level(int change, t_minishell *minishell)
 	int			shell_level;
 	t_variable	*temp_var;
 
-	temp_var = find_variable_internal("SHLVL", minishell);
+	temp_var = find_variable("SHLVL", minishell);
 	old_SHLVL =  temp_var ? temp_var->value : NULL;
 	old_level = ft_atoi(old_SHLVL);
 	shell_level = old_level + change;
@@ -197,24 +197,6 @@ void	adjust_shell_level(int change, t_minishell *minishell)
 	temp_var = bind_variable("SHLVL", new_level, minishell);
 }
 
-void	set_home_var(t_minishell *minishell)
-{
-  t_variable	*temp_var;
-
-	temp_var = find_variable_internal("HOME", minishell);
-	if (!temp_var)
-		temp_var = bind_variable ("HOME", ft_strdup("/"), minishell);
-}
-
-void	set_shell_var(t_minishell *minishell)
-{
-	t_variable	*temp_var;
-
-	temp_var = find_variable_internal("SHELL", minishell);
-	if (!temp_var)
-		bind_variable ("SHELL", "/bin/sh", minishell);
-}
-
 void	initialize_shell_variables(char **env, t_minishell *minishell)
 {
 	char		*name;
@@ -222,8 +204,8 @@ void	initialize_shell_variables(char **env, t_minishell *minishell)
 	int			c;
 	int			char_index;
 	int			string_index;
-	t_variable	*temp_var;
 
+	minishell->last_command_exit_value = 0;
 	create_variable_tables(minishell);
 	string_index = 0;
 	while (env && (string = env[string_index++]))
@@ -237,16 +219,14 @@ void	initialize_shell_variables(char **env, t_minishell *minishell)
 		if (!char_index)
 			continue;
 		name[char_index] = '\0';
-		temp_var = NULL;
 		if (legal_identifier(name))
-			temp_var = bind_variable(name, string, minishell);
+			bind_variable(name, string, minishell);
 		name[char_index] = '=';
-		temp_var->exportstr = ft_strdup(name);
 	}
 	set_pwd(minishell);
-	temp_var = set_if_not("PATH", DEFAULT_PATH_VALUE, minishell);
-	temp_var = set_if_not("TERM", "dumb", minishell);
+	bind_variable("PATH", DEFAULT_PATH_VALUE, minishell);
+	bind_variable("TERM", "dumb", minishell);
 	adjust_shell_level(1, minishell);
-	set_home_var(minishell);
-	set_shell_var(minishell);
+	bind_variable("HOME", ft_strdup("/"), minishell);
+	bind_variable("SHELL", "/bin/sh", minishell);
 }

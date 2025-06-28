@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/25 06:31:38 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 09:24:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 	{
 		next = tlist->next;
 		expanded_something = 0;
-		expanded = expand_word_internal(tlist->word, 0, &expanded_something, minishell);
+		expanded = expand_word(tlist->word, 0, &expanded_something, minishell);
 		if (!expanded)
 		{
 			tlist->word->word = NULL;
@@ -95,15 +95,14 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 	return (new_list);
 }
 
-t_word_list	*expand_word_list(t_word_list *list, int is_redir, t_minishell *minishell)
+t_word_list	*expand_word_list(t_word_list *list, t_minishell *minishell)
 {
 	t_word_list	*new_list;
 
-	(void)is_redir;
 	if (!list)
 		return (NULL);
 	new_list = shell_expand_word_list(copy_word_list(list), minishell);
-	if (new_list && !is_redir)
+	if (new_list)
 	{
 		new_list = glob_list(new_list);
 		if (new_list)

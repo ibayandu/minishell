@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 22:14:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 17:51:03 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 13:05:01 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,17 @@
 
 typedef struct s_variable
 {
-	char				*name;
-	char				*value;
-	char				*exportstr;
-	int					attributes;
-	int					context;
+	char	*name;
+	char	*value;
+	int		is_export;
 
 }	t_variable;
 
 typedef struct s_var_list
 {
 	t_variable	**list;
-	int list_size;
-	int list_len;
+	int			list_size;
+	int			list_len;
 
 }	t_var_list;
 
@@ -44,7 +42,6 @@ typedef struct s_bucket
 	char			*key;
 	void			*data;
 	unsigned int	khash;
-	int				times_found;
 
 }	t_bucket;
 
@@ -56,26 +53,15 @@ typedef struct s_hash
 
 }	t_hash;
 
-typedef struct s_context
-{
-	char				*name;
-	int					scope;
-	int					flags;
-	struct s_context	*up;
-	struct s_context	*down;
-	t_hash				*table;
-
-}	t_context;
-
 typedef struct s_minishell
 {
 	t_redirect	*redir_stack[HEREDOC_MAX];
 	int			need_here_doc;
-	t_context	*global_variables;
+	t_hash		*global_variables;
 	int			last_command_exit_value;
 
-}				t_minishell;
+}	t_minishell;
 
-char			*decode_prompt(char *ps1);
+char	*decode_prompt(char *ps1);
 
 #endif

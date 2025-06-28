@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 21:56:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 12:13:13 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "executor.h"
 #include "lexer.h"
 #include "parsers.h"
-#include "printer.c"
+//#include "printer.c"
 #include "init.c"
 
 char	*ft_repl(t_minishell *minishell)
@@ -25,7 +25,7 @@ char	*ft_repl(t_minishell *minishell)
 	t_variable	*v;
 
 	ps1 = PS1;
-	v = find_variable_internal("PS1", minishell);
+	v = find_variable("PS1", minishell);
 	if (v)
 		ps1 = v->value;
 	ps1 = ft_strtrim(ps1, "\"'");
@@ -58,10 +58,7 @@ int	main(void)
 		if (minishell->need_here_doc)
 			gather_here_documents(minishell);
 		if (cmd)
-		{
-			execute_command(cmd, minishell);
-			// print_command(cmd, 0, 1);
-		}
+			minishell->last_command_exit_value = execute_command(cmd, minishell); // print_command(cmd, 0, 1);
 		cmdline = ft_repl(minishell);
 	}
 	ft_free();

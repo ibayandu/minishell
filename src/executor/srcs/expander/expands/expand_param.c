@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 16:30:06 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 07:51:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,33 +45,25 @@ t_bucket	*hash_search(const char *string, t_hash *table)
 	while (list)
 	{
 		if (hv == list->khash && ft_strncmp(list->key, string, ft_strlen(string)) == 0)
-		{
-			list->times_found++;
 			return (list);
-		}
 		list = list->next;
 	}
 	return (NULL);
 }
 
-t_variable	*find_variable_internal(const char *name, t_minishell *minishell)
+t_variable	*find_variable(const char *name, t_minishell *minishell)
 {
 	t_bucket	*res;
 	t_variable	*var;
-	t_context	*vc;
+	t_hash		*ht;
 
 	var = NULL;
-	vc = minishell->global_variables;
-	while (vc)
-	{
-		res = hash_search(name, vc->table);
-		if (res)
-		{
-			var = res->data;
-			break ;
-		}
-		vc = vc->down;
-	}
+	res = NULL;
+	ht = minishell->global_variables;
+	if (ht)
+		res = hash_search(name, ht);
+	if (res)
+		var = res->data;
 	if (!var)
 		return (NULL);
 	return (var);
@@ -84,22 +76,7 @@ t_variable	*new_shell_variable(const char *name)
 	entry = ft_malloc(sizeof(t_variable));
 	entry->name = ft_strdup(name);
 	entry->value = NULL;
-	entry->exportstr = NULL;
-	entry->attributes = 0;
-	entry->context = 0;
 	return (entry);
-}
-
-t_context	*new_var_context(char *name, int flags)
-{
-  t_context	*vc;
-
-  vc = ft_malloc(sizeof(t_context));
-  vc->name = name ? ft_strdup(name) : (char *)NULL;
-  vc->flags = flags;
-  vc->up = vc->down = NULL;
-  vc->table = NULL;
-  return vc;
 }
 
 t_hash	*hash_create(int buckets)
@@ -122,11 +99,7 @@ t_hash	*hash_create(int buckets)
 void	create_variable_tables(t_minishell *minishell)
 {
 	if (!minishell->global_variables)
-	{
-		minishell->global_variables = new_var_context(NULL, 0);
-		minishell->global_variables->scope = 0;
-		minishell->global_variables->table = hash_create(VARIABLES_HASH_BUCKETS);
-	}
+		minishell->global_variables = hash_create(VARIABLES_HASH_BUCKETS);
 }
 
 int	legal_identifier(char *name)
@@ -202,19 +175,16 @@ t_bucket	*hash_insert(char *string, t_hash *table)
 	item->data = NULL;
 	item->key = string;
 	item->khash = hv;
-	item->times_found = 0;
 	table->nentries++;
 	return (item);
 }
 
-t_variable	*make_new_variable(const char *name, t_hash *table, t_minishell *minishell)
+t_variable	*make_new_variable(const char *name, t_hash *table)
 {
 	t_variable	*entry;
 	t_bucket	*elt;
 
 	entry = new_shell_variable(name);
-	if (!minishell->global_variables)
-		create_variable_tables(minishell);
 	elt = hash_insert(ft_strdup(name), table);
 	elt->data = (void *)entry;
 	return (entry);
@@ -241,15 +211,13 @@ t_variable	*bind_variable(const char *name, char *value, t_minishell *minishell)
 	t_variable	*entry;
 	t_bucket	*bucket;
 
-	if (!minishell->global_variables)
-		create_variable_tables(minishell);
 	entry = NULL;
-	bucket = hash_search(name, minishell->global_variables->table);
+	bucket = hash_search(name, minishell->global_variables);
 	if (bucket)
 		entry = bucket->data;
 	if (entry)
 		return (entry);
-	entry = make_new_variable(name, minishell->global_variables->table, minishell);
+	entry = make_new_variable(name, minishell->global_variables);
 	entry->value = make_variable_value(value);
 	return (entry);
 }
@@ -282,20 +250,15 @@ t_bucket	*hash_remove(const char *string, t_hash *table)
 	return (NULL);
 }
 
-int	makunbound(const char *name, t_context *vc)
+int	makunbound(const char *name, t_hash *ht)
 {
 	t_bucket	*elt;
-	t_context	*v;
+	t_hash		*h;
 
 	elt = NULL;
-	v = vc;
-	while (v)
-	{
-		elt = hash_remove(name, v->table);
-		if (elt)
-			break ;
-		v = v->down;
-	}
+	h = ht;
+	if (h)
+		elt = hash_remove(name, h);
 	if (!elt)
 		return (-1);
 	return (0);
@@ -307,22 +270,10 @@ int	unbind_variable(const char *name, t_minishell *minishell)
 	int r;
 
 	r = 1;
-	v = find_variable_internal(name, minishell);
+	v = find_variable(name, minishell);
 	if (v)
 		r = makunbound(name, minishell->global_variables);
 	return (r);
-}
-
-t_variable	*set_if_not(char *name, char *value, t_minishell *minishell)
-{
-	t_variable	*v;
-
-	if (!minishell->global_variables)
-		create_variable_tables(minishell);
-	v = find_variable_internal(name, minishell);
-	if (!v)
-		v = bind_variable(name, value, minishell);
-	return (v);
 }
 
 t_word	*param_expand(char *string, int *sindex, int *expanded_something, t_minishell *minishell)
@@ -355,7 +306,7 @@ t_word	*param_expand(char *string, int *sindex, int *expanded_something, t_minis
 				*expanded_something = 0;
 			goto return0;
 		}
-		var = find_variable_internal(temp1, minishell);
+		var = find_variable(temp1, minishell);
 		if (var && var->value)
 		{
 			temp = var->value;

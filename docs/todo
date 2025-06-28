@@ -1,13 +1,6 @@
- - Add builtin flag for builtin command words
- - Add Assignment Builtin flag for export
-
  - Decide similar approach on directory structor for total structs and definations
 
  - Close the 3 to MAX_FD fd's on new process with fork
- - The builtin redirections are missing
-
- - Track the minishell->last_command_exit_value
- - Handle _="command_name" env variable with flags on t_variable
 
  * ??? Should we ???*
  - Should you add default_locale_variables() function in bash. Which is for
@@ -15,4 +8,5 @@
  - Take a look what bash does on
 
  :)
+ - Handle newline execution
  - Handle ~/.minishellrc file

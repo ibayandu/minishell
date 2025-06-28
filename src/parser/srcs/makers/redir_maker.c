@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 10:05:30 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 11:00:02 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
 	temp = ft_malloc(sizeof(t_redirect));
 	temp->redirector = source;
 	temp->redirectee = dest_and_filename;
-	temp->here_doc_eof = 0;
+	temp->here_doc_eof = NULL;
 	temp->redir_type = redir_type;
 	temp->flags = 0;
 	temp->next = NULL;
@@ -42,14 +42,14 @@ t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
 	return (temp);
 }
 
-void	document_done(char *document, t_redirect *temp)
+void	doc_done(char *doc, t_redirect *temp)
 {
-	if (!document)
-		document = ft_strdup("");
-	temp->redirectee->word = document;
+	if (!doc)
+		doc = ft_strdup("");
+	temp->redirectee->word = doc;
 }
 
-void	document_warning(char *here_doc_eof)
+void	doc_warning(char *here_doc_eof)
 {
 	char	*text;
 
@@ -66,8 +66,7 @@ void	make_here_document(t_redirect *temp)
 	document = NULL;
 	temp->here_doc_eof = string_quote_removal(temp->redirectee->word);
 	if (!temp->here_doc_eof)
-		return (temp->here_doc_eof = ft_strdup(""),
-			document_done(document, temp));
+		return (temp->here_doc_eof = ft_strdup(""), doc_done(document, temp));
 	full_line = ft_readline(PS2);
 	while (full_line)
 	{
@@ -78,11 +77,11 @@ void	make_here_document(t_redirect *temp)
 		}
 		if (ft_strncmp(full_line, temp->here_doc_eof,
 				ft_strlen(temp->here_doc_eof) + 1) == '\n')
-			return (document_done(document, temp));
+			return (doc_done(document, temp));
 		document = ft_strjoin(document, full_line);
 		full_line = ft_readline(PS2);
 	}
 	if (!full_line)
-		document_warning(temp->here_doc_eof);
-	document_done(document, temp);
+		doc_warning(temp->here_doc_eof);
+	doc_done(document, temp);
 }

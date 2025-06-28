@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:15:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 15:51:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 09:24:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "utils.h"
 #include "expander.h"
 
-t_word_list	*expand_word_internal(t_word *word, int quoted, int *expanded_something, t_minishell *minishell)
+t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_minishell *minishell)
 {
 	t_word_list	*list;
 	t_word		*tword;
@@ -28,7 +28,7 @@ t_word_list	*expand_word_internal(t_word *word, int quoted, int *expanded_someth
 
 	sindex = 0;
 	string = word->word;
-	istring = ft_malloc(1);
+	istring = ft_strdup("");
 	istring_size = 1;
 	istring_index = 0;
 	temp = NULL;
@@ -60,7 +60,7 @@ t_word_list	*expand_word_internal(t_word *word, int quoted, int *expanded_someth
 				tword = alloc_word_desc();
 				tword->word = temp;
 				temp = NULL;
-				list = expand_word_internal(tword, 1, NULL, minishell);
+				list = expand_word(tword, 1, NULL, minishell);
 				if (!list)
 					return (NULL);
 			}
@@ -69,7 +69,7 @@ t_word_list	*expand_word_internal(t_word *word, int quoted, int *expanded_someth
 			if (list)
 			{
 				if (list->next)
-					temp = string_list_internal(list);
+					temp = string_list(list);
 				else
 					temp = ft_strdup(list->word->word);
 			}

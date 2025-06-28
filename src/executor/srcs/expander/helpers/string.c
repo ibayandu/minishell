@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 21:39:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 09:25:17 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "structs.h"
 
-char	*string_list_internal(t_word_list *list)
+char	*string_list(t_word_list *list)
 {
 	t_word_list	*t;
 	char		*result;
@@ -36,7 +36,7 @@ char	*string_list_internal(t_word_list *list)
 		result_size += ft_strlen(t->word->word);
 		t = t->next;
 	}
-	r = result = ft_malloc (result_size + 1);
+	r = result = ft_malloc(result_size + 1);
 	t = list;
 	while (t)
 	{
