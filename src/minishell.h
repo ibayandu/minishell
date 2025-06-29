@@ -6,13 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 22:14:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 13:05:01 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 13:45:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <signal.h>
 # include "structs.h"
 
 # define DEFAULT_PATH_VALUE "/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:."
@@ -55,10 +56,10 @@ typedef struct s_hash
 
 typedef struct s_minishell
 {
-	t_redirect	*redir_stack[HEREDOC_MAX];
-	int			need_here_doc;
-	t_hash		*global_variables;
-	int			last_command_exit_value;
+	t_redirect			*redir_stack[HEREDOC_MAX];
+	int					need_here_doc;
+	t_hash				*global_variables;
+	int					last_command_exit_value;
 
 }	t_minishell;
 

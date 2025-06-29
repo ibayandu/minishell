@@ -6,15 +6,25 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 02:20:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 14:46:59 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
+#include <termios.h>
 #include <errno.h>
 #include "builtin.h"
 #include "expander.h"
 #include "execute.h"
+
+void	handle_child(int sig)
+{
+	(void)sig;
+	if (isatty(STDOUT_FILENO))
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	ft_free();
+	exit(130);
+}
 
 static void	is_directory(char *filename)
 {
@@ -38,6 +48,8 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, t_minishell 
 
 	char *const *argv = build_argv(cmd->words);
 
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_child);
 	if (redirects)
 		if (apply_redirections(redirects, minishell))
 		{
@@ -127,6 +139,8 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minish
 			return (1);
 		return (ret);
 	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		return (1);

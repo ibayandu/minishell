@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 08:52:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 11:03:42 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 			temp_list = expanded;
 		denull_list(&temp_list);
 		expanded = ft_revword(temp_list);
-		expanded->word->flags = tlist->word->flags;
+		if (expanded && expanded->word && tlist && tlist->word)
+			expanded->word->flags = tlist->word->flags;
 		new_list = list_append(expanded, new_list);
 		tlist = next;
 	}

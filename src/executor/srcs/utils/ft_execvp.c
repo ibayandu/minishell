@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 20:03:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 14:51:50 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 11:18:21 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	*find_in_path(const char *file, t_minishell *minishell)
 	if (v && v->value)
 		path_copy = ft_strdup(v->value);
 	else
-		return (NULL);
+		path_copy = ft_strdup(".");
 	dir = ft_strtok(path_copy, ":");
 	while (dir)
 	{

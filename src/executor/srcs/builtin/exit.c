@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:46:21 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 05:27:48 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 13:32:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	builtin_exit(char **argv)
 	int		plus;
 
 	status = 0;
-	//ft_putendl_fd("exit", STDOUT_FILENO);
+	ft_putendl_fd("exit", STDOUT_FILENO);
 	i = 0;
 	minus = 0;
 	plus = 0;
