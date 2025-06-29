@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 22:13:07 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 06:50:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,38 @@ char	**strvec_sort(char **input, int is_asc)
 	return sorted;
 }
 
-static void	list_env(t_minishell *minishell)
-{
-	char	**env;
-	int			i;
-
-	i = 0;
-	env = make_var_export_array(minishell->global_variables);
-	env = strvec_sort(env, 1);
-	while (env && env[i])
-		ft_putendl_fd(ft_strjoin(ft_strjoin("declare -x \"", env[i++]), "\""), 1);
-}
-
 static char	*ft_get_key(char *arg)
 {
 	int		i;
 	char	*ret;
 
 	ret = ft_strdup(arg);
-	i = ret - ft_strchr(ret, '=');
+	i = ft_strchr(ret, '=') - ret;
 	ret[i] = '\0';
 	if (*ret && legal_identifier(ret))
 		return (ret);
 	return (NULL);
+}
+
+static void	list_env(t_minishell *minishell)
+{
+	char	**env;
+	int		i;
+	char	*key;
+
+	env = make_var_export_array(minishell->global_variables, 1);
+	env = strvec_sort(env, 1);
+	i = -1;
+	while (env && env[++i])
+	{
+		if (ft_strchr(env[i], '='))
+		{
+			key = ft_get_key(env[i]);
+			ft_putendl_fd(ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin("declare -x ", key), "="), "\""), ft_strchr(env[i], '=') + 1), "\""), 1);
+		}
+		else
+			ft_putendl_fd(ft_strjoin("declare -x ", env[i]), 1);
+	}
 }
 
 static int	ft_export_with_value(char *arg, t_minishell *minishell)
@@ -91,16 +100,18 @@ static int	ft_export_with_value(char *arg, t_minishell *minishell)
 	}
 	unbind_variable(ft_get_key(arg), minishell);
 	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1, minishell))
-	{
-		perror("export");
 		return (1);
-	}
 	return (0);
 }
 
 static int	ft_export_without_value(char *arg, t_minishell *minishell)
 {
-	if (!bind_variable(arg, "", minishell))
+	if (!legal_identifier(arg))
+	{
+		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
+		return (1);
+	}
+	if (!bind_variable(arg, NULL, minishell))
 		return (1);
 	return (0);
 }

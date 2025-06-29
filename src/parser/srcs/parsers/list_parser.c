@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:37:31 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/21 16:52:05 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:18:49 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_command	*parse_inputunit(t_minishell *minishell)
 		return (NULL);
 	if (get_current_token()->token_type == T_NL)
 		return (cmd);
-	return (ft_panic(get_current_token()), NULL);
+	return (ft_panic(get_current_token(), minishell), NULL);
 }
 
 t_command	*parse_compound_list(t_minishell *minishell)

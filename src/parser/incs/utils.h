@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/21 21:00:05 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 13:05:52 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@
 # include <stddef.h>
 # include "token.h"
 # include "structs.h"
+# include "minishell.h"
 
 size_t			ft_mbrlen(const char *s, size_t max_len);
 int				ft_charflag(char c, int flag);
 t_word_list		*ft_revword(t_word_list *list);
 t_redirect		*ft_revredir(t_redirect *list);
 char			*string_quote_removal(char *string);
-void			ft_panic(t_token *token);
+void			ft_panic(t_token *token, t_minishell *minishell);
 t_redir_type	ft_get_redir(t_token *token);
 char			*ft_readline(char *prompt);
 t_cnt_type		ft_get_cnt(t_token *token);

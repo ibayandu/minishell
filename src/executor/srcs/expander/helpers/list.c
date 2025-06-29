@@ -65,29 +65,23 @@ void	flatten(t_hash *var_hash_table, int (*func)(t_variable *), t_var_list *vlis
 	}
 }
 
-t_variable	**map_over(int (*function)(t_variable *), t_context *vc)
+t_variable	**map_over(int (*function)(t_variable *), t_hash *ht)
 {
-	t_context	*v;
+	t_hash		*h;
 	t_var_list	*vlist;
 	t_variable	**ret;
 	int			nentries;
 
 	nentries = 0;
-	v = vc;
-	while (v)
-	{
-		nentries += v->table ? v->table->nentries : 0;
-		v = v->down;
-	}
+	h = ht;
+	if (h)
+		nentries += h ? h->nentries : 0;
 	if (!nentries)
 		return (NULL);
 	vlist = vlist_alloc(nentries);
-	v = vc;
-	while (v)
-	{
-		flatten(v->table, function, vlist);
-		v = v->down;
-	}
+	h = ht;
+	if (h)
+		flatten(h, function, vlist);
 	ret = vlist->list;
 	return (ret);
 }
@@ -111,11 +105,6 @@ int	strvec_len(char **array)
 	return (i);
 }
 
-char **strvec_create(int n)
-{
-	return (ft_malloc((n) * sizeof(char *)));
-}
-
 char	*mk_env_string(const char *name, const char *value)
 {
 	size_t	name_len;
@@ -128,15 +117,16 @@ char	*mk_env_string(const char *name, const char *value)
 	p = ft_malloc(2 + name_len + value_len);
 	ft_memcpy(p, name, name_len);
 	q = p + name_len;
-	q[0] = '=';
+	if (value)
+		q[0] = '=';
 	if (value && *value)
 		ft_memcpy(q + 1, value, value_len + 1);
 	else
-		q[1] = '\0';
+		q[1 - (!value)] = '\0';
 	return (p);
 }
 
-char	**make_env_array_from_var_list(t_variable **vars)
+char	**make_env_array_from_var_list(t_variable **vars, int is_export)
 {
 	int			i;
 	int			list_index;
@@ -144,14 +134,14 @@ char	**make_env_array_from_var_list(t_variable **vars)
 	char		**list;
 	char		*value;
 
-	list = strvec_create(1 + strvec_len((char **)vars));
+	list = ft_malloc((1 + strvec_len((char **)vars)) * sizeof(char *));
 	i = 0;
 	list_index = 0;
 	var = vars[i];
 	while (var)
 	{
 		value = var->value;
-		if (value)
+		if (value || is_export)
 		{
 			list[list_index] = mk_env_string(var->name, value);
 			list_index++;
@@ -163,14 +153,14 @@ char	**make_env_array_from_var_list(t_variable **vars)
 	return (list);
 }
 
-char	**make_var_export_array(t_context *vcxt)
+char	**make_var_export_array(t_hash *ht, int is_export)
 {
 	char		**list;
 	t_variable	**vars;
 
-	vars = map_over(export_environment_candidate, vcxt);
+	vars = map_over(export_environment_candidate, ht);
 	if (!vars)
 		return (NULL);
-	list = make_env_array_from_var_list(vars);
+	list = make_env_array_from_var_list(vars, is_export);
 	return (list);
 }

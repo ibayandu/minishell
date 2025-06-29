@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:33:07 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 04:26:14 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 11:18:55 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_redirect	*parse_redirection(t_minishell *minishell)
 		dest = make_word(get_current_token()->value,
 				get_current_token()->flags);
 	else
-		return (ft_panic(get_current_token()), NULL);
+		return (ft_panic(get_current_token(), minishell), NULL);
 	redirect = make_redirection(source, redir_type, dest);
 	if (get_next_token() && redir_type == REDIR_UNTIL)
 		push_heredoc(redirect, minishell);

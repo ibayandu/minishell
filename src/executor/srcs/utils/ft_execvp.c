@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 20:03:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 20:20:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 11:18:21 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,21 @@ static char	*build_full_path(const char *dir, const char *file)
 	return (full_path);
 }
 
-static char	*find_in_path(const char *file)
+static char	*find_in_path(const char *file, t_minishell *minishell)
 {
-	char	*path_env;
-	char	*path_copy;
-	char	*dir;
-	char	*full_path;
+	char		*path_copy;
+	char		*dir;
+	char		*full_path;
+	t_variable	*v;
 
+	v = NULL;
 	if (!file || !*file || ft_strchr(file, '/'))
 		return (NULL);
-	path_env = getenv("PATH");
-	if (!path_env)
-		return (NULL);
-	path_copy = ft_strdup(path_env);
-	if (!path_copy)
-		return (NULL);
+	v = find_variable("PATH", minishell);
+	if (v && v->value)
+		path_copy = ft_strdup(v->value);
+	else
+		path_copy = ft_strdup(".");
 	dir = ft_strtok(path_copy, ":");
 	while (dir)
 	{
@@ -69,12 +69,19 @@ int	ft_execvp(const char *file, char *const argv[], t_minishell *minishell)
 		errno = ENOENT;
 		return (-1);
 	}
-	env = make_var_export_array(minishell->global_variables);
 	if (ft_strchr(file, '/'))
+	{
+		unbind_variable("_", minishell);
+		bind_variable("_", (char *)file, minishell);
+		env = make_var_export_array(minishell->global_variables, 0);
 		return (execve(file, argv, env));
-	path = find_in_path(file);
+	}
+	path = find_in_path(file, minishell);
 	if (path)
 	{
+		unbind_variable("_", minishell);
+		bind_variable("_", path, minishell);
+		env = make_var_export_array(minishell->global_variables, 0);
 		result = execve(path, argv, env);
 		return (result);
 	}

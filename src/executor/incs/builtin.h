@@ -6,17 +6,18 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:58 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/22 18:11:23 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 13:02:39 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-# include "libft.h"
-# include "structs.h"
-# include "minishell.h"
+#include <x86_64-linux-gnu/bits/local_lim.h>
 # include <stdio.h>
+# include "minishell.h"
+# include "structs.h"
+# include "libft.h"
 
 int	is_builtin(const char *name);
 int	run_builtin(t_simple_cmd *cmd, t_minishell *minishell);

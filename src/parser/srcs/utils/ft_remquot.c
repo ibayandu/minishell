@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 21:31:32 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 11:08:49 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*string_quote_removal(char *string)
 			temp = string_extract_single_quoted(string, &sindex);
 			if (temp)
 			{
-				ft_strlcpy(r, temp, ft_strlen(temp));
+				ft_strlcpy(r, temp, ft_strlen(temp) + 1);
 				r += ft_strlen(r);
 			}
 		}

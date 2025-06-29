@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/25 06:31:38 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 11:03:42 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,31 @@ t_word_list	*copy_word_list(t_word_list *list)
 	return (new_list);
 }
 
+void denull_list(t_word_list **list)
+{
+	t_word_list *cur;
+	t_word_list *tmp;
+
+	if (!list || !*list)
+		return;
+	while (*list && (*list)->word && (*list)->word->word == NULL)
+	{
+		tmp = *list;
+		*list = (*list)->next;
+	}
+	cur = *list;
+	while (cur && cur->next)
+	{
+		if (cur->next->word && cur->next->word->word == NULL)
+		{
+			tmp = cur->next;
+			cur->next = tmp->next;
+		}
+		else
+			cur = cur->next;
+	}
+}
+
 t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 {
 	t_word_list	*expanded;
@@ -75,7 +100,7 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 	{
 		next = tlist->next;
 		expanded_something = 0;
-		expanded = expand_word_internal(tlist->word, 0, &expanded_something, minishell);
+		expanded = expand_word(tlist->word, 0, &expanded_something, minishell);
 		if (!expanded)
 		{
 			tlist->word->word = NULL;
@@ -86,7 +111,10 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 			temp_list = word_list_split(expanded);
 		else
 			temp_list = expanded;
+		denull_list(&temp_list);
 		expanded = ft_revword(temp_list);
+		if (expanded && expanded->word && tlist && tlist->word)
+			expanded->word->flags = tlist->word->flags;
 		new_list = list_append(expanded, new_list);
 		tlist = next;
 	}
@@ -95,15 +123,14 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 	return (new_list);
 }
 
-t_word_list	*expand_word_list(t_word_list *list, int is_redir, t_minishell *minishell)
+t_word_list	*expand_word_list(t_word_list *list, t_minishell *minishell)
 {
 	t_word_list	*new_list;
 
-	(void)is_redir;
 	if (!list)
 		return (NULL);
 	new_list = shell_expand_word_list(copy_word_list(list), minishell);
-	if (new_list && !is_redir)
+	if (new_list)
 	{
 		new_list = glob_list(new_list);
 		if (new_list)

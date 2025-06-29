@@ -6,17 +6,28 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 21:56:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 14:36:54 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "get_next_line.h"
 #include "executor.h"
 #include "lexer.h"
 #include "parsers.h"
-#include "printer.c"
 #include "init.c"
+
+void	handle_sigint(int sig)
+{
+	(void)sig;
+	if (isatty(STDOUT_FILENO))
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
 
 char	*ft_repl(t_minishell *minishell)
 {
@@ -24,20 +35,29 @@ char	*ft_repl(t_minishell *minishell)
 	char		*ps1;
 	t_variable	*v;
 
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint);
 	ps1 = PS1;
-	v = find_variable_internal("PS1", minishell);
+	line = NULL;
+	v = find_variable("PS1", minishell);
 	if (v)
 		ps1 = v->value;
 	ps1 = ft_strtrim(ps1, "\"'");
 	ps1 = decode_prompt(ps1);
-	line = ft_absorb(readline(ps1));
-	if (line == NULL)
+	if (isatty(fileno(stdin)))
+		line = ft_absorb(readline(ps1));
+	// else
+	// 	line = ft_absorb(get_next_line(fileno(stdin)));
+	if (!line)
 	{
 		write(STDERR_FILENO, "exit\n", 5);
 		ft_free();
 		exit(0);
 	}
-	add_history(line);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
+	if (*line)
+		add_history(line);
 	return (line);
 }
 
@@ -58,14 +78,12 @@ int	main(void)
 		if (minishell->need_here_doc)
 			gather_here_documents(minishell);
 		if (cmd)
-		{
-			execute_command(cmd, minishell);
-			// print_command(cmd, 0, 1);
-		}
+			minishell->last_command_exit_value = execute_command(cmd, minishell);
 		cmdline = ft_repl(minishell);
 	}
+	rl_clear_history();
 	ft_free();
-	return (0);
+	return (minishell->last_command_exit_value);
 }
 
 

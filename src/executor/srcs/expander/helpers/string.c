@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/23 21:39:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 02:52:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "structs.h"
 
-char	*string_list_internal(t_word_list *list)
+char	*string_list(t_word_list *list)
 {
 	t_word_list	*t;
 	char		*result;
@@ -36,7 +36,7 @@ char	*string_list_internal(t_word_list *list)
 		result_size += ft_strlen(t->word->word);
 		t = t->next;
 	}
-	r = result = ft_malloc (result_size + 1);
+	r = result = ft_malloc(result_size + 1);
 	t = list;
 	while (t)
 	{
@@ -65,28 +65,31 @@ char	*string_extract_double_quoted(char *string, int *sindex)
 	int		j;
 	int		i;
 	char	*temp;
+	int		skip;
 
 	slen = ft_strlen(string + *sindex) + *sindex;
 	temp = ft_malloc(1 + slen - *sindex);
 	j = 0;
 	i = *sindex;
+	skip = 0;
 	while (string[i])
 	{
-		if (string[i] != '"')
+		if (string[i] != '"' && skip == 1)
 		{
 			temp[j++] = string[i++];
-			continue;
+			continue ;
 		}
 		else
 		{
+			if (skip == 2)
+				break ;
 			i++;
-			continue;
+			skip++;
+			continue ;
 		}
 		break;
 	}
 	temp[j] = '\0';
-	if (string[i])
-		i++;
 	*sindex = i;
 	return (temp);
 }

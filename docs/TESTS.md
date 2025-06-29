@@ -94,3 +94,10 @@ bash: export: `ğğüdsadsaş=7': not a valid identifier
 $> export "dsad"=7
 
 ------------------------
+
+minishell> echo hi > a b
+minishell> export a=d
+minishell> echo hi > $a b
+minishell>
+
+------------------------

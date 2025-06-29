@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 11:47:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/16 14:39:48 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 01:05:49 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	total_len;
 
 	if (!s2)
-		return (NULL);
+		return (ft_strdup(s1));
 	if (!s1)
 		s1 = ft_strdup("");
 	s2len = ft_strlen(s2);

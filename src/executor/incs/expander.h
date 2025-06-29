@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/25 06:34:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 00:59:24 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,18 @@
 
 t_word_list *list_append(t_word_list *head, t_word_list *tail);
 char		**strvec_sort(char **input, int is_asc);
-t_variable	*set_if_not(char *name, char *value, t_minishell *minishell);
 int			legal_identifier(char *name);
 void		create_variable_tables(t_minishell *minishell);
-t_word_list	*expand_word_list(t_word_list *list, int is_redir, t_minishell *minishell);
+t_word_list	*expand_word_list(t_word_list *list, t_minishell *minishell);
 t_word_list	*word_list_split(t_word_list *list);
-t_word_list	*expand_word_internal(t_word *word, int quoted, int *expanded_something, t_minishell *minishell);
+t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_minishell *minishell);
 char		*string_extract_double_quoted(char *string, int *sindex);
-char		*string_list_internal(t_word_list *list);
-t_variable	*find_variable_internal(const char *name, t_minishell *minishell);
+char		*string_list(t_word_list *list);
+t_variable	*find_variable(const char *name, t_minishell *minishell);
 t_word		*param_expand(char *string, int *sindex, int *expanded_something, t_minishell *minishell);
 t_variable	*bind_variable(const char *name, char *value, t_minishell *minishell);
 int			unbind_variable(const char *name, t_minishell *minishell);
-char		**make_var_export_array(t_context *vcxt);
+char		**make_var_export_array(t_hash *ht, int is_export);
 t_word_list	*list_string(char *string, char *seperators);
 
 char		**glob_vector(char *pat, char *dir, int flags);
@@ -57,5 +56,8 @@ t_word_list	*glob_list(t_word_list *tlist);
 int			testdir(char *dir);
 char		**arraydir(char *dir, char **array);
 t_list		*finddir(char *pat, char *sdir, int flags, t_list **ep, int *np);
+
+char		*redir_expand(t_word *redir_word, t_minishell *minishell);
+char		*here_document_expand(t_word *document, t_minishell *minishell);
 
 #endif /* EXPANDER_H*/

@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 02:47:02 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 07:53:22 by yzeybek          ###   ########.tr       */
+/*   Created: 2024/11/02 20:20:54 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/28 21:57:27 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expander.h"
-#include "builtin.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	builtin_env(t_minishell *minishell)
-{
-	char		**env;
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
-	env = make_var_export_array(minishell->global_variables, 0);
-	while (*env != NULL)
-		ft_putendl_fd(*env++, 1);
-	return (0);
-}
+# include <stdlib.h>
+
+char	*get_next_line(int fd);
+char	*find_newline(char *str);
+char	*gnl_strjoin(char *s1, char *s2);
+size_t	gnl_strlen(char *str);
+size_t	gnl_strlcpy(char *dst, char *src, size_t dstsize);
+void	*del(void *data);
+
+#endif
