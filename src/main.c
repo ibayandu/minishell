@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 14:36:54 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 21:48:39 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "get_next_line.h"
 #include "executor.h"
+#include "get_next_line.h"
+#include "init.c"
 #include "lexer.h"
 #include "parsers.h"
-#include "init.c"
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <stdio.h>
 
 void	handle_sigint(int sig)
 {
@@ -60,31 +60,82 @@ char	*ft_repl(t_minishell *minishell)
 		add_history(line);
 	return (line);
 }
+#include <fcntl.h>
+#define MAX_BUFFER_SIZE 1024
+
+void	minirc(t_minishell *minishell)
+{
+	char		*home_dir;
+	char		filepath[1024];
+	FILE		*file;
+	char		*content;
+	size_t		len;
+	t_command	*cmd;
+
+	home_dir = getenv("HOME");
+	if (home_dir == NULL)
+	{
+		fprintf(stderr, "Home directory bulunamadı.\n");
+	}
+	// .minirc dosyasının tam yolunu oluşturuyoruz.
+	snprintf(filepath, sizeof(filepath), "%s/.minirc", home_dir);
+	// Dosyayı okuma modunda açıyoruz.
+	file = fopen(filepath, "r");
+	if (file == NULL)
+	{
+		fprintf(stderr, ".minirc dosyası bulunamadı veya açılamadı: %s\n",
+			filepath);
+	}
+	// Dosya içeriğini okumak için bir buffer oluşturuyoruz.
+	content = (char *)malloc(MAX_BUFFER_SIZE);
+	if (content == NULL)
+	{
+		fprintf(stderr, "Bellek ayırma hatası.\n");
+		fclose(file);
+	}
+	// Dosyayı okuyoruz ve içeriği 'content' değişkenine atıyoruz.
+	len = fread(content, 1, MAX_BUFFER_SIZE - 1, file);
+	content[len] = '\0'; // String sonlandırıcısını ekliyoruz.
+	// Dosyayı kapatıyoruz.
+	fclose(file);
+	if (content)
+	{
+		if (init_lexer(ft_strjoin(content, "\n")))
+		{
+			cmd = parse_inputunit(minishell);
+			if (minishell->need_here_doc)
+				gather_here_documents(minishell);
+			if (cmd)
+				minishell->last_command_exit_value = execute_command(cmd,
+						minishell);
+		}
+	}
+}
 
 int	main(void)
 {
-	t_minishell	*const	minishell = &(t_minishell){0};
-	t_command			*cmd;
-	char				*cmdline;
-	extern char			**environ;
+	t_command	*cmd;
+	char		*cmdline;
+	extern char	**environ;
 
+	t_minishell *const minishell = &(t_minishell){0};
 	initialize_shell_variables(environ, minishell);
+	minirc(minishell);
 	cmdline = ft_repl(minishell);
 	while (cmdline)
 	{
-		if (!init_lexer(ft_strjoin(cmdline, "\n")))
-			return (1);
-		cmd = parse_inputunit(minishell);
-		if (minishell->need_here_doc)
-			gather_here_documents(minishell);
-		if (cmd)
-			minishell->last_command_exit_value = execute_command(cmd, minishell);
+		if (init_lexer(ft_strjoin(cmdline, "\n")))
+		{
+			cmd = parse_inputunit(minishell);
+			if (minishell->need_here_doc)
+				gather_here_documents(minishell);
+			if (cmd)
+				minishell->last_command_exit_value = execute_command(cmd,
+						minishell);
+		}
 		cmdline = ft_repl(minishell);
 	}
 	rl_clear_history();
 	ft_free();
 	return (minishell->last_command_exit_value);
 }
-
-
-
