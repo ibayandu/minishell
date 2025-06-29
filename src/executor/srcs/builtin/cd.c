@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 13:02:26 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 16:55:25 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ static int	change_directory(const char *path, t_minishell *minishell)
 	if (v)
 		oldpwd = v->value;
 	if (chdir(path) != 0)
+	{
+		perror(ft_strjoin("minishell: cd: ", path));
 		return (1);
+	}
 	if (oldpwd)
 	{
 		unbind_variable("OLDPWD", minishell);
@@ -45,8 +48,17 @@ int	builtin_cd(char **argv, t_minishell *minishell)
 	const char	*path;
 	char		*home;
 	t_variable	*v;
+	int			i;
 
 	home = NULL;
+	i = 0;
+	while (argv[i])
+		i++;
+	if (i > 2)
+	{
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+		return (1);
+	}
 	if (argv[1] == NULL)
 	{
 		v = find_variable("HOME", minishell);
@@ -54,7 +66,7 @@ int	builtin_cd(char **argv, t_minishell *minishell)
 			home = v->value;
 		if (!home)
 		{
-			ft_putendl_fd("minishell: cd: HOME not set", 2);
+			ft_putendl_fd("minishell: cd: HOME not set", STDERR_FILENO);
 			return (1);
 		}
 		path = home;

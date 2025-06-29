@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 09:24:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 08:52:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,31 @@ t_word_list	*copy_word_list(t_word_list *list)
 	return (new_list);
 }
 
+void denull_list(t_word_list **list)
+{
+	t_word_list *cur;
+	t_word_list *tmp;
+
+	if (!list || !*list)
+		return;
+	while (*list && (*list)->word && (*list)->word->word == NULL)
+	{
+		tmp = *list;
+		*list = (*list)->next;
+	}
+	cur = *list;
+	while (cur && cur->next)
+	{
+		if (cur->next->word && cur->next->word->word == NULL)
+		{
+			tmp = cur->next;
+			cur->next = tmp->next;
+		}
+		else
+			cur = cur->next;
+	}
+}
+
 t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 {
 	t_word_list	*expanded;
@@ -86,7 +111,9 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 			temp_list = word_list_split(expanded);
 		else
 			temp_list = expanded;
+		denull_list(&temp_list);
 		expanded = ft_revword(temp_list);
+		expanded->word->flags = tlist->word->flags;
 		new_list = list_append(expanded, new_list);
 		tlist = next;
 	}

@@ -6,10 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:55:25 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 10:51:21 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 04:00:37 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/stat.h>
 #include "exec_utils.h"
 #include "expander.h"
 
@@ -28,11 +29,14 @@ static int	apply_output_redirection(t_redirect *r, t_minishell *minishell)
 			return (1);
 		if (fd >= 0)
 		{
-			dup2(fd, STDOUT_FILENO);
+			dup2(fd, ft_atoi(r->redirector->word));
 			close(fd);
 		}
 		else
+		{
 			perror(ft_strjoin("minishell: ", r->redirectee->word));
+			return (1);
+		}
 	}
 	else
 		return (1);

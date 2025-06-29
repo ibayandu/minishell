@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:48:22 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 11:03:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 09:56:10 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ char	*redir_expand(t_word *redir_word, t_minishell *minishell)
 			temp_list = word_list_split(expanded);
 	else
 		temp_list = expanded;
-	if (temp_list->next)
+	temp_list = glob_list(temp_list);
+	if ((temp_list && !temp_list->word->word) || (temp_list && temp_list->next))
 	{
 		minishell->last_command_exit_value = 1;
 		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: ", redir_word->word), ": ambiguous redirect"), STDERR_FILENO);
 		return (NULL);
 	}
-	return (string_list(expanded));
+	return (string_list(temp_list));
 }
 
 char	*here_document_expand(t_word *document, t_minishell *minishell)

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 07:51:45 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 04:11:32 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ int	legal_identifier(char *name)
 
 	i = 0;
 	if (!name)
+		return (i);
+	if (ft_isdigit(name[i]))
 		return (i);
 	while (ft_isalnum(name[i]) || name[i] == '_')
 		i++;
@@ -301,7 +303,7 @@ t_word	*param_expand(char *string, int *sindex, int *expanded_something, t_minis
 		temp1 = (zindex > t_index) ? ft_substr(string, t_index, zindex - t_index) : NULL;
 		if (!temp1 || !*temp1)
 		{
-			temp = ft_strdup("$");
+			temp = string[zindex] == '\'' || string[zindex] == '"' ? NULL : ft_strdup("$");
 			if (expanded_something)
 				*expanded_something = 0;
 			goto return0;

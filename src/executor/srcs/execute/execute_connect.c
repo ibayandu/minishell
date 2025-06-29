@@ -6,10 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 13:22:13 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 17:33:41 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include "execute.h"
 #include "executor.h"
 
@@ -27,18 +28,30 @@ static int	execute_if(t_connect_cmd *connect, t_minishell *minishell)
 
 static void	execute_pipe_left_side(t_command *cmd, int pipefd[2], t_minishell *minishell)
 {
+	int	status;
+
 	close(pipefd[0]);
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[1]);
-	exit(execute_command(cmd, minishell));
+	status = execute_command(cmd, minishell);
+	if (status && errno == EPIPE)
+		perror("minishell");
+	ft_free();
+	exit(status);
 }
 
 static void	execute_pipe_right_side(t_command *cmd, int pipefd[2], t_minishell *minishell)
 {
+	int	status;
+
 	close(pipefd[1]);
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);
-	exit(execute_command(cmd, minishell));
+	status = execute_command(cmd, minishell);
+	if (status && errno == EPIPE)
+		perror("minishell");
+	ft_free();
+	exit(status);
 }
 
 static int	execute_pipe(t_connect_cmd *connect, t_minishell *minishell)
@@ -49,10 +62,7 @@ static int	execute_pipe(t_connect_cmd *connect, t_minishell *minishell)
 	pid_t	pid2;
 
 	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
 		return (1);
-	}
 	pid1 = fork();
 	if (pid1 == 0)
 		execute_pipe_left_side(connect->first, pipefd, minishell);

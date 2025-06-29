@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 09:25:17 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 02:52:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,28 +65,31 @@ char	*string_extract_double_quoted(char *string, int *sindex)
 	int		j;
 	int		i;
 	char	*temp;
+	int		skip;
 
 	slen = ft_strlen(string + *sindex) + *sindex;
 	temp = ft_malloc(1 + slen - *sindex);
 	j = 0;
 	i = *sindex;
+	skip = 0;
 	while (string[i])
 	{
-		if (string[i] != '"')
+		if (string[i] != '"' && skip == 1)
 		{
 			temp[j++] = string[i++];
-			continue;
+			continue ;
 		}
 		else
 		{
+			if (skip == 2)
+				break ;
 			i++;
-			continue;
+			skip++;
+			continue ;
 		}
 		break;
 	}
 	temp[j] = '\0';
-	if (string[i])
-		i++;
 	*sindex = i;
 	return (temp);
 }

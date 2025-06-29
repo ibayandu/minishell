@@ -6,12 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 12:13:13 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/29 01:19:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "get_next_line.h"
 #include "executor.h"
 #include "lexer.h"
 #include "parsers.h"
@@ -25,15 +27,19 @@ char	*ft_repl(t_minishell *minishell)
 	t_variable	*v;
 
 	ps1 = PS1;
+	line = NULL;
 	v = find_variable("PS1", minishell);
 	if (v)
 		ps1 = v->value;
 	ps1 = ft_strtrim(ps1, "\"'");
 	ps1 = decode_prompt(ps1);
-	line = ft_absorb(readline(ps1));
+	if (isatty(fileno(stdin)))
+		line = ft_absorb(readline(ps1));
+	else
+		line = ft_absorb(get_next_line(fileno(stdin)));
 	if (line == NULL)
 	{
-		write(STDERR_FILENO, "exit\n", 5);
+		//write(STDERR_FILENO, "exit\n", 5);
 		ft_free();
 		exit(0);
 	}

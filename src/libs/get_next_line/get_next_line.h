@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 02:47:39 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 13:29:48 by yzeybek          ###   ########.tr       */
+/*   Created: 2024/11/02 20:20:54 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/06/28 21:57:27 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "expander.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	builtin_unset(char **argv, t_minishell *minishell)
-{
-	int	i;
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
-	i = 1;
-	if (!argv[1])
-		return (0);
-	while (argv[i])
-	{
-		unbind_variable(argv[i], minishell);
-		i++;
-	}
-	return (0);
-}
+# include <stdlib.h>
+
+char	*get_next_line(int fd);
+char	*find_newline(char *str);
+char	*gnl_strjoin(char *s1, char *s2);
+size_t	gnl_strlen(char *str);
+size_t	gnl_strlcpy(char *dst, char *src, size_t dstsize);
+void	*del(void *data);
+
+#endif

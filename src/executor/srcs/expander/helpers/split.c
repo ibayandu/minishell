@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:04:08 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/22 21:35:30 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/06/28 15:34:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ t_word_list	*word_list_split(t_word_list *list)
 		if (!tresult && t->word)
 		{
 			w = alloc_word_desc();
-			w->word = ft_strdup("");
+			w->word = NULL;
 			tresult = make_word_list(w, NULL);
 		}
 		if (!result)

@@ -1,8 +1,32 @@
 #include <sys/stat.h>
 #include <dirent.h>
+#include "token.h"
 #include "makers.h"
 #include "libft.h"
 #include "expander.h"
+
+static char	**ft_realloc_vec(char **old, size_t new_items)
+{
+	size_t	old_count;
+	char	**newv;
+	size_t	to_copy;
+	size_t	i;
+
+	old_count = 0;
+	if (old)
+		while (old[old_count])
+			old_count++;
+	newv = ft_malloc((new_items + 1) * sizeof *newv);
+	to_copy = old_count < new_items ? old_count : new_items;
+	i = -1;
+	while (++i < to_copy)
+		newv[i] = old[i];
+	i = to_copy - 1;
+	while (++i < new_items)
+		newv[i] = NULL;
+	newv[new_items] = NULL;
+	return (newv);
+}
 
 char	*sh_makepath(char *path, char *dir, int flags)
 {
@@ -176,6 +200,10 @@ char	**glob_vector(char *pat, char *dir, int flags)
 				count++;
 				continue ;
 			}
+			if (!ft_strchr(pat, '.') && (ft_strcmp(dp->d_name, ".") == 0 || ft_strcmp(dp->d_name, "..") == 0))
+				continue ;
+			if (dp->d_name[0] == '.' && pat[0] != '.')
+				continue ;
 			if (!glob_match(pat, dp->d_name))
 			{
 				nextlink = ft_malloc(sizeof(t_list));
@@ -212,11 +240,10 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	name_vector[count] = NULL;
 	return (name_vector);
 }
-
+#include <stdio.h>
 char	**glob_filename(char *pathname, int flags)
 {
 	char			**result;
-	char			**new_result;
 	int				result_size;
 	char			*directory_name;
 	char			*filename;
@@ -371,8 +398,7 @@ char	**glob_filename(char *pathname, int flags)
 				l = 0;
 				while (array[l])
 					++l;
-				new_result = ft_realloc(result, (result_size + l) * sizeof(char *));
-				result = new_result;
+				result = ft_realloc_vec(result, (result_size + l) * sizeof(char *));
 				l = -1;
 				while (array[++l])
 					result[result_size++ - 1] = array[l];
@@ -383,11 +409,10 @@ char	**glob_filename(char *pathname, int flags)
 		}
 		return (result);
 	}
-
 	only_filename:
 	if (!*filename)
 	{
-		result = ft_realloc(result, 2 * sizeof(char *));
+		result = ft_realloc_vec(result, 2 * sizeof(char *));
 		result[0] = ft_strdup(directory_name);
 		result[1] = NULL;
 		return (result);
@@ -397,7 +422,7 @@ char	**glob_filename(char *pathname, int flags)
 		dflags = flags;
 		if (!directory_len)
 			dflags |= GX_NULLDIR;
-		if (!ft_strncmp(filename, "**", 2))
+		if (!ft_strncmp(filename, "**", 2) && filename[2] != '*')
 		{
 			dflags |= GX_ALLDIRS|GX_ADDCURDIR;
 			if (!directory_len && !(flags & GX_ALLDIRS))
@@ -425,7 +450,7 @@ t_word_list	*glob_list(t_word_list *tlist)
 	while (tlist)
 	{
 		next = tlist->next;
-		if (glob_pattern(tlist->word->word))
+		if (glob_pattern(tlist->word->word) && !(tlist->word->flags & F_QUOTED))
 		{
 			glob_array = glob_filename(tlist->word->word, 0);
 			if (glob_array && glob_array[0])
