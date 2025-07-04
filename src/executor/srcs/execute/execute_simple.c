@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 14:46:59 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/04 20:43:31 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 void	handle_child(int sig)
 {
 	(void)sig;
-	if (isatty(STDOUT_FILENO))
-		ft_putchar_fd('\n', STDOUT_FILENO);
 	ft_free();
 	exit(130);
 }
@@ -87,6 +85,10 @@ static int	wait_for_child(pid_t pid)
 		return (1);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (WTERMSIG(status) + 128);
+	if (WIFSTOPPED(status))
+		return (WSTOPSIG(status));
 	return (1);
 }
 

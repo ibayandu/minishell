@@ -15,6 +15,5 @@ tty options:
  - handling pipes with program name
 
  :)
- - Handle newline execution
- - Handle ~/.minishellrc file
  - VSCode TERM program blue and red dot
+ - handle aliases
