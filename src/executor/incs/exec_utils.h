@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 10:39:43 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 18:58:36 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <unistd.h>
 
 int		apply_redirections(t_redirect *r, t_minishell *minishell);
-char	**build_argv(t_word_list *words);
+char	**build_argv(t_word_list *words, t_minishell *minishell);
 int		ft_execvp(const char *file, char *const argv[], t_minishell *minishell);
 
 #endif // EXEC_UTILS_H

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:21:11 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 13:12:21 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 19:09:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,20 @@ int	run_builtin(t_simple_cmd *cmd, t_minishell *minishell)
 {
 	const char	*name;
 
-	unbind_variable("_", minishell);
+	unbind_variable("_", minishell->global_variables);
 	if (!cmd || !cmd->words || !cmd->words->word)
 		return (1);
 	name = cmd->words->word->word;
 	if (!ft_strncmp(name, "cd", 3))
-		return (builtin_cd(build_argv(cmd->words), minishell));
+		return (builtin_cd(build_argv(cmd->words, minishell), minishell));
 	else if (!ft_strncmp(name, "export", 7))
-		return (builtin_export(build_argv(cmd->words), minishell));
+		return (builtin_export(build_argv(cmd->words, minishell), minishell));
 	else if (!ft_strncmp(name, "unset", 6))
-		return (builtin_unset(build_argv(cmd->words), minishell));
+		return (builtin_unset(build_argv(cmd->words, minishell), minishell));
 	else if (!ft_strncmp(name, "exit", 5))
-		return (builtin_exit(build_argv(cmd->words)));
+		return (builtin_exit(build_argv(cmd->words, minishell)));
 	else if (!ft_strncmp(name, "echo", 5))
-		return (builtin_echo(build_argv(cmd->words)));
+		return (builtin_echo(build_argv(cmd->words, minishell)));
 	else if (!ft_strncmp(name, "pwd", 4))
 		return (builtin_pwd());
 	else if (!ft_strncmp(name, "env", 4))

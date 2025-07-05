@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 22:14:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 13:45:22 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 18:59:57 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_minishell
 	t_redirect			*redir_stack[HEREDOC_MAX];
 	int					need_here_doc;
 	t_hash				*global_variables;
+	t_hash				*alias_variables;
 	int					last_command_exit_value;
 
 }	t_minishell;

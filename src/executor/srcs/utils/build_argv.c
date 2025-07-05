@@ -3,16 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   build_argv.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:54:41 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/21 20:03:41 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:58:08 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec_utils.h"
 
-char	**build_argv(t_word_list *words)
+char	*expand_alias(char *word, t_minishell *minishell)
+{
+	
+}
+
+char	**build_argv(t_word_list *words, t_minishell *minishell)
 {
 	size_t		count;
 	t_word_list	*tmp;
@@ -31,6 +36,7 @@ char	**build_argv(t_word_list *words)
 	if (!argv)
 		return (NULL);
 	tmp = words;
+	tmp->word->word = expand_alias(tmp->word->word, minishell);
 	while (tmp)
 	{
 		argv[i++] = tmp->word->word;

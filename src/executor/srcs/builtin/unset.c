@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:47:39 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 13:29:48 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 19:09:25 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	builtin_unset(char **argv, t_minishell *minishell)
 		return (0);
 	while (argv[i])
 	{
-		unbind_variable(argv[i], minishell);
+		unbind_variable(argv[i], minishell->global_variables);
 		i++;
 	}
 	return (0);

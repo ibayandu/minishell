@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/04 20:43:31 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 18:59:24 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	is_directory(char *filename)
 static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minishell)
 {
 
-	char *const *argv = build_argv(cmd->words);
+	char *const *argv = build_argv(cmd->words, minishell);
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handle_child);

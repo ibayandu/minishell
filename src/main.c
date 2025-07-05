@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/04 22:24:46 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 19:05:28 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_repl(t_minishell *minishell)
 	signal(SIGINT, handle_sigint);
 	ps1 = PS1;
 	line = NULL;
-	v = find_variable("PS1", minishell);
+	v = find_variable("PS1", minishell->global_variables);
 	if (v)
 		ps1 = v->value;
 	ps1 = ft_strtrim(ps1, "\"'");

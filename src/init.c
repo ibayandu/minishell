@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 11:14:46 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 19:09:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,9 @@ void	set_pwd(t_minishell *minishell)
 	char		*home_string;
 	char		*current_dir;
 
-	home_var = find_variable("HOME", minishell);
+	home_var = find_variable("HOME", minishell->global_variables);
 	home_string = home_var ? home_var->value : NULL;
-	temp_var = find_variable("PWD", minishell);
+	temp_var = find_variable("PWD", minishell->global_variables);
 	if (temp_var)
 		temp_string = temp_var->value;
 	if (temp_var && temp_var->value && temp_string[0] == '/' && same_file(temp_string, ".", NULL, NULL))
@@ -140,19 +140,19 @@ void	set_pwd(t_minishell *minishell)
 		if (!current_dir)
 			current_dir = ft_strdup(getcwd(0,0));
 		else
-			temp_var = bind_variable("PWD", current_dir, minishell);
+			temp_var = bind_variable("PWD", current_dir, minishell->global_variables);
 	}
 	else if (home_string && same_file (home_string, ".", NULL, NULL))
-		temp_var = bind_variable ("PWD", home_string, minishell);
+		temp_var = bind_variable ("PWD", home_string, minishell->global_variables);
 	else
 	{
 		temp_string = ft_strdup(getcwd(0,0));
 		if (temp_string)
-			temp_var = bind_variable ("PWD", temp_string, minishell);
+			temp_var = bind_variable ("PWD", temp_string, minishell->global_variables);
 	}
-	temp_var = find_variable("OLDPWD", minishell);
+	temp_var = find_variable("OLDPWD", minishell->global_variables);
 	if (!temp_var || !temp_var->value)
-		temp_var = bind_variable ("OLDPWD", NULL, minishell);
+		temp_var = bind_variable ("OLDPWD", NULL, minishell->global_variables);
 }
 
 void	adjust_shell_level(int change, t_minishell *minishell)
@@ -163,7 +163,7 @@ void	adjust_shell_level(int change, t_minishell *minishell)
 	int			shell_level;
 	t_variable	*temp_var;
 
-	temp_var = find_variable("SHLVL", minishell);
+	temp_var = find_variable("SHLVL", minishell->global_variables);
 	old_SHLVL =  temp_var ? temp_var->value : NULL;
 	old_level = ft_atoi(old_SHLVL);
 	shell_level = old_level + change;
@@ -193,8 +193,8 @@ void	adjust_shell_level(int change, t_minishell *minishell)
 		new_level[2] = (old_level % 10) + '0';
 		new_level[3] = '\0';
 	}
-	unbind_variable("SHLVL", minishell);
-	temp_var = bind_variable("SHLVL", new_level, minishell);
+	unbind_variable("SHLVL", minishell->global_variables);
+	temp_var = bind_variable("SHLVL", new_level, minishell->global_variables);
 }
 
 void	initialize_shell_variables(char **env, t_minishell *minishell)
@@ -220,13 +220,13 @@ void	initialize_shell_variables(char **env, t_minishell *minishell)
 			continue;
 		name[char_index] = '\0';
 		if (legal_identifier(name))
-			bind_variable(name, string, minishell);
+			bind_variable(name, string, minishell->global_variables);
 		name[char_index] = '=';
 	}
 	set_pwd(minishell);
-	bind_variable("PATH", DEFAULT_PATH_VALUE, minishell);
-	bind_variable("TERM", "dumb", minishell);
+	bind_variable("PATH", DEFAULT_PATH_VALUE, minishell->global_variables);
+	bind_variable("TERM", "dumb", minishell->global_variables);
 	adjust_shell_level(1, minishell);
-	bind_variable("HOME", ft_strdup("/"), minishell);
-	bind_variable("SHELL", "/bin/sh", minishell);
+	bind_variable("HOME", ft_strdup("/"), minishell->global_variables);
+	bind_variable("SHELL", "/bin/sh", minishell->global_variables);
 }
