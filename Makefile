@@ -3,16 +3,16 @@ MAKEFLAGS += --no-print-directory
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-IFLAGS = -Isrc -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser/incs -Isrc/libs/collector/incs -Isrc/executor/incs -Isrc/libs/get_next_line
+IFLAGS = -Isrc -Isrc/libs/libft/incs -Isrc/lexer -Isrc/lexer/incs -Isrc/parser/incs -Isrc/libs/collector/incs -Isrc/executor/incs -Isrc/libs/libgnl/incs
 LFLAGS = -lreadline
 
 VPATH = src
 
-SRCS = main.c decode_prompt.c
+SRCS = main.c decode_prompt.c signal.c
 
 LIBFT = libs/libft/build/libs/libft.a
 COLLECTOR = libs/collector/build/libs/collector.a
-GET_NEXT_LINE = libs/get_next_line/build/libs/get_next_line.a
+LIBGNL = libs/libgnl/build/libs/libgnl.a
 LEXER = lexer/build/libs/lexer.a
 PARSER = parser/build/libs/parser.a
 EXECUTOR = executor/build/libs/executor.a
@@ -29,7 +29,7 @@ src/build/%.o: %.c
 all:
 	@$(MAKE) -C src/libs/libft
 	@$(MAKE) -C src/libs/collector
-	@$(MAKE) -C src/libs/get_next_line
+	@$(MAKE) -C src/libs/libgnl
 	@$(MAKE) -C src/lexer
 	@$(MAKE) -C src/parser
 	@$(MAKE) -C src/executor
@@ -37,13 +37,13 @@ all:
 
 program: ${NAME}
 
-$(NAME):  $(OBJS) $(EXECUTOR) $(PARSER) $(LEXER) $(LIBFT) $(COLLECTOR) $(GET_NEXT_LINE)
+$(NAME):  $(OBJS) $(EXECUTOR) $(PARSER) $(LEXER) $(LIBFT) $(LIBGNL) $(COLLECTOR)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 clean:
 	@rm -rf src/build
 	@$(MAKE) clean -C src/libs/libft
 	@$(MAKE) clean -C src/libs/collector
-	@$(MAKE) clean -C src/libs/get_next_line
+	@$(MAKE) clean -C src/libs/libgnl
 	@$(MAKE) clean -C src/lexer
 	@$(MAKE) clean -C src/parser
 	@$(MAKE) clean -C src/executor
@@ -52,7 +52,7 @@ fclean: clean
 	@rm -rf $(NAME)
 	@$(MAKE) fclean -C src/libs/libft
 	@$(MAKE) fclean -C src/libs/collector
-	@$(MAKE) fclean -C src/libs/get_next_line
+	@$(MAKE) fclean -C src/libs/libgnl
 	@$(MAKE) fclean -C src/lexer
 	@$(MAKE) fclean -C src/parser
 	@$(MAKE) fclean -C src/executor

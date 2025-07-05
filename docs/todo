@@ -9,11 +9,9 @@
  - Why bash gets in emacs handling
  - Close the 3 to MAX_FD fd's on new process with fork
 
-tty options:
- - ls and other commands coloring
- - istty ttyname for checking
+!
  - handling pipes with program name
 
  :)
  - VSCode TERM program blue and red dot
- - handle aliases
+ - maybe handle alias erros pedantic way

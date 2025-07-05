@@ -6,14 +6,56 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/05 19:09:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 21:16:21 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
 #include "expander.h"
 #include "minishell.h"
+#include "libgnl.h"
 #include "libft.h"
+#include "lexer.h"
+#include "parsers.h"
+#include "executor.h"
+
+void	execute_begin_file(char *filepath, t_minishell *minishell)
+{
+	int			fd;
+	char		*content;
+	t_command	*cmd;
+
+	if (!filepath)
+		return ;
+	fd = open(filepath, O_RDONLY);
+	if (fd < 0)
+		return ;
+	content = get_all_line(fd);
+	close(fd);
+	if (content)
+	{
+		if (init_lexer(ft_strjoin(content, "\n")))
+		{
+			cmd = parse_inputunit(minishell);
+			if (minishell->need_here_doc)
+				gather_here_documents(minishell);
+			if (cmd)
+				minishell->last_command_exit_value = execute_command(cmd,
+						minishell);
+		}
+	}
+}
+
+void	execute_minirc(t_minishell *minishell)
+{
+	t_variable	*v;
+
+	v = find_variable("HOME", minishell->global_variables);
+	if (v)
+		execute_begin_file(ft_strjoin(v->value, "/.minirc"), minishell);
+}
 
 int	same_file(const char *path1, const char *path2, struct stat *stp1, struct stat *stp2)
 {
@@ -224,6 +266,7 @@ void	initialize_shell_variables(char **env, t_minishell *minishell)
 		name[char_index] = '=';
 	}
 	set_pwd(minishell);
+	execute_minirc(minishell);
 	bind_variable("PATH", DEFAULT_PATH_VALUE, minishell->global_variables);
 	bind_variable("TERM", "dumb", minishell->global_variables);
 	adjust_shell_level(1, minishell);

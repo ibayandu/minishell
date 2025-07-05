@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.h                                       :+:      :+:    :+:   */
+/*   gnl_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/21 19:05:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 22:00:30 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/07/05 21:02:50 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/07/05 21:11:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_UTILS_H
-# define EXEC_UTILS_H
+#ifndef GNL_UTILS_H
+# define GNL_UTILS_H
 
-# include "libft.h"
-# include "structs.h"
-# include "minishell.h"
-# include <fcntl.h>
-# include <stdio.h>
-# include <unistd.h>
+#include <stdlib.h>
+#include "collector.h"
 
-int		apply_redirections(t_redirect *r, t_minishell *minishell);
-char	**build_argv(t_word_list *words);
-int		ft_execvp(const char *file, char *const argv[], t_minishell *minishell);
+char	*gnl_find_newline(char *str);
+char	*gnl_strjoin(char *s1, char *s2);
+size_t	gnl_strlen(char *str);
+size_t	gnl_strlcpy(char *dst, char *src, size_t dstsize);
+char	*gnl_strdup(char *str);
 
-#endif // EXEC_UTILS_H
+#endif

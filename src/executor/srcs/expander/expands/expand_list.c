@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 11:03:42 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 22:17:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,19 @@ void denull_list(t_word_list **list)
 	}
 }
 
+char	*expand_alias(char *word, t_minishell *minishell, int *expanded_something)
+{
+	t_variable	*v;
+
+	v = find_variable(word, minishell->alias_variables);
+	if (v)
+	{
+		*expanded_something = 1;
+		return (v->value);
+	}
+	return (word);
+}
+
 t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 {
 	t_word_list	*expanded;
@@ -100,6 +113,8 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 	{
 		next = tlist->next;
 		expanded_something = 0;
+		if (!new_list)
+			tlist->word->word = expand_alias(tlist->word->word, minishell, &expanded_something);
 		expanded = expand_word(tlist->word, 0, &expanded_something, minishell);
 		if (!expanded)
 		{

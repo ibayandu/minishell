@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 18:59:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 22:00:53 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@
 #include "builtin.h"
 #include "expander.h"
 #include "execute.h"
-
-void	handle_child(int sig)
-{
-	(void)sig;
-	ft_free();
-	exit(130);
-}
 
 static void	is_directory(char *filename)
 {
@@ -44,10 +37,9 @@ static void	is_directory(char *filename)
 static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minishell)
 {
 
-	char *const *argv = build_argv(cmd->words, minishell);
+	char *const *argv = build_argv(cmd->words);
 
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_child);
+	setup_signals_exec();
 	if (redirects)
 		if (apply_redirections(redirects, minishell))
 		{
@@ -141,8 +133,7 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minish
 			return (1);
 		return (ret);
 	}
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
+	discard_signals();
 	pid = fork();
 	if (pid < 0)
 		return (1);

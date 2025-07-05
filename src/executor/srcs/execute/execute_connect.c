@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_connect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 20:51:44 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/07/05 20:04:40 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ static void	execute_pipe_left_side(t_command *cmd, int pipefd[2],
 {
 	int	status;
 
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
+	discard_signals();
 	close(pipefd[0]);
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[1]);
@@ -48,8 +47,7 @@ static void	execute_pipe_right_side(t_command *cmd, int pipefd[2],
 {
 	int	status;
 
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
+	discard_signals();
 	close(pipefd[1]);
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);

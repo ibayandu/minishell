@@ -6,17 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 10:17:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 21:56:39 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 21:12:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
-void	del(void **data)
-{
-	free(*data);
-	*data = NULL;
-}
+#include "libgnl_utils.h"
 
 size_t	gnl_strlen(char *str)
 {
@@ -30,7 +24,7 @@ size_t	gnl_strlen(char *str)
 	return (i);
 }
 
-char	*find_newline(char *str)
+char	*gnl_find_newline(char *str)
 {
 	size_t	i;
 
@@ -72,9 +66,7 @@ char	*gnl_strjoin(char *s1, char *s2)
 	size_t	i;
 	char	*res;
 
-	res = malloc((gnl_strlen(s1) + gnl_strlen(s2) + 1) * sizeof(char));
-	if (!res)
-		return (NULL);
+	res = ft_malloc((gnl_strlen(s1) + gnl_strlen(s2) + 1) * sizeof(char));
 	i = 0;
 	while (s1 && *s1)
 	{
@@ -88,4 +80,17 @@ char	*gnl_strjoin(char *s1, char *s2)
 	}
 	res[i] = '\0';
 	return (res);
+}
+
+char	*gnl_strdup(char *str)
+{
+	char	*newstr;
+	size_t	strlen;
+
+	strlen = gnl_strlen(str);
+	newstr = ft_calloc(strlen + 1, sizeof(char));
+	if (!newstr)
+		return (NULL);
+	gnl_strlcpy(newstr, str, strlen);
+	return (newstr);
 }

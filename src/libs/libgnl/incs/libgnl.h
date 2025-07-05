@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   gnl.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 20:20:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 21:57:27 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 21:03:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,9 @@
 # endif
 
 # include <stdlib.h>
+# include "collector.h"
 
 char	*get_next_line(int fd);
-char	*find_newline(char *str);
-char	*gnl_strjoin(char *s1, char *s2);
-size_t	gnl_strlen(char *str);
-size_t	gnl_strlcpy(char *dst, char *src, size_t dstsize);
-void	*del(void *data);
+char	*get_all_line(int fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 14:37:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 20:07:46 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@
 #include "utils.h"
 #include "token.h"
 #include "libft.h"
-
-void	handle_heredocs(int sig)
-{
-	(void)sig;
-	if (isatty(STDOUT_FILENO))
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	exit(130);
-}
 
 t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
 				t_word *dest_and_filename)
@@ -72,8 +64,7 @@ void	make_here_document(t_redirect *temp)
 	char	*full_line;
 
 	document = NULL;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_heredocs);
+	setup_signals_exec();
 	temp->here_doc_eof = string_quote_removal(temp->redirectee->word);
 	if (!temp->here_doc_eof)
 		return (temp->here_doc_eof = ft_strdup(""), doc_done(document, temp));
