@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 22:00:53 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 21:01:52 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, t_minishell 
 	if (ft_strchr(argv[0], '/') || errno == EACCES)
 		perror(ft_strjoin("minishell: ", argv[0]));
 	else
-		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: ", argv[0]), ": command not found"), STDERR_FILENO);
+		ft_putendl_fd(ft_strjoin(argv[0], ": command not found"), STDERR_FILENO);
 	ft_free();
 	if (errno == EACCES)
 		exit(126);
@@ -79,8 +79,6 @@ static int	wait_for_child(pid_t pid)
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
-	if (WIFSTOPPED(status))
-		return (WSTOPSIG(status));
 	return (1);
 }
 

@@ -73,7 +73,7 @@ int	glob_pattern(char *string)
 		return (0);
 	i = -1;
 	while (string[++i])
-		if (string[i] == '*')
+		if (string[i] == '\001')
 			return (1);
 	return (0);
 }
@@ -82,9 +82,9 @@ int	glob_match(const char *pattern, const char *string)
 {
 	if (!*pattern)
 		return (*string);
-	if (*pattern == '*')
+	if (*pattern == '\001')
 	{
-		while (*pattern == '*')
+		while (*pattern == '\001')
 			pattern++;
 		if (!*pattern)
 			return (0);
@@ -240,7 +240,7 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	name_vector[count] = NULL;
 	return (name_vector);
 }
-#include <stdio.h>
+
 char	**glob_filename(char *pathname, int flags)
 {
 	char			**result;
@@ -292,10 +292,10 @@ char	**glob_filename(char *pathname, int flags)
 		last_starstar = 0;
 		d = directory_name;
 		dflags = flags;
-		if (d[0] == '*' && d[1] == '*' && (d[2] == '/' || d[2] == '\0'))
+		if (d[0] == '\001' && d[1] == '\001' && (d[2] == '/' || d[2] == '\0'))
 		{
 			p = d;
-			while (d[0] == '*' && d[1] == '*' && (d[2] == '/' || d[2] == '\0'))
+			while (d[0] == '\001' && d[1] == '\001' && (d[2] == '/' || d[2] == '\0'))
 			{
 				p = d;
 				if (d[2])
@@ -317,7 +317,7 @@ char	**glob_filename(char *pathname, int flags)
 		{
 			dl = directory_len;
 			prev = dl;
-			while (dl >= 4 && d[dl - 1] == '/' && d[dl - 2] == '*' && d[dl - 3] == '*' && d[dl - 4] == '/')
+			while (dl >= 4 && d[dl - 1] == '/' && d[dl - 2] == '\001' && d[dl - 3] == '\001' && d[dl - 4] == '/')
 			{
 				prev = dl;
 				dl -= 3;
@@ -326,7 +326,7 @@ char	**glob_filename(char *pathname, int flags)
 				last_starstar = 1;
 			directory_len = prev;
 		}
-		if (last_starstar && directory_len > 4 && ft_strncmp(filename, "**", 2) == 0)
+		if (last_starstar && directory_len > 4 && ft_strncmp(filename, "\001\001", 2) == 0)
 			directory_len -= 3;
 		if (d[directory_len - 1] == '/')
 			d[directory_len - 1] = '\0';
@@ -337,7 +337,7 @@ char	**glob_filename(char *pathname, int flags)
 			return (NULL);
 		else if (*directories == NULL)
 			return (NULL);
-		if (all_starstar && ft_strncmp(filename, "**", 2) == 0)
+		if (all_starstar && ft_strncmp(filename, "\001\001", 2) == 0)
 		{
 			directory_name = NULL;
 			directory_len = 0;
@@ -349,7 +349,7 @@ char	**glob_filename(char *pathname, int flags)
 			shouldbreak = 0;
 			dname = directories[i];
 			dflags = flags & ~(GX_ALLDIRS|GX_ADDCURDIR);
-			if (filename[0] == '*' && filename[1] == '*' && filename[2] == '\0')
+			if (filename[0] == '\001' && filename[1] == '\001' && filename[2] == '\0')
 				dflags |= GX_ALLDIRS|GX_ADDCURDIR;
 			if (dname[0] == '\0' && filename[0])
 			{
@@ -376,7 +376,7 @@ char	**glob_filename(char *pathname, int flags)
 				temp_results = glob_vector(filename, dname, dflags);
 			if (temp_results)
 			{
-				if ((dflags & GX_ALLDIRS) && filename[0] == '*' && filename[1] == '*' && (filename[2] == '\0' || filename[2] == '/'))
+				if ((dflags & GX_ALLDIRS) && filename[0] == '\001' && filename[1] == '\001' && (filename[2] == '\0' || filename[2] == '/'))
 				{
 					if ((dflags & GX_NULLDIR) && (flags & GX_NULLDIR) == 0 && temp_results && *temp_results && **temp_results == 0)
 					{
@@ -422,7 +422,7 @@ char	**glob_filename(char *pathname, int flags)
 		dflags = flags;
 		if (!directory_len)
 			dflags |= GX_NULLDIR;
-		if (!ft_strncmp(filename, "**", 2) && filename[2] != '*')
+		if (!ft_strncmp(filename, "\001\001", 2) && filename[2] != '\001')
 		{
 			dflags |= GX_ALLDIRS|GX_ADDCURDIR;
 			if (!directory_len && !(flags & GX_ALLDIRS))
@@ -435,6 +435,11 @@ char	**glob_filename(char *pathname, int flags)
 		return (result);
 	}
 	return (NULL);
+}
+
+t_word_list	*restar_list(t_word_list *list)
+{
+
 }
 
 t_word_list	*glob_list(t_word_list *tlist)
@@ -450,7 +455,7 @@ t_word_list	*glob_list(t_word_list *tlist)
 	while (tlist)
 	{
 		next = tlist->next;
-		if (glob_pattern(tlist->word->word) && !(tlist->word->flags & F_QUOTED))
+		if (glob_pattern(tlist->word->word))
 		{
 			glob_array = glob_filename(tlist->word->word, 0);
 			if (glob_array && glob_array[0])
@@ -480,5 +485,5 @@ t_word_list	*glob_list(t_word_list *tlist)
 		glob_array = NULL;
 		tlist = next;
 	}
-	return (output_list);
+	return (restar_list(output_list));
 }

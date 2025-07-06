@@ -1,17 +1,6 @@
  Team
  - Decide similar approach on directory structor for total structs and definations
- - Ask for unclosed quote error
 
- * ??? Should we ???*
- - Should you add default_locale_variables() function in bash. Which is for
- Handlin LC variables if they are not initialized
- - Take a look what bash does on
- - Why bash gets in emacs handling
- - Close the 3 to MAX_FD fd's on new process with fork
+ !
+ - handle star as glob char problem with CTLEC char
 
-!
- - handling pipes with program name
-
- :)
- - VSCode TERM program blue and red dot
- - maybe handle alias erros pedantic way

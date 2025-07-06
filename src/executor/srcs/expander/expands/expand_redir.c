@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 08:48:22 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 09:56:10 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 20:29:53 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*redir_expand(t_word *redir_word, t_minishell *minishell)
 	t_word_list	*temp_list;
 	int			expanded_something;
 
+	expanded_something = 0;
 	expanded = expand_word(redir_word, 0, &expanded_something, minishell);
 	if (!expanded)
 	{

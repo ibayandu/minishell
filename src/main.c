@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 21:25:31 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 18:00:03 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "init.c"
 #include "lexer.h"
 #include "parsers.h"
+#include "utils.h"
+
 
 char	*ft_repl(t_minishell *minishell)
 {
@@ -55,10 +57,9 @@ int	main(void)
 	{
 		if (init_lexer(ft_strjoin(cmdline, "\n")))
 		{
+			minishell->need_here_doc = 0;
 			cmd = parse_inputunit(minishell);
-			if (minishell->need_here_doc)
-				gather_here_documents(minishell);
-			if (cmd)
+			if (!ft_heredoc(minishell) && cmd)
 				minishell->last_command_exit_value = execute_command(cmd,
 						minishell);
 		}

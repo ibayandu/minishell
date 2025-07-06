@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 22:14:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/05 21:16:53 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 15:45:40 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define MAX_BUFFER_SIZE 1024
 # define PS1 "minishell> " // "\\u@\\H:\\w$ "
 # define PS2 "> "
+# define VOID (void)0
 
 typedef struct s_variable
 {

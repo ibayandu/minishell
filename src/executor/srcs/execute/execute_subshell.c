@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 10:40:06 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 18:46:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects, t_minishel
 {
 	pid_t	pid;
 	int		status;
+	int		res;
 
 	pid = fork();
 	if (pid == 0)
@@ -25,7 +26,9 @@ int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects, t_minishel
 			ft_free();
 			exit(1);
 		}
-		exit(execute_command(subshell->command, minishell));
+		res = execute_command(subshell->command, minishell);
+		ft_free();
+		exit(res);
 	}
 	waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));

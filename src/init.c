@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/05 21:16:21 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 15:50:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "lexer.h"
 #include "parsers.h"
 #include "executor.h"
+#include "utils.h"
 
 void	execute_begin_file(char *filepath, t_minishell *minishell)
 {
@@ -39,9 +40,7 @@ void	execute_begin_file(char *filepath, t_minishell *minishell)
 		if (init_lexer(ft_strjoin(content, "\n")))
 		{
 			cmd = parse_inputunit(minishell);
-			if (minishell->need_here_doc)
-				gather_here_documents(minishell);
-			if (cmd)
+			if (!ft_heredoc(minishell) && cmd)
 				minishell->last_command_exit_value = execute_command(cmd,
 						minishell);
 		}

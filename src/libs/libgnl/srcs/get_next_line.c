@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:47:08 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/05 21:12:28 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 13:07:41 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	trim_line(char **content)
 	start = gnl_find_newline(*content);
 	if (!start)
 	{
-		content = NULL;
+		*content = NULL;
 		return ;
 	}
 	temp = ft_malloc(gnl_strlen(start) * sizeof(char));
@@ -31,7 +31,7 @@ static void	trim_line(char **content)
 		gnl_strlen(start));
 	*content = temp;
 	if (!**content)
-		content = NULL;
+		*content = NULL;
 }
 
 static void	get_line(char **content, char	**next_line)
@@ -53,7 +53,7 @@ static int	read_fd(int fd, char **content, char *buffer)
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read == -1)
 	{
-		content = NULL;
+		*content = NULL;
 		return (-1);
 	}
 	if (!bytes_read)
@@ -91,8 +91,6 @@ char	*get_all_line(int fd)
 	char *tmp;
 
 	all = gnl_strdup("");
-	if (!all)
-		return (NULL);
 	line = get_next_line(fd);
 	while (line)
 	{

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:15:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 09:17:25 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 21:35:50 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,46 @@
 #include "libft.h"
 #include "utils.h"
 #include "expander.h"
+
+char *replace_star_unquoted(const char *input)
+{
+	size_t len = ft_strlen(input);
+	char *out  = ft_malloc(len + 1);
+	if (!out) return NULL;
+
+	int in_sq = 0, in_dq = 0;
+	size_t j = 0;
+
+	for (size_t i = 0; i < len; i++)
+	{
+		char c = input[i];
+		if (c == '\'' && !in_dq)
+		{
+			// toggle single‑quote state, copy the quote itself
+			in_sq = !in_sq;
+			out[j++] = c;
+		}
+		else if (c == '"' && !in_sq)
+		{
+			// toggle double‑quote state, copy the quote
+			in_dq = !in_dq;
+			out[j++] = c;
+		}
+		else if (c == '*' && !in_sq && !in_dq)
+		{
+			// unquoted '*': replace
+			out[j++] = '\001';
+		}
+		else
+		{
+			// any other character
+			out[j++] = c;
+		}
+	}
+
+	out[j] = '\0';
+	return out;
+}
 
 t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_minishell *minishell)
 {
@@ -46,12 +86,15 @@ t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_mi
 			if (!tword)
 				return (NULL);
 			temp = tword ? tword->word : NULL;
+			temp = replace_star_unquoted(temp);
 			istring = ft_strjoin(istring, temp);
 			istring_size = ft_strlen(istring) + 1;
 			istring_index += ft_strlen(temp);
 			temp = NULL;
 			continue ;
 		}
+		else if (string[sindex] == '*' && !quoted)
+			string[sindex] = '\001';
 		else if (string[sindex] == '"')
 		{
 			temp = string_extract_double_quoted(string, &sindex);

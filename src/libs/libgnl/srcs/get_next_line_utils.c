@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 10:17:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/05 21:12:22 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 13:07:48 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ char	*gnl_strdup(char *str)
 
 	strlen = gnl_strlen(str);
 	newstr = ft_calloc(strlen + 1, sizeof(char));
-	if (!newstr)
-		return (NULL);
 	gnl_strlcpy(newstr, str, strlen);
 	return (newstr);
 }

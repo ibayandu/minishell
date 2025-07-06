@@ -1,14 +1,6 @@
 {
-	readline
+	ignore_libreadline_leaks
 	Memcheck:Leak
-	match-leak-kinds: reachable
 	...
-	fun:readline
-}
-{
-	add_history
-	Memcheck:Leak
-	match-leak-kinds: reachable
-	...
-	fun:add_history
+	obj:*/libreadline.so.*
 }
