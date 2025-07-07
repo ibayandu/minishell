@@ -5,6 +5,28 @@
 #include "libft.h"
 #include "expander.h"
 
+t_word_list *restar_list(t_word_list *list)
+{
+    t_word_list *cur = list;
+
+    while (cur)
+    {
+        if (cur->word && cur->word->word)
+        {
+            char *s = cur->word->word;
+            for (size_t i = 0; s[i] != '\0'; i++)
+            {
+                if (s[i] == '\001')
+                    s[i] = '*';
+            }
+        }
+        cur = cur->next;
+    }
+
+    return list;
+}
+
+
 static char	**ft_realloc_vec(char **old, size_t new_items)
 {
 	size_t	old_count;
@@ -435,11 +457,6 @@ char	**glob_filename(char *pathname, int flags)
 		return (result);
 	}
 	return (NULL);
-}
-
-t_word_list	*restar_list(t_word_list *list)
-{
-
 }
 
 t_word_list	*glob_list(t_word_list *tlist)

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 15:46:09 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/07 16:07:13 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,8 @@ void	doc_warning(char *here_doc_eof)
 
 void	make_here_document_fd(t_redirect *temp, int fd)
 {
-	char	*document;
 	char	*full_line;
 
-	document = NULL;
 	setup_signals_exec();
 	temp->here_doc_eof = string_quote_removal(temp->redirectee->word);
 	if (!temp->here_doc_eof)
