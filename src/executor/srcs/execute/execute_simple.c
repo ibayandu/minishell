@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 14:46:59 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/06 21:01:52 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,6 @@
 #include "builtin.h"
 #include "expander.h"
 #include "execute.h"
-
-void	handle_child(int sig)
-{
-	(void)sig;
-	if (isatty(STDOUT_FILENO))
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	ft_free();
-	exit(130);
-}
 
 static void	is_directory(char *filename)
 {
@@ -48,8 +39,7 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, t_minishell 
 
 	char *const *argv = build_argv(cmd->words);
 
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_child);
+	setup_signals_exec();
 	if (redirects)
 		if (apply_redirections(redirects, minishell))
 		{
@@ -72,7 +62,7 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects, t_minishell 
 	if (ft_strchr(argv[0], '/') || errno == EACCES)
 		perror(ft_strjoin("minishell: ", argv[0]));
 	else
-		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: ", argv[0]), ": command not found"), STDERR_FILENO);
+		ft_putendl_fd(ft_strjoin(argv[0], ": command not found"), STDERR_FILENO);
 	ft_free();
 	if (errno == EACCES)
 		exit(126);
@@ -87,6 +77,8 @@ static int	wait_for_child(pid_t pid)
 		return (1);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (WTERMSIG(status) + 128);
 	return (1);
 }
 
@@ -139,8 +131,7 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, t_minishell *minish
 			return (1);
 		return (ret);
 	}
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
+	discard_signals();
 	pid = fork();
 	if (pid < 0)
 		return (1);

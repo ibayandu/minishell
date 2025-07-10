@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/28 16:55:25 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 19:09:14 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	change_directory(const char *path, t_minishell *minishell)
 	t_variable	*v;
 
 	oldpwd = NULL;
-	v = find_variable("PWD", minishell);
+	v = find_variable("PWD", minishell->global_variables);
 	if (v)
 		oldpwd = v->value;
 	if (chdir(path) != 0)
@@ -30,13 +30,13 @@ static int	change_directory(const char *path, t_minishell *minishell)
 	}
 	if (oldpwd)
 	{
-		unbind_variable("OLDPWD", minishell);
-		bind_variable("OLDPWD", oldpwd, minishell);
+		unbind_variable("OLDPWD", minishell->global_variables);
+		bind_variable("OLDPWD", oldpwd, minishell->global_variables);
 	}
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		unbind_variable("PWD", minishell);
-		bind_variable("PWD", cwd, minishell);
+		unbind_variable("PWD", minishell->global_variables);
+		bind_variable("PWD", cwd, minishell->global_variables);
 	}
 	else
 		return (1);
@@ -61,7 +61,7 @@ int	builtin_cd(char **argv, t_minishell *minishell)
 	}
 	if (argv[1] == NULL)
 	{
-		v = find_variable("HOME", minishell);
+		v = find_variable("HOME", minishell->global_variables);
 		if (v)
 			home = v->value;
 		if (!home)

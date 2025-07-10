@@ -6,17 +6,19 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 06:29:32 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/23 16:40:44 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 21:17:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <pwd.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <unistd.h>
 #include <x86_64-linux-gnu/bits/local_lim.h>
+#include "libft.h"
+#include "minishell.h"
+#include "expander.h"
 
 #define ESC 27
 
@@ -251,4 +253,18 @@ char	*decode_prompt(const char *ps1)
 	}
 	result[j] = '\0';
 	return (result);
+}
+
+char	*get_prompt(t_minishell *minishell)
+{
+	t_variable	*v;
+	char		*ps1;
+
+	ps1 = PS1;
+	v = find_variable("PS1", minishell->global_variables);
+	if (v)
+		ps1 = v->value;
+	ps1 = ft_strtrim(ps1, "\"'");
+	ps1 = decode_prompt(ps1);
+	return (ps1);
 }

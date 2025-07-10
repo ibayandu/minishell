@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   gnl_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 02:47:39 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 19:09:25 by yzeybek          ###   ########.tr       */
+/*   Created: 2025/07/05 21:02:50 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/07/05 21:11:35 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "expander.h"
+#ifndef GNL_UTILS_H
+# define GNL_UTILS_H
 
-int	builtin_unset(char **argv, t_minishell *minishell)
-{
-	int	i;
+#include <stdlib.h>
+#include "collector.h"
 
-	i = 1;
-	if (!argv[1])
-		return (0);
-	while (argv[i])
-	{
-		unbind_variable(argv[i], minishell->global_variables);
-		i++;
-	}
-	return (0);
-}
+char	*gnl_find_newline(char *str);
+char	*gnl_strjoin(char *s1, char *s2);
+size_t	gnl_strlen(char *str);
+size_t	gnl_strlcpy(char *dst, char *src, size_t dstsize);
+char	*gnl_strdup(char *str);
+
+#endif

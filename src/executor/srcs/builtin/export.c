@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 06:50:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/05 19:09:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ static int	ft_export_with_value(char *arg, t_minishell *minishell)
 		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
 		return (1);
 	}
-	unbind_variable(ft_get_key(arg), minishell);
-	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1, minishell))
+	unbind_variable(ft_get_key(arg), minishell->global_variables);
+	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1, minishell->global_variables))
 		return (1);
 	return (0);
 }
@@ -111,7 +111,7 @@ static int	ft_export_without_value(char *arg, t_minishell *minishell)
 		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
 		return (1);
 	}
-	if (!bind_variable(arg, NULL, minishell))
+	if (!bind_variable(arg, NULL, minishell->global_variables))
 		return (1);
 	return (0);
 }
