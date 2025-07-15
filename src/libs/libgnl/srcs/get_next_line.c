@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:47:08 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 13:07:41 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 17:46:56 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
+#include "gnl_utils.h"
 #include <unistd.h>
-#include "libgnl_utils.h"
-#include "libgnl.h"
 
 static void	trim_line(char **content)
 {
@@ -26,15 +26,14 @@ static void	trim_line(char **content)
 		return ;
 	}
 	temp = ft_malloc(gnl_strlen(start) * sizeof(char));
-	gnl_strlcpy(temp,
-		(*content) + gnl_strlen(*content) - gnl_strlen(start) + 1,
+	gnl_strlcpy(temp, (*content) + gnl_strlen(*content) - gnl_strlen(start) + 1,
 		gnl_strlen(start));
 	*content = temp;
 	if (!**content)
 		*content = NULL;
 }
 
-static void	get_line(char **content, char	**next_line)
+static void	get_line(char **content, char **next_line)
 {
 	char	*start;
 	size_t	length;
@@ -86,9 +85,9 @@ char	*get_next_line(int fd)
 
 char	*get_all_line(int fd)
 {
-	char *all;
-	char *line;
-	char *tmp;
+	char	*all;
+	char	*line;
+	char	*tmp;
 
 	all = gnl_strdup("");
 	line = get_next_line(fd);

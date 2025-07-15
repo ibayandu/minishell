@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 14:05:47 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 17:15:01 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 17:47:39 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include "minishell.h"
-#include "libgnl.h"
+#include "get_next_line.h"
 #include "makers.h"
 #include "libft.h"
 

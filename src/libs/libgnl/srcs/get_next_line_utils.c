@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 10:17:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 13:07:48 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 17:47:21 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libgnl_utils.h"
+#include "gnl_utils.h"
 
 size_t	gnl_strlen(char *str)
 {

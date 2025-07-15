@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 15:50:07 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 17:48:58 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "expander.h"
 #include "minishell.h"
-#include "libgnl.h"
+#include "get_next_line.h"
 #include "libft.h"
 #include "lexer.h"
 #include "parsers.h"

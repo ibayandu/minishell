@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/06 18:00:03 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 17:48:04 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdio.h>
 #include "executor.h"
-#include "libgnl.h"
+#include "get_next_line.h"
 #include "init.c"
 #include "lexer.h"
 #include "parsers.h"
 #include "utils.h"
-
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <stdio.h>
 
 char	*ft_repl(t_minishell *minishell)
 {
@@ -46,11 +45,11 @@ char	*ft_repl(t_minishell *minishell)
 
 int	main(void)
 {
-	t_minishell *const minishell = &(t_minishell){0};
 	t_command	*cmd;
 	char		*cmdline;
 	extern char	**environ;
 
+	t_minishell *const minishell = &(t_minishell){0};
 	initialize_shell_variables(environ, minishell);
 	cmdline = ft_repl(minishell);
 	while (cmdline)
