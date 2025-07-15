@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_heredoc.c                                       :+:      :+:    :+:   */
+/*   ft_heredoc_helper.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 14:05:47 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/15 17:47:39 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/07/15 17:59:32 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/07/15 18:09:30 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include "minishell.h"
-#include "get_next_line.h"
-#include "makers.h"
-#include "libft.h"
+#include "ft_heredoc.h"
 
 void	push_heredoc(t_redirect *r, t_minishell *minishell)
 {
@@ -29,19 +22,6 @@ void	push_heredoc(t_redirect *r, t_minishell *minishell)
 		exit(2);
 	}
 	minishell->redir_stack[minishell->need_here_doc++] = r;
-}
-
-char	**create_temps(t_minishell *minishell)
-{
-	int		i;
-	char	**paths;
-
-	paths = ft_malloc(sizeof(char *) * (minishell->need_here_doc + 1));
-	i = -1;
-	while (++i < minishell->need_here_doc)
-		paths[i] = ft_strjoin("/tmp/minishell_hd_", ft_itoa(i));
-	paths[i] = NULL;
-	return (paths);
 }
 
 int	*create_fds(char **paths, t_minishell *minishell, int is_child)
@@ -67,6 +47,19 @@ int	*create_fds(char **paths, t_minishell *minishell, int is_child)
 	return (fds);
 }
 
+static char	**create_temps(t_minishell *minishell)
+{
+	int		i;
+	char	**paths;
+
+	paths = ft_malloc(sizeof(char *) * (minishell->need_here_doc + 1));
+	i = -1;
+	while (++i < minishell->need_here_doc)
+		paths[i] = ft_strjoin("/tmp/minishell_hd_", ft_itoa(i));
+	paths[i] = NULL;
+	return (paths);
+}
+
 pid_t	gather_here_documents_fd(char ***paths, t_minishell *minishell)
 {
 	int		*fds;
@@ -88,40 +81,4 @@ pid_t	gather_here_documents_fd(char ***paths, t_minishell *minishell)
 		exit(0);
 	}
 	return (pid);
-}
-
-int	ft_heredoc(t_minishell *minishell)
-{
-	int		status;
-	pid_t	pid;
-	char	**paths;
-	int		*fds;
-	int		r;
-
-	status = 0;
-	if (!minishell->need_here_doc)
-		return (0);
-	pid = gather_here_documents_fd(&paths, minishell);
-	if (pid < 0)
-		return (1);
-	if (waitpid(pid, &status, 0) < 0)
-		return (1);
-	if (WIFEXITED(status))
-		status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		minishell->last_command_exit_value = WTERMSIG(status) + 128;
-	if (!status)
-	{
-		fds = create_fds(paths, minishell, 0);
-		r = -1;
-		while (++r < minishell->need_here_doc)
-		{
-			if (fds[r] < 0)
-				return (1);
-			minishell->redir_stack[r]->redirectee->word = get_all_line(fds[r]);
-			minishell->redir_stack[r] = NULL;
-			unlink(paths[r]);
-		}
-	}
-	return (status);
 }

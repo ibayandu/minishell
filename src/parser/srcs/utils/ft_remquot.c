@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remquot.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/28 11:08:49 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 17:55:01 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,41 @@ char	*string_extract_single_quoted(char *string, int *sindex)
 	return (t);
 }
 
+static void	handle_single_quote(char *string, int *sindex, char **r)
+{
+	char	*temp;
+
+	temp = string_extract_single_quoted(string, sindex);
+	if (temp)
+	{
+		ft_strlcpy(*r, temp, ft_strlen(temp) + 1);
+		*r += ft_strlen(temp);
+	}
+}
+
+static void	handle_double_quote(int *dquote, int *sindex)
+{
+	*dquote = 1 - *dquote;
+	(*sindex)++;
+}
+
 char	*string_quote_removal(char *string)
 {
 	char	*r;
 	char	*result_string;
 	int		sindex;
 	int		dquote;
-	char	*temp;
 
 	result_string = ft_malloc(ft_strlen(string) + 1);
 	r = result_string;
 	dquote = 0;
 	sindex = 0;
-	temp = NULL;
 	while (string[sindex])
 	{
 		if (string[sindex] == '\'' && !dquote)
-		{
-			temp = string_extract_single_quoted(string, &sindex);
-			if (temp)
-			{
-				ft_strlcpy(r, temp, ft_strlen(temp) + 1);
-				r += ft_strlen(r);
-			}
-		}
+			handle_single_quote(string, &sindex, &r);
 		else if (string[sindex] == '"')
-			dquote = 1 - dquote + (0 * sindex++);
+			handle_double_quote(&dquote, &sindex);
 		else
 			*r++ = string[sindex++];
 	}

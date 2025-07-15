@@ -3,20 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   redir_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:33:07 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 14:06:06 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 18:09:59 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "makers.h"
-#include "parsers.h"
 #include "minishell.h"
+#include "parsers.h"
 #include "utils.h"
-
-
 
 t_redirect	*parse_redirection(t_minishell *minishell)
 {
@@ -68,5 +66,3 @@ t_redirect	*parse_redirection_list(t_minishell *minishell)
 	}
 	return (head);
 }
-
-
