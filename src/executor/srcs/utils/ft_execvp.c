@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execvp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 20:03:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 19:09:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 18:18:19 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "exec_utils.h"
 #include "expander.h"
+#include "minishell.h"
 #include <errno.h>
 
 static char	*build_full_path(const char *dir, const char *file)
@@ -58,33 +58,45 @@ static char	*find_in_path(const char *file, t_minishell *minishell)
 	return (NULL);
 }
 
-int	ft_execvp(const char *file, char *const argv[], t_minishell *minishell)
+static int	exec_with_path(const char *file, char *const argv[],
+		t_minishell *minishell)
+{
+	char	*path;
+	char	**env;
+	int		result;
+
+	path = find_in_path(file, minishell);
+	if (!path)
+	{
+		errno = ENOENT;
+		return (-1);
+	}
+	unbind_variable("_", minishell->global_variables);
+	bind_variable("_", path, minishell->global_variables);
+	env = make_var_export_array(minishell->global_variables, 0);
+	result = execve(path, argv, env);
+	return (result);
+}
+
+static int	exec_with_direct_file(const char *file, char *const argv[],
+		t_minishell *minishell)
 {
 	char	**env;
-	char		*path;
-	int			result;
 
+	unbind_variable("_", minishell->global_variables);
+	bind_variable("_", (char *)file, minishell->global_variables);
+	env = make_var_export_array(minishell->global_variables, 0);
+	return (execve(file, argv, env));
+}
+
+int	ft_execvp(const char *file, char *const argv[], t_minishell *minishell)
+{
 	if (!file || !*file)
 	{
 		errno = ENOENT;
 		return (-1);
 	}
 	if (ft_strchr(file, '/'))
-	{
-		unbind_variable("_", minishell->global_variables);
-		bind_variable("_", (char *)file, minishell->global_variables);
-		env = make_var_export_array(minishell->global_variables, 0);
-		return (execve(file, argv, env));
-	}
-	path = find_in_path(file, minishell);
-	if (path)
-	{
-		unbind_variable("_", minishell->global_variables);
-		bind_variable("_", path, minishell->global_variables);
-		env = make_var_export_array(minishell->global_variables, 0);
-		result = execve(path, argv, env);
-		return (result);
-	}
-	errno = ENOENT;
-	return (-1);
+		return (exec_with_direct_file(file, argv, minishell));
+	return (exec_with_path(file, argv, minishell));
 }
