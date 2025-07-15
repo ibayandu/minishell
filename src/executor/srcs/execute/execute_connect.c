@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_connect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 20:04:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/12 20:41:19 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,6 @@ static int	execute_pipe(t_connect_cmd *connect, t_minishell *minishell)
 		return (1);
 }
 
-static int	execute_nl(t_connect_cmd *connect, t_minishell *minishell)
-{
-	minishell->last_command_exit_value = execute_command(connect->first,
-			minishell);
-	minishell->last_command_exit_value = execute_command(connect->second,
-			minishell);
-	return (minishell->last_command_exit_value);
-}
-
 int	execute_connect(t_connect_cmd *connect, t_minishell *minishell)
 {
 	if (connect->type == CNT_AND_AND || connect->type == CNT_OR_OR)
@@ -99,6 +90,12 @@ int	execute_connect(t_connect_cmd *connect, t_minishell *minishell)
 	else if (connect->type == CNT_PIPE)
 		return (execute_pipe(connect, minishell));
 	else if (connect->type == CNT_NL)
-		return (execute_nl(connect, minishell));
+	{
+		minishell->last_command_exit_value = execute_command(connect->first,
+				minishell);
+		minishell->last_command_exit_value = execute_command(connect->second,
+				minishell);
+		return (minishell->last_command_exit_value);
+	}
 	return (1);
 }

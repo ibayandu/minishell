@@ -6,92 +6,12 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 20:42:10 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/07/15 17:28:16 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "common.h"
 #include "lexer.h"
 #include "token_utils.h"
-
-static int	is_quote_closed(char *input)
-{
-	int	single_quote;
-	int	double_quote;
-
-	single_quote = 0;
-	double_quote = 0;
-	while (*input)
-	{
-		if (*input == '"' && !single_quote)
-			double_quote = !double_quote;
-		else if (*input == '\'' && !double_quote)
-			single_quote = !single_quote;
-		input++;
-	}
-	return (single_quote == 0 && double_quote == 0);
-}
-
-char	*get_quote_str(char *token)
-{
-	char	*quote;
-
-	quote = ft_calloc(sizeof(char), 2);
-	while (*token)
-	{
-		if (*token == '"' && quote[0] != '"')
-			quote[0] = '"';
-		else if (*token == '\'' && quote[0] != '\'')
-			quote[0] = '\'';
-		token++;
-	}
-	return (quote);
-}
-
-/**
- * @brief kullanıcıdan alınan input'u bu fonksiyona verdiğinde senin için
- * tokenize eder.
- * @param input tokenize edilecek string.
- * @return girdiyi tiplerine göre ayrıştırarak t_list* döner.
- * @note t_token türüne incs klasörü altında token.h dosyasının
- * içinde ulaşabilirsin.
- *
- * Örnek Kullanım
- *
- * t_token	x = lexer(input);
- */
-static t_list	*lexer(char *input)
-{
-	t_list	*tokens;
-	t_token	*token;
-	char	*errmsg;
-
-	tokens = NULL;
-	while (*input)
-	{
-		if (ft_isspace(*input))
-		{
-			input++;
-			continue ;
-		}
-		token = create_token(get_token_type(input), get_token_str(input));
-		if (!is_quote_closed(token->value))
-		{
-			errmsg = ft_strjoin("minishell: syntax error near unexpected token `",
-					get_quote_str(token->value));
-			errmsg = ft_strjoin(errmsg, "'");
-			ft_putendl_fd(errmsg, 2);
-			return (NULL);
-		}
-		if (token)
-		{
-			ft_lstadd_back(&tokens, ft_lstnew(token));
-			input += ft_strlen(token->value);
-		}
-	}
-	((t_token *)(ft_lstlast(tokens)->content))->flags = 1;
-	return (tokens);
-}
 
 /**
  * @brief Basit bir lexer başlatıcı ve iterator işlevi.

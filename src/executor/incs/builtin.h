@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:58 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 22:34:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/12 16:25:36 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-#include <x86_64-linux-gnu/bits/local_lim.h>
-# include <stdio.h>
+# include "libft.h"
 # include "minishell.h"
 # include "structs.h"
-# include "libft.h"
+# include <stdio.h>
+# include <x86_64-linux-gnu/bits/local_lim.h>
 
 int	is_builtin(const char *name);
 int	run_builtin(t_simple_cmd *cmd, t_minishell *minishell);

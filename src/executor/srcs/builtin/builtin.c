@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:21:11 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 22:34:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/12 17:53:34 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_builtin(const char *name)
 		|| !ft_strncmp(name, "unset", 6) || !ft_strncmp(name, "exit", 5)
 		|| !ft_strncmp(name, "echo", 5) || !ft_strncmp(name, "env", 4)
 		|| !ft_strncmp(name, "pwd", 4) || !ft_strncmp(name, "alias", 6)
-		|| !ft_strncmp(name,"unalias",8));
+		|| !ft_strncmp(name, "unalias", 8));
 }
 
 int	run_builtin(t_simple_cmd *cmd, t_minishell *minishell)
@@ -47,9 +47,9 @@ int	run_builtin(t_simple_cmd *cmd, t_minishell *minishell)
 		return (builtin_pwd());
 	else if (!ft_strncmp(name, "env", 4))
 		return (builtin_env(minishell));
-	else if(!ft_strncmp(name, "alias", 5))
+	else if (!ft_strncmp(name, "alias", 5))
 		return (builtin_alias(build_argv(cmd->words), minishell));
-	else if(!ft_strncmp(name,"unalias",8))
-		return (builtin_unalias(build_argv(cmd->words),minishell));
+	else if (!ft_strncmp(name, "unalias", 8))
+		return (builtin_unalias(build_argv(cmd->words), minishell));
 	return (1);
 }

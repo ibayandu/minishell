@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/05 19:08:51 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/12 16:26:00 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
-# include "structs.h"
 # include "libft.h"
 # include "minishell.h"
+# include "structs.h"
 
 # define DEFAULT_INITIAL_ARRAY_SIZE 112
 # define VARIABLES_HASH_BUCKETS 1024
@@ -34,17 +34,19 @@
 # define MP_RMDOT 4
 # define MP_IGNDOT 8
 
-t_word_list *list_append(t_word_list *head, t_word_list *tail);
+t_word_list	*list_append(t_word_list *head, t_word_list *tail);
 char		**strvec_sort(char **input, int is_asc);
 int			legal_identifier(char *name);
 void		create_variable_tables(t_minishell *minishell);
 t_word_list	*expand_word_list(t_word_list *list, t_minishell *minishell);
 t_word_list	*word_list_split(t_word_list *list);
-t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_minishell *minishell);
+t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something,
+				t_minishell *minishell);
 char		*string_extract_double_quoted(char *string, int *sindex);
 char		*string_list(t_word_list *list);
 t_variable	*find_variable(const char *name, t_hash *ht);
-t_word		*param_expand(char *string, int *sindex, int *expanded_something, t_minishell *minishell);
+t_word		*param_expand(char *string, int *sindex, int *expanded_something,
+				t_minishell *minishell);
 t_variable	*bind_variable(const char *name, char *value, t_hash *ht);
 int			unbind_variable(const char *name, t_hash *ht);
 char		**make_var_export_array(t_hash *ht, int is_export);

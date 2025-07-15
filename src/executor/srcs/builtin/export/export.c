@@ -3,56 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 19:09:20 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/12 20:27:11 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "expander.h"
-
-size_t	count_strings(char **arr)
-{
-	size_t	count;
-
-	count = 0;
-	while (arr && arr[count])
-		count++;
-	return (count);
-}
-
-char	**strvec_sort(char **input, int is_asc)
-{
-	size_t count;
-
-	count = count_strings(input);
-	if (count == 0)
-		return NULL;
-
-	char **sorted = ft_malloc((count + 1) * sizeof(char *));
-	if (!sorted)
-		return NULL;
-	for (size_t i = 0; i < count; i++)
-		sorted[i] = ft_strdup(input[i]);
-	sorted[count] = NULL;
-	for (size_t i = 0; i + 1 < count; i++)
-	{
-		for (size_t j = 0; j + 1 < count - i; j++)
-		{
-			int cmp = ft_strcmp(sorted[j], sorted[j+1]);
-			if ((is_asc && cmp > 0) || (!is_asc && cmp < 0))
-			{
-				char *tmp = sorted[j];
-				sorted[j] = sorted[j+1];
-				sorted[j+1] = tmp;
-			}
-		}
-	}
-
-	return sorted;
-}
+#include "export.h"
 
 static char	*ft_get_key(char *arg)
 {
@@ -72,6 +30,7 @@ static void	list_env(t_minishell *minishell)
 	char	**env;
 	int		i;
 	char	*key;
+	char	*joined_str;
 
 	env = make_var_export_array(minishell->global_variables, 1);
 	env = strvec_sort(env, 1);
@@ -81,7 +40,10 @@ static void	list_env(t_minishell *minishell)
 		if (ft_strchr(env[i], '='))
 		{
 			key = ft_get_key(env[i]);
-			ft_putendl_fd(ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin("declare -x ", key), "="), "\""), ft_strchr(env[i], '=') + 1), "\""), 1);
+			joined_str = ft_strjoin(ft_strjoin(ft_strjoin("declare -x ", key),
+						"="), "\"");
+			joined_str = ft_strjoin(joined_str, ft_strchr(env[i], '=') + 1);
+			ft_putendl_fd(ft_strjoin(joined_str, "\""), 1);
 		}
 		else
 			ft_putendl_fd(ft_strjoin("declare -x ", env[i]), 1);
@@ -95,11 +57,13 @@ static int	ft_export_with_value(char *arg, t_minishell *minishell)
 	key = ft_get_key(arg);
 	if (!key)
 	{
-		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
+		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg),
+				"': not a valid identifier"), 2);
 		return (1);
 	}
 	unbind_variable(ft_get_key(arg), minishell->global_variables);
-	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1, minishell->global_variables))
+	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1,
+			minishell->global_variables))
 		return (1);
 	return (0);
 }
@@ -108,7 +72,8 @@ static int	ft_export_without_value(char *arg, t_minishell *minishell)
 {
 	if (!legal_identifier(arg))
 	{
-		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg), "': not a valid identifier"), 2);
+		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg),
+				"': not a valid identifier"), 2);
 		return (1);
 	}
 	if (!bind_variable(arg, NULL, minishell->global_variables))

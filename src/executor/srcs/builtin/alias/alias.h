@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   alias_helper.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 02:48:18 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/12 20:18:41 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/07/12 17:47:28 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/07/12 20:26:25 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#ifndef ALIAS_H
+# define ALIAS_H
 
-int	builtin_pwd(void)
-{
-	char	cwd[PATH_MAX];
+# include "builtin.h"
+# include "expander.h"
 
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
-		return (0);
-	}
-	return (1);
-}
+void	list_alias(t_minishell *minishell);
+int		ft_alias_with_value(char *arg, t_minishell *minishell);
+int		ft_alias_without_value(char *arg, t_minishell *minishell);
+
+#endif // ALIAS_H

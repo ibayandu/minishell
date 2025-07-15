@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 22:00:30 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/12 16:25:51 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define EXEC_UTILS_H
 
 # include "libft.h"
-# include "structs.h"
 # include "minishell.h"
+# include "structs.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>

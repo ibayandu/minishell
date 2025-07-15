@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   execute_simple.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 02:48:18 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/12 20:18:41 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/07/12 17:47:28 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/07/12 20:32:25 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#ifndef EXECUTE_SIMPLE_H
+# define EXECUTE_SIMPLE_H
 
-int	builtin_pwd(void)
-{
-	char	cwd[PATH_MAX];
+# include "builtin.h"
+# include "execute.h"
+# include "expander.h"
+# include <errno.h>
+# include <sys/stat.h>
+# include <termios.h>
 
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
-		return (0);
-	}
-	return (1);
-}
+void	child_process(t_simple_cmd *cmd, t_redirect *redirects,
+			t_minishell *minishell);
+
+#endif // EXECUTE_SIMPLE_H

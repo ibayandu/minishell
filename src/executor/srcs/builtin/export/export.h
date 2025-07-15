@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   export_helper.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 02:48:18 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/12 20:18:41 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/07/12 17:47:28 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/07/12 20:26:59 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#ifndef EXPORT_H
+# define EXPORT_H
 
-int	builtin_pwd(void)
-{
-	char	cwd[PATH_MAX];
+# include "builtin.h"
+# include "expander.h"
 
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
-		return (0);
-	}
-	return (1);
-}
+size_t	count_strings(char **arr);
+char	**strvec_sort(char **input, int is_asc);
+
+#endif // EXPORT_H
