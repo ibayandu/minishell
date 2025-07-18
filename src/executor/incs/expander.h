@@ -6,7 +6,7 @@
 /*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/12 16:26:00 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:28:13 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@
 # define MP_RMDOT 4
 # define MP_IGNDOT 8
 
+typedef struct s_finddir_args
+{
+	char	*pat;
+	char	*sdir;
+	int		flags;
+	t_list	**ep;
+	int		*np;
+}			t_finddir_args;
+
 t_word_list	*list_append(t_word_list *head, t_word_list *tail);
 char		**strvec_sort(char **input, int is_asc);
 int			legal_identifier(char *name);
@@ -57,7 +66,7 @@ t_word_list	*glob_list(t_word_list *tlist);
 
 int			testdir(char *dir);
 char		**arraydir(char *dir, char **array);
-t_list		*finddir(char *pat, char *sdir, int flags, t_list **ep, int *np);
+t_list		*finddir(t_finddir_args args);
 
 char		*redir_expand(t_word *redir_word, t_minishell *minishell);
 char		*here_document_expand(t_word *document, t_minishell *minishell);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   dir.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 06:26:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/25 07:06:32 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/07/15 18:28:43 by ibayandu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/stat.h>
 #include "expander.h"
 #include "libft.h"
+#include <sys/stat.h>
 
 int	testdir(char *dir)
 {
@@ -66,7 +66,7 @@ void	set_addr(t_list **ep, int *np, int np_v, t_list *ep_v)
 		*np = np_v;
 }
 
-t_list	*finddir(char *pat, char *sdir, int flags, t_list **ep, int *np)
+t_list	*finddir(t_finddir_args args)
 {
 	char	**r;
 	int		ndirs;
@@ -76,9 +76,9 @@ t_list	*finddir(char *pat, char *sdir, int flags, t_list **ep, int *np)
 
 	ret = NULL;
 	e = NULL;
-	r = glob_vector(pat, sdir, flags);
+	r = glob_vector(args.pat, args.sdir, args.flags);
 	if (!r || !*r)
-		return (set_addr(ep, np, 0, NULL), NULL);
+		return (set_addr(args.ep, args.np, 0, NULL), NULL);
 	ndirs = -1;
 	while (r[++ndirs])
 	{
@@ -89,6 +89,6 @@ t_list	*finddir(char *pat, char *sdir, int flags, t_list **ep, int *np)
 		ret = g;
 		g->content = r[ndirs];
 	}
-	set_addr(ep, np, ndirs, e);
+	set_addr(args.ep, args.np, ndirs, e);
 	return (ret);
 }

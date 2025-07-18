@@ -206,7 +206,14 @@ char	**glob_vector(char *pat, char *dir, int flags)
 			{
 				if (testdir(subdir) == 0)
 				{
-					dirlist = finddir(pat, subdir, (flags & ~GX_ADDCURDIR), &e, &ndirs);
+					t_finddir_args args = {
+						.pat = pat,
+						.sdir = subdir,
+						.flags = (flags & ~GX_ADDCURDIR),
+						.ep = &e,
+						.np = &ndirs
+					};
+					dirlist = finddir(args);
 					if (ndirs)
 					{
 						e->next = lastlink;
