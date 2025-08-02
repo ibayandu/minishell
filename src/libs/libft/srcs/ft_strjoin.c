@@ -6,10 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 11:47:08 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 01:05:49 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/02 19:17:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libmem.h"
 #include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -26,7 +27,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	s2len = ft_strlen(s2);
 	s1len = ft_strlen(s1);
 	total_len = s1len + s2len;
-	result = (char *)ft_malloc((total_len * sizeof(char)) + 1);
+	result = (char *)mem_malloc((total_len * sizeof(char)) + 1);
 	if (!result)
 		return (NULL);
 	ft_strlcpy(result, s1, s1len + 1);

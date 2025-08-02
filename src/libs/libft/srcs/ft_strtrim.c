@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:23:21 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/04 01:47:01 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:18:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libmem.h"
 #include "libft.h"
 
 char	*ft_strtrim(char const *s1, char const *set)
@@ -22,7 +23,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	len = ft_strlen(s1);
 	while (len && s1[len - 1] && ft_strchr(set, s1[len - 1]) != 0)
 		len--;
-	result = (char *)ft_malloc(sizeof(char) * (len + 1));
+	result = (char *)mem_malloc(sizeof(char) * (len + 1));
 	if (!result)
 		return (NULL);
 	ft_memcpy(result, s1, len);

@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:52:59 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/15 17:20:44 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:24:30 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
-
-# include "libft.h"
 
 # define F_DOLLAR 1
 # define F_QUOTED 2

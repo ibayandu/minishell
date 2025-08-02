@@ -6,12 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 01:53:45 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/20 00:49:56 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/02 18:35:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
-#include "lexer.h"
+#include "parser_utils.h"
 
 t_redir_type	ft_get_redir(t_token *token)
 {

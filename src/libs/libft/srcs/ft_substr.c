@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 10:42:32 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/04 01:47:04 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:18:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libmem.h"
 #include "libft.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
@@ -24,7 +25,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (len > ft_strlen(s) - start)
 		len = ft_strlen(s) - start;
 	i = 0;
-	rtn = ft_calloc(len + 1, sizeof(char));
+	rtn = mem_calloc(len + 1, sizeof(char));
 	if (!rtn)
 		return (NULL);
 	while (i < len)

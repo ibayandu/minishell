@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 20:35:39 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/02 22:13:54 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "utils.h"
-#include "makers.h"
-#include "token.h"
+#include "parser_utils.h"
+#include "parser_makers.h"
+#include "lexer.h"
 #include "expander.h"
 
 t_word_list *list_append(t_word_list *head, t_word_list *tail)
@@ -49,7 +49,7 @@ t_word_list	*copy_word_list(t_word_list *list)
 	{
 		if (!new_list)
 		{
-			tl = make_word_list(copy_word (list->word), new_list);
+			tl = make_word_list(copy_word(list->word), new_list);
 			new_list = tl;
 		}
 		else
@@ -87,11 +87,11 @@ void denull_list(t_word_list **list)
 	}
 }
 
-char	*expand_alias(char *word, t_minishell *minishell, int *expanded_something)
+char	*expand_alias(char *word, int *expanded_something)
 {
 	t_variable	*v;
 
-	v = find_variable(word, minishell->alias_variables);
+	v = find_variable(word, create_variable_tables(1));
 	if (v)
 	{
 		*expanded_something = 1;
@@ -100,7 +100,7 @@ char	*expand_alias(char *word, t_minishell *minishell, int *expanded_something)
 	return (word);
 }
 
-t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
+t_word_list	*shell_expand_word_list(t_word_list *tlist, int *exit_code)
 {
 	t_word_list	*expanded;
 	t_word_list	*new_list;
@@ -114,12 +114,12 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 		next = tlist->next;
 		expanded_something = 0;
 		if (!new_list)
-			tlist->word->word = expand_alias(tlist->word->word, minishell, &expanded_something);
-		expanded = expand_word(tlist->word, 0, &expanded_something, minishell);
+			tlist->word->word = expand_alias(tlist->word->word, &expanded_something);
+		expanded = expand_word(tlist->word, 0, &expanded_something, *exit_code);
 		if (!expanded)
 		{
 			tlist->word->word = NULL;
-			minishell->last_command_exit_value = 1;
+			*exit_code = 1;
 			return (NULL);
 		}
 		if (expanded_something)
@@ -138,13 +138,13 @@ t_word_list	*shell_expand_word_list(t_word_list *tlist, t_minishell *minishell)
 	return (new_list);
 }
 
-t_word_list	*expand_word_list(t_word_list *list, t_minishell *minishell)
+t_word_list	*expand_word_list(t_word_list *list, int *exit_code)
 {
 	t_word_list	*new_list;
 
 	if (!list)
 		return (NULL);
-	new_list = shell_expand_word_list(copy_word_list(list), minishell);
+	new_list = shell_expand_word_list(copy_word_list(list), exit_code);
 	if (new_list)
 	{
 		new_list = glob_list(new_list);

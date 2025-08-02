@@ -6,15 +6,15 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:51:38 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 10:31:05 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/02 18:35:37 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include <unistd.h>
 #include "libft.h"
-#include "minishell.h"
+#include "parser_utils.h"
 
-void	ft_panic(t_token *token, t_minishell *minishell)
+void	ft_panic(t_token *token, int *exit_code)
 {
 	const char	*token_value = token->value;
 
@@ -23,5 +23,5 @@ void	ft_panic(t_token *token, t_minishell *minishell)
 	ft_putendl_fd(ft_strjoin(ft_strjoin(
 				ft_strdup("minishell: syntax error near unexpected token `"),
 				token_value), "'"), STDERR_FILENO);
-	minishell->last_command_exit_value = 2;
+	*exit_code = 2;
 }

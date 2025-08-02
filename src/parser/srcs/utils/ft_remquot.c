@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remquot.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:20:04 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/15 17:55:01 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:22:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "utils.h"
+#include "libmem.h"
+#include "parser_utils.h"
 
 char	*string_extract_single_quoted(char *string, int *sindex)
 {
@@ -58,7 +59,7 @@ char	*string_quote_removal(char *string)
 	int		sindex;
 	int		dquote;
 
-	result_string = ft_malloc(ft_strlen(string) + 1);
+	result_string = mem_malloc(ft_strlen(string) + 1);
 	r = result_string;
 	dquote = 0;
 	sindex = 0;

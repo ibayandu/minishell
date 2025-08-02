@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:14:55 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/05/04 01:45:26 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:15:30 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libmem.h"
 #include "libft.h"
 
 static int	how_many_digits(long n)
@@ -45,7 +46,7 @@ char	*ft_itoa(int n)
 		is_minus = 1;
 		number *= -1;
 	}
-	result = ft_calloc(length_number + 1, sizeof(char));
+	result = mem_calloc(length_number + 1, sizeof(char));
 	if (!result)
 		return (NULL);
 	while (length_number--)

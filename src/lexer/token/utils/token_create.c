@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token_create.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:14 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/15 17:35:33 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:14:56 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "common.h"
 #include "token_utils.h"
 
@@ -24,7 +25,7 @@ static t_token	*create_token(t_token_type type, char *value)
 {
 	t_token	*token;
 
-	token = ft_malloc(sizeof(t_token));
+	token = mem_malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = value;
@@ -39,7 +40,7 @@ static char	*get_quote_str(char *token)
 {
 	char	*quote;
 
-	quote = ft_calloc(sizeof(char), 2);
+	quote = mem_calloc(sizeof(char), 2);
 	while (*token)
 	{
 		if (*token == '"' && quote[0] != '"')

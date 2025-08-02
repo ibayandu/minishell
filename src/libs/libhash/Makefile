@@ -3,11 +3,11 @@ RM = rm -rf
 AR = ar rcs
 MKDIR = mkdir -p
 
-IFLAGS = -I ./incs
+IFLAGS = -I ./ -I ./incs -I ../libft -I ../libmem
 CFLAGS = -Wall -Werror -Wextra -g
 
 VPATH = srcs
-SRCS =
+SRCS = libhash.c hash_utils.c
 
 OBJS_DIR = build/objs
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
@@ -32,10 +32,10 @@ $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) build/objs
 
-fclean: clean
-	$(RM) $(NAME)
+fclean:
+	$(RM) build
 
 re: fclean all
 

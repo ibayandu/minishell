@@ -1,8 +1,9 @@
 #include <sys/stat.h>
 #include <dirent.h>
-#include "token.h"
-#include "makers.h"
 #include "libft.h"
+#include "libmem.h"
+#include "lexer.h"
+#include "parser_makers.h"
 #include "expander.h"
 
 t_word_list *restar_list(t_word_list *list)
@@ -38,7 +39,7 @@ static char	**ft_realloc_vec(char **old, size_t new_items)
 	if (old)
 		while (old[old_count])
 			old_count++;
-	newv = ft_malloc((new_items + 1) * sizeof *newv);
+	newv = mem_malloc((new_items + 1) * sizeof *newv);
 	to_copy = old_count < new_items ? old_count : new_items;
 	i = -1;
 	while (++i < to_copy)
@@ -74,7 +75,7 @@ char	*sh_makepath(char *path, char *dir, int flags)
 		xdir += 2;
 		dirlen -= 2;
 	}
-	ret = ft_malloc(2 + dirlen + pathlen);
+	ret = mem_malloc(2 + dirlen + pathlen);
 	r = ret;
 	s = xpath;
 	while (*s)
@@ -153,7 +154,7 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	{
 		if (testdir(dir) < 0)
 			return (NULL);
-		nextlink = ft_malloc(sizeof(t_list));
+		nextlink = mem_malloc(sizeof(t_list));
 		nextlink->next = NULL;
 		lastlink = nextlink;
 		nextlink->content = ft_strdup("");
@@ -164,14 +165,14 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	{
 		if (testdir(dir) < 0)
 			return (NULL);
-		nextname = ft_malloc(ft_strlen(dir) + ft_strlen(pat) + 2);
+		nextname = mem_malloc(ft_strlen(dir) + ft_strlen(pat) + 2);
 		npat = ft_strdup(pat);
 		ft_strcpy(nextname, dir);
 		nextname[ft_strlen(dir)] = '/';
 		ft_strcpy(nextname + ft_strlen(dir) + 1, npat);
 		if (lstat(nextname, &finfo))
 		{
-			nextlink = ft_malloc(sizeof(t_list));
+			nextlink = mem_malloc(sizeof(t_list));
 			nextlink->next = NULL;
 			lastlink = nextlink;
 			nextlink->content = npat;
@@ -221,7 +222,7 @@ char	**glob_vector(char *pat, char *dir, int flags)
 						count += ndirs;
 					}
 				}
-				nextlink = ft_malloc(sizeof(t_list));
+				nextlink = mem_malloc(sizeof(t_list));
 				nextname = ft_strdup(subdir);
 				nextlink->next = lastlink;
 				lastlink = nextlink;
@@ -235,7 +236,7 @@ char	**glob_vector(char *pat, char *dir, int flags)
 				continue ;
 			if (!glob_match(pat, dp->d_name))
 			{
-				nextlink = ft_malloc(sizeof(t_list));
+				nextlink = mem_malloc(sizeof(t_list));
 				nextname = ft_strdup(dp->d_name);
 				nextlink->next = lastlink;
 				lastlink = nextlink;
@@ -247,8 +248,8 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	}
 	if (add_current)
 	{
-		nextname = ft_malloc(ft_strlen(dir) + 1);
-		nextlink = ft_malloc(sizeof(t_list));
+		nextname = mem_malloc(ft_strlen(dir) + 1);
+		nextlink = mem_malloc(sizeof(t_list));
 		nextlink->content = nextname;
 		nextlink->next = lastlink;
 		lastlink = nextlink;
@@ -258,7 +259,7 @@ char	**glob_vector(char *pat, char *dir, int flags)
 			ft_memcpy(nextname, dir, ft_strlen(dir) + 1);
 		count++;
 	}
-	name_vector = ft_malloc((count + 1) * sizeof(char *));
+	name_vector = mem_malloc((count + 1) * sizeof(char *));
 	tmplink = lastlink;
 	i = -1;
 	while (++i < count)
@@ -294,7 +295,7 @@ char	**glob_filename(char *pathname, int flags)
 	char			**array;
 	unsigned int	l;
 
-	result = ft_malloc(sizeof(char *));
+	result = mem_malloc(sizeof(char *));
 	result_size = 1;
 	result[0] = NULL;
 	directory_name = NULL;
@@ -309,7 +310,7 @@ char	**glob_filename(char *pathname, int flags)
 	else
 	{
 		directory_len = (filename - pathname) + 1;
-		directory_name = ft_malloc(directory_len + 1);
+		directory_name = mem_malloc(directory_len + 1);
 		ft_memcpy(directory_name, pathname, directory_len);
 		directory_name[directory_len] = '\0';
 		free_dirname = 1;
@@ -393,7 +394,7 @@ char	**glob_filename(char *pathname, int flags)
 						temp_results = NULL;
 					else
 					{
-						temp_results = ft_malloc(2 * sizeof (char *));
+						temp_results = mem_malloc(2 * sizeof (char *));
 						temp_results[0] = ft_strdup("");
 						temp_results[1] = NULL;
 					}
@@ -486,7 +487,7 @@ t_word_list	*glob_list(t_word_list *tlist)
 				glob_array = strvec_sort(glob_array, 1);
 			if (!glob_array)
 			{
-				glob_array = ft_malloc(sizeof(char *));
+				glob_array = mem_malloc(sizeof(char *));
 				glob_array[0] = NULL;
 			}
 			glob_list = NULL;

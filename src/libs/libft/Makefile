@@ -1,10 +1,12 @@
 CC = cc
+RM = rm -rf
+AR = ar rcs
+MKDIR = mkdir -p
 
+IFLAGS = -I ./ -I ./incs -I ../libmem
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I./incs -I../collector/incs
 
 VPATH = srcs
-
 SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 		ft_isspace.c ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c \
 		ft_memmove.c ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c \
@@ -17,25 +19,34 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 		ft_lstmap.c ft_strndup.c ft_nbrlen.c ft_strtok.c ft_strcpy.c \
 		ft_strcmp.c
 
-OBJS = $(SRCS:%.c=build/%.o)
+OBJS_DIR = build/objs
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-NAME = build/libs/libft.a
+NAME_DIR = build/libs
+NAME = $(NAME_DIR)/libft.a
 
-all: $(NAME)
+$(OBJS_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o  $@ $(IFLAGS)
+
+all: dir $(NAME)
+
+dir:
+	@if [ ! -d $(OBJS_DIR) ]; then \
+		$(MKDIR) $(OBJS_DIR); \
+	fi
+	@if [ ! -d $(NAME_DIR) ]; then \
+		$(MKDIR) $(NAME_DIR); \
+	fi
 
 $(NAME): $(OBJS)
-	ar rcs $@ $^
-
-build/%.o: %.c
-	@mkdir -p build/libs
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(AR) $(NAME) $(OBJS)
 
 clean:
-	@rm -rf build/objs
+	$(RM) build/objs
 
 fclean:
-	@rm -rf build
+	$(RM) build
 
 re: fclean all
 
-.PHONY: clean fclean all re
+.PHONY: all clean fclean re dir

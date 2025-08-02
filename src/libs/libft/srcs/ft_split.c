@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:30:50 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/05/04 01:46:20 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:16:50 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libmem.h"
 #include "libft.h"
 
 static size_t	count_word(char const *s, char c)
@@ -40,7 +41,7 @@ static char	*get_word(char const *s, char c, size_t index)
 	len = 0;
 	while (s[index + len] && s[index + len] != c)
 		len++;
-	res = ft_malloc(sizeof(char) * (len + 1));
+	res = mem_malloc(sizeof(char) * (len + 1));
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -59,7 +60,7 @@ char	**ft_split(char const *s, char c)
 	size_t	i;
 	size_t	j;
 
-	res = ft_malloc(sizeof(char *) * (count_word(s, c) + 1));
+	res = mem_malloc(sizeof(char *) * (count_word(s, c) + 1));
 	if (!res)
 		return (NULL);
 	i = 0;

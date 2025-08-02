@@ -1,7 +1,7 @@
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I.
+CFLAGS += -I ./ -I ./incs -I ../libs/libft -I../libs/libmem
 
 VPATH = token:token/utils:common
 

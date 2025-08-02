@@ -6,19 +6,20 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:15:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/07/06 21:35:50 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/02 22:16:30 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "makers.h"
 #include "libft.h"
-#include "utils.h"
+#include "libmem.h"
+#include "parser_makers.h"
+#include "parser_utils.h"
 #include "expander.h"
 
 char *replace_star_unquoted(const char *input)
 {
 	size_t len = ft_strlen(input);
-	char *out  = ft_malloc(len + 1);
+	char *out  = mem_malloc(len + 1);
 	if (!out) return NULL;
 
 	int in_sq = 0, in_dq = 0;
@@ -55,7 +56,7 @@ char *replace_star_unquoted(const char *input)
 	return out;
 }
 
-t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_minishell *minishell)
+t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, int exit_code)
 {
 	t_word_list	*list;
 	t_word		*tword;
@@ -82,7 +83,7 @@ t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_mi
 		{
 			if (expanded_something)
 				*expanded_something = 1;
-			tword = param_expand(string, &sindex, expanded_something, minishell);
+			tword = param_expand(string, &sindex, expanded_something, exit_code);
 			if (!tword)
 				return (NULL);
 			temp = tword ? tword->word : NULL;
@@ -107,7 +108,7 @@ t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_mi
 				tword = alloc_word_desc();
 				tword->word = temp;
 				temp = NULL;
-				list = expand_word(tword, 1, NULL, minishell);
+				list = expand_word(tword, 1, NULL, exit_code);
 				if (!list)
 					return (NULL);
 			}
@@ -132,7 +133,7 @@ t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, t_mi
 		}
 		else if (string[sindex] == '\'' && !quoted)
 		{
-			temp = ft_malloc(ft_strlen(&string[sindex]) + 1);
+			temp = mem_malloc(ft_strlen(&string[sindex]) + 1);
 			temp = string_extract_single_quoted(string, &sindex);
 			if (!*temp)
 				temp = NULL;

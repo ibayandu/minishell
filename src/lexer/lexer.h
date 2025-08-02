@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:12 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/15 17:37:45 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:14:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "libft.h"
 # include "token.h"
 
 void	*init_lexer(char *input);

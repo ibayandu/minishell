@@ -6,12 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:24:49 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/12 20:57:57 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/02 18:26:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include "structs.h"
+#include "parser_utils.h"
 
 t_word_list	*ft_revword(t_word_list *list)
 {
