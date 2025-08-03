@@ -6,22 +6,22 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 13:50:29 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/06/29 10:30:51 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/03 01:05:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
-#include "exec_utils.h"
+#include "exec_funcs.h"
+#include "executor.h"
 
-int	execute_command(t_command *cmd, t_minishell *minishell)
+int	execute_command(t_command *cmd, int *exit_code)
 {
 	if (!cmd)
 		return (0);
 	if (cmd->type == CMD_SIMPLE)
-		return (execute_simple(cmd->value.simple, cmd->redirects, minishell));
+		return (execute_simple(cmd->value.simple, cmd->redirects, exit_code));
 	if (cmd->type == CMD_CONNECT)
-		return (execute_connect(cmd->value.connection, minishell));
+		return (execute_connect(cmd->value.connection, exit_code));
 	if (cmd->type == CMD_SUBSHELL)
-		return (execute_subshell(cmd->value.subshell, cmd->redirects, minishell));
+		return (execute_subshell(cmd->value.subshell, cmd->redirects));
 	return (1);
 }

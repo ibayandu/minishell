@@ -3,17 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   execute_subshell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/12 20:43:39 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/03 01:38:08 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "libmem.h"
+#include "exec_funcs.h"
+#include "executor.h"
 
 int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects,
-		t_minishell *minishell)
+					int *exit_code)
 {
 	pid_t	pid;
 	int		status;
@@ -22,13 +28,13 @@ int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects,
 	pid = fork();
 	if (pid == 0)
 	{
-		if (apply_redirections(redirects, minishell))
+		if (apply_redirections(redirects, exit_code))
 		{
-			ft_free();
+			mem_free();
 			exit(1);
 		}
-		res = execute_command(subshell->command, minishell);
-		ft_free();
+		res = execute_command(subshell->command, exit_code);
+		mem_free();
 		exit(res);
 	}
 	waitpid(pid, &status, 0);

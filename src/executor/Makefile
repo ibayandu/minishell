@@ -1,35 +1,42 @@
 CC = cc
+RM = rm -rf
+AR = ar rcs
+MKDIR = mkdir -p
 
+IFLAGS = -I ./ -I ./incs 
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I./incs -I../libs/libft/incs -I../libs/collector/incs -I. -I../parser/incs -I.. -I../lexer/incs
 
-VPATH = srcs:srcs/expander:srcs/expander/expands:srcs/expander/helpers:srcs/execute:srcs/utils:srcs/builtin:srcs/builtin/alias:srcs/builtin/export
-VPATH += :srcs/execute/execute_simple
+VPATH =
+SRCS =
 
-SRCS = executor.c ft_execvp.c execute_connect.c execute_simple.c execute_simple_helper.c execute_subshell.c apply_redirections.c build_argv.c ft_execvp.c \
-		builtin.c cd.c echo.c env.c exit.c export.c export_helper.c pwd.c unset.c expand_word.c expand_list.c split.c string.c expand_param.c \
-		list.c list2.c expand_glob.c dir.c expand_redir.c alias.c alias_helper.c unalias.c
+OBJS_DIR = build/objs
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-OBJS = $(SRCS:%.c=build/objs/%.o)
+NAME_DIR = build/libs
+NAME = $(NAME_DIR)/executor.a
 
-NAME = build/libs/executor.a
+$(OBJS_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o  $@ $(IFLAGS)
 
-all: $(NAME)
+all: dir $(NAME)
+
+dir:
+	@if [ ! -d $(OBJS_DIR) ]; then \
+		$(MKDIR) $(OBJS_DIR); \
+	fi
+	@if [ ! -d $(NAME_DIR) ]; then \
+		$(MKDIR) $(NAME_DIR); \
+	fi
 
 $(NAME): $(OBJS)
-	ar rcs $@ $^
-
-build/objs/%.o: %.c
-	@mkdir -p build/objs
-	@mkdir -p build/libs
-	$(CC) $(CFLAGS) -c $< -o  $@
+	$(AR) $(NAME) $(OBJS)
 
 clean:
-	@rm -rf build/objs
+	$(RM) build/objs
 
-fclean: clean
-	@rm -rf build
+fclean:
+	$(RM) build
 
 re: fclean all
 
-.PHONY: clean
+.PHONY: all clean fclean re dir

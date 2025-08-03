@@ -1,32 +1,42 @@
 CC = cc
+RM = rm -rf
+AR = ar rcs
+MKDIR = mkdir -p
 
+IFLAGS = -I ./ -I ./incs -I ../libs/libft -I ../libs/libmem
 CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS += -I ./ -I ./incs -I ../libs/libft -I../libs/libmem
 
-VPATH = token:token/utils:common
+VPATH = srcs/common:srcs/token
+SRCS = lexer.c token_str.c token_flags.c token_create.c common.c
 
-SRCS = lexer.c common.c token_create.c token_str.c token_flags.c
+OBJS_DIR = build/objs
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-OBJS = $(SRCS:%.c=build/objs/%.o)
+NAME_DIR = build/libs
+NAME = $(NAME_DIR)/lexer.a
 
-NAME = build/libs/lexer.a
+$(OBJS_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o  $@ $(IFLAGS)
 
-all: $(NAME)
+all: dir $(NAME)
+
+dir:
+	@if [ ! -d $(OBJS_DIR) ]; then \
+		$(MKDIR) $(OBJS_DIR); \
+	fi
+	@if [ ! -d $(NAME_DIR) ]; then \
+		$(MKDIR) $(NAME_DIR); \
+	fi
 
 $(NAME): $(OBJS)
-	ar rcs $@ $^
-
-build/objs/%.o: %.c
-	@mkdir -p build/objs
-	@mkdir -p build/libs
-	$(CC) $(CFLAGS) -c $< -o  $@
+	$(AR) $(NAME) $(OBJS)
 
 clean:
-	@rm -rf build/objs
+	$(RM) build/objs
 
-fclean: clean
-	@rm -rf build
+fclean:
+	$(RM) build
 
 re: fclean all
 
-.PHONY: clean
+.PHONY: all clean fclean re dir

@@ -6,11 +6,12 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:37:54 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/02 19:14:46 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/03 00:31:31 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "libmem.h"
 #include "common.h"
 #include "token_utils.h"
 

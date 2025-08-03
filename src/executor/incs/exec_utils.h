@@ -3,25 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/12 16:25:51 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/03 01:33:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_UTILS_H
 # define EXEC_UTILS_H
 
-# include "libft.h"
-# include "minishell.h"
-# include "structs.h"
-# include <fcntl.h>
-# include <stdio.h>
-# include <unistd.h>
+#include "parser_structs.h"
 
-int		apply_redirections(t_redirect *r, t_minishell *minishell);
+int		apply_redirections(t_redirect *r, int *exit_code);
 char	**build_argv(t_word_list *words);
-int		ft_execvp(const char *file, char *const argv[], t_minishell *minishell);
+int		ft_execvp(const char *file, char *const argv[]);
 
 #endif // EXEC_UTILS_H

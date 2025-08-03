@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   common.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:51:38 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/19 20:52:22 by ibayandu         ###   ########.fr       */
+/*   Updated: 2025/08/03 00:35:41 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "common.h"
 
 t_token_type	is_number(char *str)

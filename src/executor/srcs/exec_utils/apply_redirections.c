@@ -6,19 +6,22 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:55:25 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/06/29 04:00:37 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/03 01:48:25 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include "libft.h"
 #include "exec_utils.h"
 #include "expander.h"
 
-static int	apply_output_redirection(t_redirect *r, t_minishell *minishell)
+static int	apply_output_redirection(t_redirect *r, int *exit_code)
 {
 	int	fd;
 
-	r->redirectee->word = redir_expand(r->redirectee, minishell);
+	r->redirectee->word = redir_expand(r->redirectee, exit_code);
 	if (r->redirectee->word)
 	{
 		if (r->redir_type == REDIR_OUTPUT)
@@ -43,11 +46,11 @@ static int	apply_output_redirection(t_redirect *r, t_minishell *minishell)
 	return (0);
 }
 
-static int	apply_heredoc_redirection(t_redirect *r, t_minishell *minishell)
+static int	apply_heredoc_redirection(t_redirect *r, int *exit_code)
 {
 	int	pipefd[2];
 
-	r->redirectee->word = here_document_expand(r->redirectee, minishell);
+	r->redirectee->word = here_document_expand(r->redirectee, exit_code);
 	if (r->redirectee->word)
 	{
 		if (pipe(pipefd) == -1)
@@ -65,13 +68,13 @@ static int	apply_heredoc_redirection(t_redirect *r, t_minishell *minishell)
 	return (0);
 }
 
-static int	apply_input_redirection(t_redirect *r, t_minishell *minishell)
+static int	apply_input_redirection(t_redirect *r, int *exit_code)
 {
 	int	fd;
 
 	if (r->redir_type == REDIR_INPUT)
 	{
-		r->redirectee->word = redir_expand(r->redirectee, minishell);
+		r->redirectee->word = redir_expand(r->redirectee, exit_code);
 		if (r->redirectee->word)
 		{
 			fd = open(r->redirectee->word, O_RDONLY);
@@ -87,22 +90,22 @@ static int	apply_input_redirection(t_redirect *r, t_minishell *minishell)
 			return (1);
 	}
 	else if (r->redir_type == REDIR_UNTIL)
-		if (apply_heredoc_redirection(r, minishell))
+		if (apply_heredoc_redirection(r, exit_code))
 			return (1);
 	return (0);
 }
 
-int	apply_redirections(t_redirect *r, t_minishell *minishell)
+int	apply_redirections(t_redirect *r, int *exit_code)
 {
 	while (r)
 	{
 		if (r->redir_type == REDIR_OUTPUT || r->redir_type == REDIR_APPEND)
 		{
-			if (apply_output_redirection(r, minishell))
+			if (apply_output_redirection(r, exit_code))
 				return (1);
 		}
 		else if (r->redir_type == REDIR_INPUT || r->redir_type == REDIR_UNTIL)
-			if (apply_input_redirection(r, minishell))
+			if (apply_input_redirection(r, exit_code))
 				return (1);
 		r = r->next;
 	}

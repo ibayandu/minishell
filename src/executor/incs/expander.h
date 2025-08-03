@@ -6,13 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/02 22:17:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/03 12:36:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
+# include "libft.h"
 # include "libhash.h"
 # include "parser_structs.h"
 
@@ -87,4 +88,4 @@ t_list		*finddir(t_finddir_args args);
 char		*redir_expand(t_word *redir_word, int *exit_code);
 char		*here_document_expand(t_word *document, int *exit_code);
 
-#endif /* EXPANDER_H*/
+#endif // EXPANDER_H

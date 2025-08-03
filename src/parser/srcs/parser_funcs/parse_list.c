@@ -6,10 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:37:31 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/02 19:21:01 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/03 00:33:16 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
 #include "parser_makers.h"
 #include "parser_funcs.h"
 #include "parser_utils.h"

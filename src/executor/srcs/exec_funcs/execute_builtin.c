@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_simple.c                                   :+:      :+:    :+:   */
+/*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibayandu <ibayandu@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/12 20:38:32 by ibayandu         ###   ########.fr       */
+/*   Created: 2025/07/12 20:23:42 by ibayandu          #+#    #+#             */
+/*   Updated: 2025/08/03 01:46:16 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute_simple.h"
+#include <unistd.h>
+#include "libft.h"
+#include "exec_utils.h"
+#include "exec_builtin.h"
+#include "exec_funcs.h"
 
-static int	wait_for_child(pid_t pid)
-{
-	int	status;
-
-	if (waitpid(pid, &status, 0) == -1)
-		return (1);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (WTERMSIG(status) + 128);
-	return (1);
-}
-
-int	store_fds(int fds[3])
+static int	store_fds(int fds[3])
 {
 	fds[0] = dup(STDIN_FILENO);
 	if (fds[0] < 0)
@@ -39,7 +30,7 @@ int	store_fds(int fds[3])
 	return (0);
 }
 
-int	restore_fds(int fds[3])
+static int	restore_fds(int fds[3])
 {
 	if (dup2(fds[0], STDIN_FILENO) < 0)
 		return (1);
@@ -56,8 +47,18 @@ int	restore_fds(int fds[3])
 	return (0);
 }
 
-static int	execute_builtin_if_possible(t_simple_cmd *cmd,
-		t_minishell *minishell, int fds[3])
+static int	is_builtin(const char *name)
+{
+	if (!name)
+		return (0);
+	return (!ft_strncmp(name, "cd", 3) || !ft_strncmp(name, "export", 7)
+		|| !ft_strncmp(name, "unset", 6) || !ft_strncmp(name, "exit", 5)
+		|| !ft_strncmp(name, "echo", 5) || !ft_strncmp(name, "env", 4)
+		|| !ft_strncmp(name, "pwd", 4) || !ft_strncmp(name, "alias", 6)
+		|| !ft_strncmp(name, "unalias", 8));
+}
+
+int	execute_builtin(t_simple_cmd *cmd, int fds[3], int *exit_code)
 {
 	if (!cmd->words || !cmd->words->word || !cmd->words->word->word)
 		return (-1);
@@ -65,32 +66,12 @@ static int	execute_builtin_if_possible(t_simple_cmd *cmd,
 		return (-1);
 	if (store_fds(fds))
 		return (1);
-	if (apply_redirections(cmd->redirects, minishell))
+	if (apply_redirections(cmd->redirects, exit_code))
 	{
 		restore_fds(fds);
 		return (1);
 	}
 	if (restore_fds(fds))
 		return (1);
-	return (run_builtin(cmd, minishell));
-}
-
-int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects,
-		t_minishell *minishell)
-{
-	int		fds[3];
-	int		ret;
-	pid_t	pid;
-
-	cmd->words = expand_word_list(cmd->words, minishell);
-	ret = execute_builtin_if_possible(cmd, minishell, fds);
-	if (ret != -1)
-		return (ret);
-	discard_signals();
-	pid = fork();
-	if (pid < 0)
-		return (1);
-	if (pid == 0)
-		child_process(cmd, redirects, minishell);
-	return (wait_for_child(pid));
+	return (run_builtin(cmd));
 }

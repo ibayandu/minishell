@@ -6,10 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:54:41 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 21:54:34 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/03 01:33:42 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libmem.h"
 #include "exec_utils.h"
 
 char	**build_argv(t_word_list *words)
@@ -27,7 +28,7 @@ char	**build_argv(t_word_list *words)
 		count++;
 		tmp = tmp->next;
 	}
-	argv = ft_malloc(sizeof(char *) * (count + 1));
+	argv = mem_malloc(sizeof(char *) * (count + 1));
 	if (!argv)
 		return (NULL);
 	tmp = words;
