@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:59:39 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 12:40:43 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/04 22:39:28 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,79 +196,60 @@ void	set_pwd(t_minishell *minishell)
 		temp_var = bind_variable ("OLDPWD", NULL, minishell->global_variables);
 }
 
-void	adjust_shell_level(int change, t_minishell *minishell)
+void	adjust_shell_level(int change)
 {
-	char		new_level[5];
-	char		*old_SHLVL;
+	char		*new_level;
 	long		old_level;
 	int			shell_level;
 	t_variable	*temp_var;
 
-	temp_var = find_variable("SHLVL", minishell->global_variables);
-	old_SHLVL =  temp_var ? temp_var->value : NULL;
-	old_level = ft_atoi(old_SHLVL);
+	old_level = 0;
+	temp_var = find_variable("SHLVL", create_variable_tables(0));
+	if (temp_var)
+		old_level =  ft_atoi(temp_var->value);
 	shell_level = old_level + change;
-	if (shell_level < 0)
-		shell_level = 0;
-	else if (shell_level >= 1000)
-	{
-		//internal_warning (_("shell level (%d) too high, resetting to 1"), shell_level);
-		shell_level = 1;
-	}
-	if (shell_level < 10)
-	{
-		new_level[0] = shell_level + '0';
-		new_level[1] = '\0';
-	}
-	else if (shell_level < 100)
-	{
-		new_level[0] = (shell_level / 10) + '0';
-		new_level[1] = (shell_level % 10) + '0';
-		new_level[2] = '\0';
-	}
-	else if (shell_level < 1000)
-	{
-		new_level[0] = (shell_level / 100) + '0';
-		old_level = shell_level % 100;
-		new_level[1] = (old_level / 10) + '0';
-		new_level[2] = (old_level % 10) + '0';
-		new_level[3] = '\0';
-	}
-	unbind_variable("SHLVL", minishell->global_variables);
-	temp_var = bind_variable("SHLVL", new_level, minishell->global_variables);
+	new_level = ft_itoa(shell_level);
+	unbind_variable("SHLVL", create_variable_tables(0));
+	bind_variable("SHLVL", new_level, create_variable_tables(0));
 }
 
-void	initialize_shell_variables(char **env)
+void	bind_environments(char **env)
 {
-	char		*name;
-	char		*string;
-	int			c;
-	int			char_index;
-	int			string_index;
+	char	*key;
+	char	*value;
+	int		i;
+	int		j;
 
-	minishell->last_command_exit_value = 0;
-	create_variable_tables(minishell);
-	string_index = 0;
-	while (env && (string = env[string_index++]))
+	j = -1;
+	while (env && env[++j])
 	{
-		char_index = 0;
-		name = string;
-		while ((c = *string++) && c != '=')
-			;
-		if (string[-1] == '=')
-			char_index = string - name - 1;
-		if (!char_index)
-			continue;
-		name[char_index] = '\0';
-		if (legal_identifier(name))
-			bind_variable(name, string, minishell->global_variables);
-		name[char_index] = '=';
+		key = env[j];
+		value = env[j];
+		i = 0;
+		while (*value && *value != '=')
+			value++;
+		if (value[-1] == '=')
+			i = value - key - 1;
+		if (!i)
+			continue ;
+		key[i] = '\0';
+		i = 0;
+		while (!ft_isdigit(key[0]) && (ft_isalnum(key[i]) || key[i] == '_' || key[i] == '.'))
+			i++;
+		if (i)
+			bind_variable(key, value, create_variable_tables(0));
+		key[i] = '=';
 	}
-	set_pwd(minishell);
-	execute_minirc(minishell);
-	bind_variable("PATH", DEFAULT_PATH_VALUE, minishell->global_variables);
-	bind_variable("TERM", "dumb", minishell->global_variables);
-	adjust_shell_level(1, minishell);
-	bind_variable("HOME", ft_strdup("/"), minishell->global_variables);
-	bind_variable("SHELL", "/bin/sh", minishell->global_variables);
+}
+
+void	initialize_shell_variables(char **env, int *exit_code)
+{
+	*exit_code = 0;
+	create_variable_tables(0);
+	bind_environments(env);
+	set_pwd(exit_code);
+	execute_minirc(exit_code);
+	bind_variable("PATH", DEFAULT_PATH_VALUE, create_variable_tables(0));
+	bind_variable("HOME", ft_strdup("/"), create_variable_tables(0));
+	adjust_shell_level(1);
 }
