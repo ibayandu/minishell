@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 20:03:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 10:26:22 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:59:58 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*find_in_path(const char *file)
 	v = NULL;
 	if (!file || !*file || ft_strchr(file, '/'))
 		return (NULL);
-	v = find_variable("PATH", create_variable_tables(0));
+	v = find_variable("PATH", create_tables(0));
 	if (v && v->value)
 		path_copy = ft_strdup(v->value);
 	else
@@ -71,9 +71,9 @@ static int	exec_with_path(const char *file, char *const argv[])
 		errno = ENOENT;
 		return (-1);
 	}
-	unbind_variable("_", create_variable_tables(0));
-	bind_variable("_", path, create_variable_tables(0));
-	env = make_var_export_array(create_variable_tables(0), 0);
+	unbind_variable("_", create_tables(0));
+	bind_variable("_", path, create_tables(0));
+	env = make_var_export_array(create_tables(0), 0);
 	result = execve(path, argv, env);
 	return (result);
 }
@@ -82,9 +82,9 @@ static int	exec_with_direct_file(const char *file, char *const argv[])
 {
 	char	**env;
 
-	unbind_variable("_", create_variable_tables(0));
-	bind_variable("_", (char *)file, create_variable_tables(0));
-	env = make_var_export_array(create_variable_tables(0), 0);
+	unbind_variable("_", create_tables(0));
+	bind_variable("_", (char *)file, create_tables(0));
+	env = make_var_export_array(create_tables(0), 0);
 	return (execve(file, argv, env));
 }
 

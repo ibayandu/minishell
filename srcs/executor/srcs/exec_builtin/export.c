@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 10:17:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:59:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	list_env(void)
 	char	*key;
 	char	*joined_str;
 
-	env = make_var_export_array(create_variable_tables(0), 1);
+	env = make_var_export_array(create_tables(0), 1);
 	env = strvec_sort(env, 1);
 	i = -1;
 	while (env && env[++i])
@@ -67,9 +67,9 @@ static int	ft_export_with_value(char *arg)
 				"': not a valid identifier"), 2);
 		return (1);
 	}
-	unbind_variable(ft_get_key(arg), create_variable_tables(0));
+	unbind_variable(ft_get_key(arg), create_tables(0));
 	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1,
-			create_variable_tables(0)))
+			create_tables(0)))
 		return (1);
 	return (0);
 }
@@ -90,7 +90,7 @@ static int	ft_export_without_value(char *arg)
 				"': not a valid identifier"), 2);
 		return (1);
 	}
-	if (!bind_variable(arg, NULL, create_variable_tables(0)))
+	if (!bind_variable(arg, NULL, create_tables(0)))
 		return (1);
 	return (0);
 }

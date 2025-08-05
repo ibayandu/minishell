@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 14:05:47 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 11:13:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 13:38:01 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,14 @@
 t_redirect	**push_heredoc(t_redirect *r)
 {
 	static t_redirect	*redir_stack[HEREDOC_MAX + 1];
-	static int			redir_count;
+	static int			count = 0;
 
-	if (redir_count >= HEREDOC_MAX)
+	if (!r)
+	{
+		count = 0;
+		redir_stack[0] = NULL;
+	}
+	if (count >= HEREDOC_MAX)
 	{
 		ft_putendl_fd("minishell: maximum here-document count exceeded",
 			STDERR_FILENO);
@@ -35,11 +40,9 @@ t_redirect	**push_heredoc(t_redirect *r)
 	}
 	if (r)
 	{
-		redir_stack[redir_count++] = r;
-		redir_stack[redir_count] = NULL;
+		redir_stack[count++] = r;
+		redir_stack[count] = NULL;
 	}
-	else
-		redir_count = 0;
 	return (redir_stack);
 }
 

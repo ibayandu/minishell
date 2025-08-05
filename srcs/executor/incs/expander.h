@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 12:46:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:58:00 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_word_list	*list_string(char *string, char *seperators);
 char		*string_list(t_word_list *list);
 char		*string_extract_double_quoted(char *string, int *sindex);
 
-t_hash		*create_variable_tables(int table_index);
+t_hash		*create_tables(int table_index);
 t_variable	*find_variable(const char *name, t_hash *ht);
 t_variable	*bind_variable(const char *name, char *value, t_hash *ht);
 int			unbind_variable(const char *name, t_hash *ht);

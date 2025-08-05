@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 22:31:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 10:08:45 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:59:27 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	builtin_unalias(char **argv)
 		return (0);
 	while (argv[i])
 	{
-		unbind_variable(argv[i], create_variable_tables(1));
+		unbind_variable(argv[i], create_tables(1));
 		i++;
 	}
 	return (0);

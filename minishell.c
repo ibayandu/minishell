@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 12:47:43 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 12:58:04 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <readline/readline.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
 #include "libgnl.h"
 #include "libft.h"
 #include "libmem.h"
@@ -21,7 +23,7 @@
 #include "parser.h"
 #include "executor.h"
 #include "minishell.h"
-#include "init.c"
+#include "init.h"
 
 static void	handle_sigint(int sig)
 {
@@ -73,7 +75,7 @@ int	main(void)
 		{
 			cmd = parse_inputunit(&exit_code);
 			if (!ft_heredoc(&exit_code) && cmd)
-				exit_code = execute_command(cmd);
+				exit_code = execute_command(cmd, &exit_code);
 		}
 		if (exit_code == 130)
 			printf("\n");

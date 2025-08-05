@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:02:38 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/03 00:22:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 13:40:30 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ int	ft_heredoc(int *exit_code)
 	int		status;
 
 	status = 1;
-	if (!push_heredoc(NULL))
+	if (!*push_heredoc(NULL))
+		return (0);
+	if (!exit_code)
 		return (0);
 	pid = gather_here_documents_fd(&paths, push_heredoc(NULL));
 	if (pid < 0)

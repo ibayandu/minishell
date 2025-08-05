@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:47:39 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 12:48:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:59:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	builtin_unset(char **argv)
 		return (0);
 	while (argv[i])
 	{
-		unbind_variable(argv[i], create_variable_tables(0));
+		unbind_variable(argv[i], create_tables(0));
 		i++;
 	}
 	return (0);

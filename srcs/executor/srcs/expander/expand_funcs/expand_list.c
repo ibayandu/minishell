@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 10:56:12 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 10:00:07 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static char	*expand_alias(char *word, int *expanded_something)
 {
 	t_variable	*v;
 
-	v = find_variable(word, create_variable_tables(1));
+	v = find_variable(word, create_tables(1));
 	if (v)
 	{
 		*expanded_something = 1;

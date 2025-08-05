@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:38:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 10:31:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 10:00:12 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_word	*param_expand(char *string, int *sindex, int *expanded_something, int exi
 				*expanded_something = 0;
 			goto return0;
 		}
-		var = find_variable(temp1, create_variable_tables(0));
+		var = find_variable(temp1, create_tables(0));
 		if (var && var->value)
 		{
 			temp = var->value;

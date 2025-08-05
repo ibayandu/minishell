@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:34:23 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 13:02:29 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:58:24 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	list_alias(void)
 	char	*key;
 	char	*joined_str;
 
-	alias = make_var_export_array(create_variable_tables(1), 1);
+	alias = make_var_export_array(create_tables(1), 1);
 	alias = strvec_sort(alias, 1);
 	i = -1;
 	while (alias && alias[++i])
@@ -66,9 +66,9 @@ static int	ft_alias_with_value(char *arg)
 				"': invalid alias name"), 2);
 		return (1);
 	}
-	unbind_variable(ft_get_key(arg), create_variable_tables(1));
+	unbind_variable(ft_get_key(arg), create_tables(1));
 	if (!bind_variable(ft_get_key(arg), ft_strchr(arg, '=') + 1,
-			create_variable_tables(1)))
+			create_tables(1)))
 		return (1);
 	return (0);
 }
@@ -78,7 +78,7 @@ static int	ft_alias_without_value(char *arg)
 	t_variable	*v;
 	char		*joined_str;
 
-	v = find_variable(arg, create_variable_tables(1));
+	v = find_variable(arg, create_tables(1));
 	if (!v)
 	{
 		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: alias: ", arg),

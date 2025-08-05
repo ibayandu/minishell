@@ -32,10 +32,10 @@ $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 
 clean:
-	$(RM) build/objs
+	$(RM) $(OBJS)
 
-fclean:
-	$(RM) build
+fclean: clean
+	$(RM) $(NAME)
 
 re: fclean all
 

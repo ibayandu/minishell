@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:21:11 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/03 01:22:04 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:58:32 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	run_builtin(t_simple_cmd *cmd)
 {
 	const char	*name;
 
-	unbind_variable("_", create_variable_tables(0));
+	unbind_variable("_", create_tables(0));
 	if (!cmd || !cmd->words || !cmd->words->word)
 		return (1);
 	name = cmd->words->word->word;

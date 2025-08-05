@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 09:41:56 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 09:58:55 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ static void	update_directory_vars(char *oldpwd)
 
 	if (oldpwd)
 	{
-		unbind_variable("OLDPWD", create_variable_tables(0));
-		bind_variable("OLDPWD", oldpwd, create_variable_tables(0));
+		unbind_variable("OLDPWD", create_tables(0));
+		bind_variable("OLDPWD", oldpwd, create_tables(0));
 	}
 	cwd = ft_strdup(getcwd(NULL, 0));
 	if (*cwd)
 	{
-		unbind_variable("PWD", create_variable_tables(0));
-		bind_variable("PWD", cwd, create_variable_tables(0));
+		unbind_variable("PWD", create_tables(0));
+		bind_variable("PWD", cwd, create_tables(0));
 	}
 }
 
@@ -38,7 +38,7 @@ static int	change_directory(const char *path)
 	char		*oldpwd;
 
 	oldpwd = NULL;
-	v = find_variable("PWD", create_variable_tables(0));
+	v = find_variable("PWD", create_tables(0));
 	if (v)
 		oldpwd = v->value;
 	if (chdir(path) != 0)
@@ -71,7 +71,7 @@ static const char	*get_cd_target_path(char **argv)
 
 	if (argv[1])
 		return (argv[1]);
-	v = find_variable("HOME", create_variable_tables(0));
+	v = find_variable("HOME", create_tables(0));
 	if (v && v->value)
 		return (v->value);
 	ft_putendl_fd("minishell: cd: HOME not set", STDERR_FILENO);

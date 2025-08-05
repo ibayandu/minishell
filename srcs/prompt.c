@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   decode_prompt.c                                    :+:      :+:    :+:   */
+/*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 06:29:32 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/07/05 21:17:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 12:38:19 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 #include <x86_64-linux-gnu/bits/local_lim.h>
-#include "libft.h"
+#include "libmem.h"
 #include "minishell.h"
 #include "expander.h"
 
@@ -38,7 +38,7 @@ static char	*get_short_pwd(void)
 	home_len = ft_strlen(home);
 	if (ft_strncmp(cwd, home, home_len) == 0)
 	{
-		short_pwd = ft_malloc(ft_strlen(cwd) - home_len + 2);
+		short_pwd = mem_malloc(ft_strlen(cwd) - home_len + 2);
 		if (!short_pwd)
 			return (ft_strdup(cwd));
 		short_pwd[0] = '~';
@@ -102,7 +102,7 @@ static char	*replace_escape_sequences(const char *input)
 	size_t	j;
 	char	*result;
 
-	result = ft_malloc(ft_strlen(input) * 2 + 1);
+	result = mem_malloc(ft_strlen(input) * 2 + 1);
 	if (!result)
 		return (NULL);
 	i = 0;
@@ -157,7 +157,7 @@ char	*decode_prompt(const char *ps1)
 	if (!ps1)
 		return (NULL);
 	len = ft_strlen(ps1);
-	tmp = ft_malloc(len + 1);
+	tmp = mem_malloc(len + 1);
 	if (!tmp)
 		return (NULL);
 	i = 0;
@@ -193,7 +193,7 @@ char	*decode_prompt(const char *ps1)
 	if (!decoded)
 		return (NULL);
 	// 3) PS1 özel kısaltmalarını işleme
-	result = ft_malloc(ft_strlen(decoded) * 4 + 1); // geniş yer ayırdık
+	result = mem_malloc(ft_strlen(decoded) * 4 + 1); // geniş yer ayırdık
 	if (!result)
 		return (NULL);
 	i = 0;
@@ -255,13 +255,13 @@ char	*decode_prompt(const char *ps1)
 	return (result);
 }
 
-char	*get_prompt(t_minishell *minishell)
+char	*get_prompt(void)
 {
 	t_variable	*v;
 	char		*ps1;
 
 	ps1 = PS1;
-	v = find_variable("PS1", minishell->global_variables);
+	v = find_variable("PS1", create_tables(0));
 	if (v)
 		ps1 = v->value;
 	ps1 = ft_strtrim(ps1, "\"'");
