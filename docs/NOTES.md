@@ -57,3 +57,5 @@
  * There is five different types of nodes that we will be need in our AST: Command, Redirection, Pipe, Subshell, Logical.
 
  *
+
+env --unset=GTK_IM_MODULE terminator
