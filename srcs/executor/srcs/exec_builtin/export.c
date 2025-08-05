@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 09:59:22 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 17:58:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static char	*ft_get_key(char *arg)
 {
-	int		i;
+	size_t	i;
 	char	*ret;
 
 	ret = ft_strdup(arg);
@@ -26,7 +26,7 @@ static char	*ft_get_key(char *arg)
 	i = 0;
 	while (ft_isalnum(ret[i]) || ret[i] == '_')
 		i++;
-	if (i)
+	if (i && i == ft_strlen(ret))
 		return (ret);
 	return (NULL);
 }
@@ -76,7 +76,7 @@ static int	ft_export_with_value(char *arg)
 
 static int	ft_export_without_value(char *arg)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	if (arg && *arg && !ft_isdigit(arg[i]))
@@ -84,7 +84,7 @@ static int	ft_export_without_value(char *arg)
 		while (ft_isalnum(arg[i]) || arg[i] == '_')
 			i++;
 	}
-	if (!i)
+	if (i != ft_strlen(arg))
 	{
 		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg),
 				"': not a valid identifier"), 2);

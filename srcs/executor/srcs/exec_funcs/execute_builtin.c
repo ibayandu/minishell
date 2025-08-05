@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:23:42 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/03 01:46:16 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 17:50:37 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ static int	is_builtin(const char *name)
 
 int	execute_builtin(t_simple_cmd *cmd, int fds[3], int *exit_code)
 {
+	int	ret;
+
+	ret = 0;
 	if (!cmd->words || !cmd->words->word || !cmd->words->word->word)
 		return (-1);
 	if (!is_builtin(cmd->words->word->word))
@@ -71,7 +74,8 @@ int	execute_builtin(t_simple_cmd *cmd, int fds[3], int *exit_code)
 		restore_fds(fds);
 		return (1);
 	}
+	ret = run_builtin(cmd);
 	if (restore_fds(fds))
 		return (1);
-	return (run_builtin(cmd));
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:34:23 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/05 09:58:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 17:51:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static char	*ft_get_key(char *arg)
 {
-	int		i;
+	size_t	i;
 	char	*ret;
 
 	ret = ft_strdup(arg);
@@ -26,7 +26,7 @@ static char	*ft_get_key(char *arg)
 	i = 0;
 	while (ft_isalnum(ret[i]) || ret[i] == '_' || ret[i] == '.')
 		i++;
-	if (i)
+	if (i == ft_strlen(ret))
 		return (ret);
 	return (NULL);
 }

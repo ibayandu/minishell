@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 20:03:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 09:59:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 18:40:57 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static char	*find_in_path(const char *file)
 	while (dir)
 	{
 		full_path = build_full_path(dir, file);
-		if (full_path && access(full_path, X_OK) == 0)
+		if (full_path && access(full_path, F_OK) == 0)
 			return (full_path);
 		dir = ft_strtok(NULL, ":");
 	}
