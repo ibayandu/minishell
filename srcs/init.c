@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 11:48:19 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/05 17:02:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 22:37:47 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,11 @@ static void	bind_environments(char **env)
 		key = env[j];
 		value = env[j];
 		i = 0;
-		while (*value && *value != '=')
-			value++;
-		value++;
-		if (value[-1] == '=')
-			i = value - key - 1;
-		if (!i)
-			continue ;
-		key[i] = '\0';
-		i = 0;
-		while (!ft_isdigit(key[0]) && (ft_isalnum(key[i])
+		while (key[i] != '=' && !ft_isdigit(key[0]) && (ft_isalnum(key[i])
 				|| key[i] == '_' || key[i] == '.'))
 			i++;
-		if (i == ft_strlen(key))
-			bind_variable(key, value, create_tables(0));
+		if (key[i] == '=')
+			bind_variable(ft_strndup(key, i), value + i + 1, create_tables(0));
 	}
 }
 

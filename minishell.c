@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 17:42:23 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 21:56:04 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*ft_repl()
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handle_sigint);
 	if (isatty(STDIN_FILENO))
-		line = mem_absorb(readline(get_prompt()));
+		line = mem_absorb(readline("minishell> "));
 	else
 		line = gnl_one(STDIN_FILENO);
 	if (!line)
