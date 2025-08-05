@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:47:08 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/02 16:23:41 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 16:53:29 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	read_fd(int fd, char **content, char *buffer)
 
 char	*gnl_one(int fd)
 {
-	static char	*content;
+	static char	*content = NULL;
 	char		*next_line;
 	char		*buffer;
 	ssize_t		bytes_read;

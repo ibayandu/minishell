@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 20:11:17 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/05 10:00:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/05 17:05:19 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ t_variable	*find_variable(const char *name, t_hash *ht)
 
 t_hash	*create_tables(int table_index)
 {
-	static t_hash	*variable_tables[2];
+	static t_hash	*variable_tables[2] = {0};
 	int				i;
 
 	i = -1;
-	while (!variable_tables[++i])
+	while (!variable_tables[++i] && i < 2)
 		variable_tables[i] = hash_create(VARIABLES_HASH_BUCKETS);
 	return (variable_tables[table_index]);
 }
