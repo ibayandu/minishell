@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/06 21:05:46 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/06 21:10:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ static t_word_list	*copy_word_list(t_word_list *list)
 	if (!list)
 		return (NULL);
 	new_list = NULL;
-	new_word = make_bare_word(list->word);
+	new_word = make_bare_word(list->word->word);
 	new_word->flags = list->word->flags;
 	tl = make_word_list(new_word, new_list);
 	new_list = tl;
 	while (list)
 	{
-		new_word = make_bare_word(list->word);
+		new_word = make_bare_word(list->word->word);
 		new_word->flags = list->word->flags;
 		tl->next = make_word_list(new_word, NULL);
 		tl = tl->next;
