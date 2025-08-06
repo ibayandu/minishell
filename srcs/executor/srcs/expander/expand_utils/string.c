@@ -6,12 +6,25 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 13:04:57 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/06 20:52:32 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
 #include "expander.h"
+
+t_word_list *list_append(t_word_list *head, t_word_list *tail)
+{
+	t_word_list	*t_head;
+
+	if (!head)
+		return (tail);
+	t_head = head;
+	while (t_head->next)
+		t_head = t_head->next;
+	t_head->next = tail;
+	return (head);
+}
 
 static int	get_list_len(t_word_list *list)
 {
