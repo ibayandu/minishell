@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/06 21:05:46 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/06 21:11:51 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,34 @@
 #include "parser_makers.h"
 #include "expander.h"
 
+static t_word	*copy_word(t_word *w)
+{
+	t_word	*new_word;
+
+	new_word = make_bare_word(w->word);
+	new_word->flags = w->flags;
+	return (new_word);
+}
+
 static t_word_list	*copy_word_list(t_word_list *list)
 {
 	t_word_list	*new_list;
-	t_word		*new_word;
 	t_word_list	*tl;
 
-	if (!list)
-		return (NULL);
 	new_list = NULL;
-	new_word = make_bare_word(list->word);
-	new_word->flags = list->word->flags;
-	tl = make_word_list(new_word, new_list);
-	new_list = tl;
+	tl = NULL;
 	while (list)
 	{
-		new_word = make_bare_word(list->word);
-		new_word->flags = list->word->flags;
-		tl->next = make_word_list(new_word, NULL);
-		tl = tl->next;
+		if (!new_list)
+		{
+			tl = make_word_list(copy_word(list->word), new_list);
+			new_list = tl;
+		}
+		else
+		{
+			tl->next = make_word_list(copy_word(list->word), NULL);
+			tl = tl->next;
+		}
 		list = list->next;
 	}
 	return (new_list);
@@ -63,15 +72,14 @@ static void denull_list(t_word_list **list)
 	}
 }
 
-static char	*expand_alias(char *word, int *is_expand)
+static char	*expand_alias(char *word, int *expanded_something)
 {
 	t_variable	*v;
 
-	*is_expand = 0;
 	v = find_variable(word, create_tables(1));
 	if (v)
 	{
-		*is_expand = 1;
+		*expanded_something = 1;
 		return (v->value);
 	}
 	return (word);
@@ -81,22 +89,25 @@ static t_word_list	*shell_expand_word_list(t_word_list *tlist, int *exit_code)
 {
 	t_word_list	*expanded;
 	t_word_list	*new_list;
+	t_word_list	*next;
 	t_word_list	*temp_list;
-	int			is_expand;
+	int			expanded_something;
 
 	new_list = NULL;
 	while (tlist)
 	{
+		next = tlist->next;
+		expanded_something = 0;
 		if (!new_list)
-			tlist->word->word = expand_alias(tlist->word->word, &is_expand);
-		expanded = expand_word(tlist->word, 0, &is_expand, *exit_code);
+			tlist->word->word = expand_alias(tlist->word->word, &expanded_something);
+		expanded = expand_word(tlist->word, 0, &expanded_something, *exit_code);
 		if (!expanded)
 		{
 			tlist->word->word = NULL;
 			*exit_code = 1;
 			return (NULL);
 		}
-		if (is_expand)
+		if (expanded_something)
 			temp_list = word_list_split(expanded);
 		else
 			temp_list = expanded;
@@ -105,7 +116,7 @@ static t_word_list	*shell_expand_word_list(t_word_list *tlist, int *exit_code)
 		if (expanded && expanded->word && tlist && tlist->word)
 			expanded->word->flags = tlist->word->flags;
 		new_list = list_append(expanded, new_list);
-		tlist = tlist->next;
+		tlist = next;
 	}
 	if (new_list)
 		new_list = ft_revword(new_list);
