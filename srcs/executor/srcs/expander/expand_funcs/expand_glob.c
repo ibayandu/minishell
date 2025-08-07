@@ -15,7 +15,7 @@ static t_word_list *restar_list(t_word_list *list)
             char *s = cur->word->word;
             for (size_t i = 0; s[i] != '\0'; i++)
             {
-                if (s[i] == '\001')
+                if (s[i] == CTLESC)
                     s[i] = '*';
             }
         }
@@ -93,7 +93,7 @@ static int	glob_pattern(char *string)
 		return (0);
 	i = -1;
 	while (string[++i])
-		if (string[i] == '\001')
+		if (string[i] == CTLESC)
 			return (1);
 	return (0);
 }
@@ -102,9 +102,9 @@ static int	glob_match(const char *pattern, const char *string)
 {
 	if (!*pattern)
 		return (*string);
-	if (*pattern == '\001')
+	if (*pattern == CTLESC)
 	{
-		while (*pattern == '\001')
+		while (*pattern == CTLESC)
 			pattern++;
 		if (!*pattern)
 			return (0);
@@ -319,10 +319,10 @@ static char	**glob_filename(char *pathname, int flags)
 		last_starstar = 0;
 		d = directory_name;
 		dflags = flags;
-		if (d[0] == '\001' && d[1] == '\001' && (d[2] == '/' || d[2] == '\0'))
+		if (d[0] == CTLESC && d[1] == CTLESC && (d[2] == '/' || d[2] == '\0'))
 		{
 			p = d;
-			while (d[0] == '\001' && d[1] == '\001' && (d[2] == '/' || d[2] == '\0'))
+			while (d[0] == CTLESC && d[1] == CTLESC && (d[2] == '/' || d[2] == '\0'))
 			{
 				p = d;
 				if (d[2])
@@ -344,7 +344,7 @@ static char	**glob_filename(char *pathname, int flags)
 		{
 			dl = directory_len;
 			prev = dl;
-			while (dl >= 4 && d[dl - 1] == '/' && d[dl - 2] == '\001' && d[dl - 3] == '\001' && d[dl - 4] == '/')
+			while (dl >= 4 && d[dl - 1] == '/' && d[dl - 2] == CTLESC && d[dl - 3] == CTLESC && d[dl - 4] == '/')
 			{
 				prev = dl;
 				dl -= 3;
@@ -376,7 +376,7 @@ static char	**glob_filename(char *pathname, int flags)
 			shouldbreak = 0;
 			dname = directories[i];
 			dflags = flags & ~(GX_ALLDIRS|GX_ADDCURDIR);
-			if (filename[0] == '\001' && filename[1] == '\001' && filename[2] == '\0')
+			if (filename[0] == CTLESC && filename[1] == CTLESC && filename[2] == '\0')
 				dflags |= GX_ALLDIRS|GX_ADDCURDIR;
 			if (dname[0] == '\0' && filename[0])
 			{
@@ -403,7 +403,7 @@ static char	**glob_filename(char *pathname, int flags)
 				temp_results = glob_vector(filename, dname, dflags);
 			if (temp_results)
 			{
-				if ((dflags & GX_ALLDIRS) && filename[0] == '\001' && filename[1] == '\001' && (filename[2] == '\0' || filename[2] == '/'))
+				if ((dflags & GX_ALLDIRS) && filename[0] == CTLESC && filename[1] == CTLESC && (filename[2] == '\0' || filename[2] == '/'))
 				{
 					if ((dflags & GX_NULLDIR) && (flags & GX_NULLDIR) == 0 && temp_results && *temp_results && **temp_results == 0)
 					{
@@ -449,7 +449,7 @@ static char	**glob_filename(char *pathname, int flags)
 		dflags = flags;
 		if (!directory_len)
 			dflags |= GX_NULLDIR;
-		if (!ft_strncmp(filename, "\001\001", 2) && filename[2] != '\001')
+		if (!ft_strncmp(filename, "\001\001", 2) && filename[2] != CTLESC)
 		{
 			dflags |= GX_ALLDIRS|GX_ADDCURDIR;
 			if (!directory_len && !(flags & GX_ALLDIRS))

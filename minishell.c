@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 21:56:04 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/07 07:28:58 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	handle_sigint(int sig)
 	rl_redisplay();
 }
 
-char	*ft_repl()
+char	*ft_repl(void)
 {
 	char	*line;
 

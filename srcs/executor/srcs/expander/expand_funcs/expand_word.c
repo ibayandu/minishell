@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:15:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 12:52:16 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/07 07:27:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,149 +15,74 @@
 #include "parser_utils.h"
 #include "expander.h"
 
-static char *replace_star_unquoted(const char *input)
+static char	*add_char(char *dst, char *src, int *srcindex, int quoted)
 {
-	size_t len = ft_strlen(input);
-	char *out  = mem_malloc(len + 1);
-	if (!out) return NULL;
+	int	len;
 
-	int in_sq = 0, in_dq = 0;
-	size_t j = 0;
-
-	for (size_t i = 0; i < len; i++)
-	{
-		char c = input[i];
-		if (c == '\'' && !in_dq)
-		{
-			// toggle single‑quote state, copy the quote itself
-			in_sq = !in_sq;
-			out[j++] = c;
-		}
-		else if (c == '"' && !in_sq)
-		{
-			// toggle double‑quote state, copy the quote
-			in_dq = !in_dq;
-			out[j++] = c;
-		}
-		else if (c == '*' && !in_sq && !in_dq)
-		{
-			// unquoted '*': replace
-			out[j++] = '\001';
-		}
-		else
-		{
-			// any other character
-			out[j++] = c;
-		}
-	}
-
-	out[j] = '\0';
-	return out;
+	if (src[*srcindex] == '*' && !quoted)
+		src[*srcindex] = CTLESC;
+	len = ft_strlen(dst);
+	dst = mem_realloc(dst, len + 2);
+	dst[len] = src[*srcindex];
+	*srcindex += 1;
+	dst[len + 1] = '\0';
+	return (dst);
 }
 
-t_word_list	*expand_word(t_word *word, int quoted, int *expanded_something, int exit_code)
+static void	decide_flags(char *str, int *flags)
+{
+	if (str && *str && !ft_strchr(str, '*'))
+		*flags &= ~F_QUOTED;
+	else if (str && *str)
+		*flags |= F_QUOTED;
+}
+
+static char	*handle_quotes(t_word *word, int *sindex, int exit_code, int quoted)
 {
 	t_word_list	*list;
-	t_word		*tword;
 	char		*temp;
-	char		*string;
+
+	if (word->word[*sindex] == '"')
+	{
+		temp = string_extract_double_quoted(word->word, sindex);
+		decide_flags(temp, &word->flags);
+		list = NULL;
+		if (temp && *temp)
+			list = expand_word(make_bare_word(temp), 1, NULL, exit_code);
+		if (list && list->next)
+			return (string_list(list));
+		else if (list)
+			return (ft_strdup(list->word->word));
+	}
+	else if (word->word[*sindex] == '\'' && !quoted)
+	{
+		temp = string_extract_single_quoted(word->word, sindex);
+		decide_flags(temp, &word->flags);
+		if (temp && *temp)
+			return (temp);
+	}
+	return (NULL);
+}
+
+t_word_list	*expand_word(t_word *word, int quoted, int *is_expand,
+	int exit_code)
+{
 	char		*istring;
-	int			istring_size;
-	int			istring_index;
 	int			sindex;
 
 	sindex = 0;
-	string = word->word;
 	istring = ft_strdup("");
-	istring_size = 1;
-	istring_index = 0;
-	temp = NULL;
-	while (1)
+	while (word->word && word->word[sindex])
 	{
-		if (!string)
-			break;
-		if (!string[sindex])
-			break;
-		else if (string[sindex] == '$')
-		{
-			if (expanded_something)
-				*expanded_something = 1;
-			tword = param_expand(string, &sindex, expanded_something, exit_code);
-			if (!tword)
-				return (NULL);
-			temp = tword ? tword->word : NULL;
-			temp = replace_star_unquoted(temp);
-			istring = ft_strjoin(istring, temp);
-			istring_size = ft_strlen(istring) + 1;
-			istring_index += ft_strlen(temp);
-			temp = NULL;
-			continue ;
-		}
-		else if (string[sindex] == '*' && !quoted)
-			string[sindex] = '\001';
-		else if (string[sindex] == '"')
-		{
-			temp = string_extract_double_quoted(string, &sindex);
-			if (temp && *temp)
-			{
-				if (!ft_strchr(temp, '*'))
-					word->flags &= ~F_QUOTED;
-				else
-					word->flags |= F_QUOTED;
-				tword = alloc_word_desc();
-				tword->word = temp;
-				temp = NULL;
-				list = expand_word(tword, 1, NULL, exit_code);
-				if (!list)
-					return (NULL);
-			}
-			else
-				list = NULL;
-			if (list)
-			{
-				if (list->next)
-					temp = string_list(list);
-				else
-					temp = ft_strdup(list->word->word);
-			}
-			else
-				temp = NULL;
-			if (temp)
-			{
-				istring = ft_strjoin(istring, temp);
-				istring_size = ft_strlen(istring) + 1;
-				istring_index += ft_strlen(temp);
-			}
-			continue ;
-		}
-		else if (string[sindex] == '\'' && !quoted)
-		{
-			temp = mem_malloc(ft_strlen(&string[sindex]) + 1);
-			temp = string_extract_single_quoted(string, &sindex);
-			if (!*temp)
-				temp = NULL;
-			if (temp)
-			{
-				if (!ft_strchr(temp, '*'))
-					word->flags &= ~F_QUOTED;
-				else
-					word->flags |= F_QUOTED;
-				istring = ft_strjoin(istring, temp);
-				istring_size = ft_strlen(istring) + 1;
-				istring_index += ft_strlen(temp);
-			}
-			continue ;
-		}
-		istring = mem_realloc(istring, istring_size + 1);
-		istring[istring_index++] = string[sindex];
-		istring[istring_index] = '\0';
-		istring_size++;
-		sindex++;
+		if (word->word[sindex] == '$')
+			istring = ft_strjoin(istring, param_expand(word->word, &sindex,
+						is_expand, exit_code)->word);
+		else if (word->word[sindex] == '"'
+			|| (word->word[sindex] == '\'' && !quoted))
+			istring = ft_strjoin(istring,
+					handle_quotes(word, &sindex, exit_code, quoted));
+		else
+			istring = add_char(istring, word->word, &sindex, quoted);
 	}
-	tword = alloc_word_desc();
-	tword->word = istring;
-	istring = NULL;
-	list = make_word_list(tword, NULL);
-	tword->flags = word->flags;
-	return (list);
+	return (make_word_list(make_word(istring, word->flags), NULL));
 }

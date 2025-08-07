@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/05 09:58:00 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/07 07:30:15 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define DEFAULT_INITIAL_ARRAY_SIZE 112
 # define VARIABLES_HASH_BUCKETS 1024
+# define CTLESC '\001'
 
 // Globbing Flags
 # define GX_ALLDIRS 4
@@ -62,10 +63,11 @@ t_word_list	*glob_list(t_word_list *tlist);
 t_word_list	*list_append(t_word_list *head, t_word_list *tail);
 t_word_list	*expand_word_list(t_word_list *list, int *exit_code);
 
-t_word		*param_expand(char *str, int *sindex, int *expand, int exit_code);
-
 char		*redir_expand(t_word *redir_word, int *exit_code);
 char		*here_document_expand(t_word *document, int *exit_code);
+
+t_word		*param_expand(char *str, int *sindex, int *is_expand,
+				int exit_code);
 
 t_word_list	*expand_word(t_word *word, int quoted, int *expand, int exit_code);
 

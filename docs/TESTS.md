@@ -101,3 +101,22 @@ minishell> echo hi > $a b
 minishell>
 
 ------------------------
+
+minishell> echo $
+$
+minishell> echo $""
+
+minishell> echo $''
+
+minishell> echo $'USER'
+USER
+minishell> echo $'$USER'
+$USER
+minishell> echo $"$USER"
+yzeybek
+minishell> echo $'"$USER"'
+"$USER"
+minishell> echo $"'$USER'"
+'yzeybek'
+
+-------------------------

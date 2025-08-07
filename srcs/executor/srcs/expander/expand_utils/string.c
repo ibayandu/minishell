@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/06 20:52:32 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/07 07:28:21 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
 #include "expander.h"
 
-t_word_list *list_append(t_word_list *head, t_word_list *tail)
+t_word_list	*list_append(t_word_list *head, t_word_list *tail)
 {
 	t_word_list	*t_head;
 

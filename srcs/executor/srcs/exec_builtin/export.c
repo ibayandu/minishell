@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 17:58:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/07 03:28:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	builtin_export(char **argv)
 {
 	int		i;
 	char	*eq;
+	int		ret;
 
 	if (!argv[1])
 	{
@@ -106,20 +107,15 @@ int	builtin_export(char **argv)
 		return (0);
 	}
 	i = 1;
+	ret = 0;
 	while (argv[i])
 	{
 		eq = ft_strchr(argv[i], '=');
-		if (eq)
-		{
-			if (ft_export_with_value(argv[i]))
-				return (1);
-		}
-		else
-		{
-			if (ft_export_without_value(argv[i]))
-				return (1);
-		}
+		if (eq && ft_export_with_value(argv[i]))
+			ret = 1;
+		else if (!eq && ft_export_without_value(argv[i]))
+			ret = 1;
 		i++;
 	}
-	return (0);
+	return (ret);
 }
