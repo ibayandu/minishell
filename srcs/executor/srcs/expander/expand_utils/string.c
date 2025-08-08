@@ -6,27 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:06:26 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/07 07:28:21 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/08 15:04:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
 #include "expander.h"
 
-t_word_list	*list_append(t_word_list *head, t_word_list *tail)
-{
-	t_word_list	*t_head;
-
-	if (!head)
-		return (tail);
-	t_head = head;
-	while (t_head->next)
-		t_head = t_head->next;
-	t_head->next = tail;
-	return (head);
-}
-
-static int	get_list_len(t_word_list *list)
+static int	string_get_list_len(t_word_list *list)
 {
 	t_word_list	*t;
 	int			res;
@@ -54,7 +41,7 @@ char	*string_list(t_word_list *list)
 		return (NULL);
 	if (!list->next)
 		return (ft_strdup(list->word->word));
-	result_size = get_list_len(list);
+	result_size = string_get_list_len(list);
 	result = mem_malloc(result_size + 1);
 	r = result;
 	t = list;

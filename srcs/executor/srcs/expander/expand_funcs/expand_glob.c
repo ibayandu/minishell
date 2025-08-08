@@ -1,125 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_glob.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/08 14:21:53 by yzeybek           #+#    #+#             */
+/*   Updated: 2025/08/08 15:06:41 by yzeybek          ###   ########.tr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <sys/stat.h>
 #include <dirent.h>
 #include "libmem.h"
 #include "parser_makers.h"
 #include "expander.h"
-
-static t_word_list *restar_list(t_word_list *list)
-{
-    t_word_list *cur = list;
-
-    while (cur)
-    {
-        if (cur->word && cur->word->word)
-        {
-            char *s = cur->word->word;
-            for (size_t i = 0; s[i] != '\0'; i++)
-            {
-                if (s[i] == CTLESC)
-                    s[i] = '*';
-            }
-        }
-        cur = cur->next;
-    }
-
-    return list;
-}
-
-static char	**ft_realloc_vec(char **old, size_t new_items)
-{
-	size_t	old_count;
-	char	**newv;
-	size_t	to_copy;
-	size_t	i;
-
-	old_count = 0;
-	if (old)
-		while (old[old_count])
-			old_count++;
-	newv = mem_malloc((new_items + 1) * sizeof *newv);
-	to_copy = old_count < new_items ? old_count : new_items;
-	i = -1;
-	while (++i < to_copy)
-		newv[i] = old[i];
-	i = to_copy - 1;
-	while (++i < new_items)
-		newv[i] = NULL;
-	newv[new_items] = NULL;
-	return (newv);
-}
-
-static char	*sh_makepath(char *path, char *dir, int flags)
-{
-	int			dirlen;
-	int			pathlen;
-	char		*ret;
-	char		*xpath;
-	char		*xdir;
-	char		*r;
-	char		*s;
-
-	if (!path || !*path)
-		xpath = ft_strdup(".");
-	else if ((flags & MP_IGNDOT) && path[0] == '.' && (path[1] == '\0' || (path[1] == '/' && path[2] == '\0')))
-		xpath = ft_strdup("");
-	else
-		xpath = path;
-	pathlen = ft_strlen(xpath);
-	xdir = dir;
-	dirlen = ft_strlen(xdir);
-	if ((flags & MP_RMDOT) && dir[0] == '.' && dir[1] == '/')
-	{
-		xdir += 2;
-		dirlen -= 2;
-	}
-	ret = mem_malloc(2 + dirlen + pathlen);
-	r = ret;
-	s = xpath;
-	while (*s)
-		*r++ = *s++;
-	if (s > xpath && s[-1] != '/')
-		*r++ = '/';
-	s = xdir;
-	while ((*r++ = *s++))
-		;
-	return (ret);
-}
-
-static int	glob_pattern(char *string)
-{
-	int		i;
-
-	if (!string)
-		return (0);
-	i = -1;
-	while (string[++i])
-		if (string[i] == CTLESC)
-			return (1);
-	return (0);
-}
-
-static int	glob_match(const char *pattern, const char *string)
-{
-	if (!*pattern)
-		return (*string);
-	if (*pattern == CTLESC)
-	{
-		while (*pattern == CTLESC)
-			pattern++;
-		if (!*pattern)
-			return (0);
-		while (*string)
-		{
-			if (!glob_match(pattern, string))
-				return (0);
-			string++;
-		}
-		return (glob_match(pattern, string));
-	}
-	if (*string && *pattern == *string)
-		return (glob_match(pattern + 1, string + 1));
-	return (1);
-}
 
 char	**glob_vector(char *pat, char *dir, int flags)
 {
@@ -507,5 +402,5 @@ t_word_list	*glob_list(t_word_list *tlist)
 		glob_array = NULL;
 		tlist = next;
 	}
-	return (restar_list(output_list));
+	return (glob_restar(output_list));
 }

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/07 07:30:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/08 15:12:49 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ typedef struct s_finddir_args
 char		**glob_vector(char *pat, char *dir, int flags);
 t_word_list	*glob_list(t_word_list *tlist);
 
-t_word_list	*list_append(t_word_list *head, t_word_list *tail);
 t_word_list	*expand_word_list(t_word_list *list, int *exit_code);
 
 char		*redir_expand(t_word *redir_word, int *exit_code);
@@ -74,6 +73,9 @@ t_word_list	*expand_word(t_word *word, int quoted, int *expand, int exit_code);
 int			testdir(char *dir);
 char		**arraydir(char *dir, char **array);
 t_list		*finddir(t_finddir_args args);
+
+t_word_list	*list_append(t_word_list *head, t_word_list *tail);
+char		**ft_realloc_vec(char **old, size_t new_items);
 
 char		**make_var_export_array(t_hash *ht, int is_export);
 
