@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:21:53 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/10 04:01:28 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 16:25:41 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	unsigned int	i;
 	int				pflags;
 	t_list			*tmplink;
+	t_finddir_args	args;
 
 	lastlink = 0;
 	count = 0;
@@ -77,13 +78,15 @@ char	**glob_vector(char *pat, char *dir, int flags)
 		d = opendir(dir);
 		if (!d)
 			return (NULL);
-		add_current = ((flags & (GX_ALLDIRS|GX_ADDCURDIR)) == (GX_ALLDIRS|GX_ADDCURDIR));
+		add_current = ((flags & (GX_ALLDIRS | GX_ADDCURDIR))
+				== (GX_ALLDIRS | GX_ADDCURDIR));
 		while (1)
 		{
 			dp = readdir(d);
 			if (!dp)
 				break ;
-			if (pat[0] != '.' && dp->d_name[0] == '.' && (dp->d_name[1] == 0 || (dp->d_name[1] == '.' && dp->d_name[2] == 0)))
+			if (pat[0] != '.' && dp->d_name[0] == '.' && (!dp->d_name[1]
+					|| (dp->d_name[1] == '.' && !dp->d_name[2])))
 				continue ;
 			if (flags & GX_ALLDIRS)
 			{
@@ -97,15 +100,13 @@ char	**glob_vector(char *pat, char *dir, int flags)
 			}
 			if (flags & GX_ALLDIRS)
 			{
-				if (testdir(subdir) == 0)
+				if (!testdir(subdir))
 				{
-					t_finddir_args args = {
-						.pat = pat,
-						.sdir = subdir,
-						.flags = (flags & ~GX_ADDCURDIR),
-						.ep = &e,
-						.np = &ndirs
-					};
+					args.pat = pat;
+					args.sdir = subdir;
+					args.flags = (flags & ~GX_ADDCURDIR);
+					args.ep = &e;
+					args.np = &ndirs;
 					dirlist = finddir(args);
 					if (ndirs)
 					{
@@ -122,7 +123,8 @@ char	**glob_vector(char *pat, char *dir, int flags)
 				count++;
 				continue ;
 			}
-			if (!ft_strchr(pat, '.') && (ft_strcmp(dp->d_name, ".") == 0 || ft_strcmp(dp->d_name, "..") == 0))
+			if (!ft_strchr(pat, '.') && (!ft_strcmp(dp->d_name, ".")
+					|| !ft_strcmp(dp->d_name, "..")))
 				continue ;
 			if (dp->d_name[0] == '.' && pat[0] != '.')
 				continue ;
@@ -163,6 +165,43 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	return (name_vector);
 }
 
+static char	**handle_empty_filename(char *directory_name, char **result)
+{
+	result = ft_realloc_vec(result, 2 * sizeof(char *));
+	result[0] = ft_strdup(directory_name);
+	result[1] = NULL;
+	return (result);
+}
+
+static char	**handle_only_filename(char *directory_name, int directory_len,
+	char *filename, int flags)
+{
+	char	**result;
+	int		dflags;
+	char	**temp_results;
+
+	dflags = flags;
+	if (!directory_len)
+		dflags |= GX_NULLDIR;
+	if (!ft_strncmp(filename, DCTLESC, 2) && filename[2] != CTLESC)
+	{
+		dflags |= GX_ALLDIRS | GX_ADDCURDIR;
+		if (!directory_len && !(flags & GX_ALLDIRS))
+			dflags &= ~GX_ADDCURDIR;
+	}
+	if (!directory_len)
+		temp_results = glob_vector(filename, ".", dflags);
+	else
+		temp_results = glob_vector(filename, directory_name, dflags);
+	if (!temp_results)
+		return (NULL);
+	if (dflags & GX_ALLDIRS)
+		result = arraydir("", temp_results);
+	else
+		result = arraydir(directory_name, temp_results);
+	return (result);
+}
+
 static char	**glob_filename(char *pathname, int flags)
 {
 	char			**result;
@@ -180,7 +219,6 @@ static char	**glob_filename(char *pathname, int flags)
 	int				last_starstar;
 	int				dl;
 	int				prev;
-	int				free_dirname;
 	char			**temp_results;
 	int				shouldbreak;
 	int				n;
@@ -197,16 +235,12 @@ static char	**glob_filename(char *pathname, int flags)
 		filename = pathname;
 		directory_name = "";
 		directory_len = 0;
-		free_dirname = 0;
 	}
 	else
 	{
-		directory_len = (filename - pathname) + 1;
-		directory_name = mem_malloc(directory_len + 1);
+		directory_len = (filename++ - pathname) + 1;
+		directory_name = mem_calloc(directory_len + 1, 1);
 		ft_memcpy(directory_name, pathname, directory_len);
-		directory_name[directory_len] = '\0';
-		free_dirname = 1;
-		++filename;
 	}
 	if (directory_len > 0 && glob_pattern(directory_name) == 1)
 	{
@@ -214,10 +248,10 @@ static char	**glob_filename(char *pathname, int flags)
 		last_starstar = 0;
 		d = directory_name;
 		dflags = flags;
-		if (d[0] == CTLESC && d[1] == CTLESC && (d[2] == '/' || d[2] == '\0'))
+		if (d[0] == CTLESC && d[1] == CTLESC && (d[2] == '/' || !d[2]))
 		{
 			p = d;
-			while (d[0] == CTLESC && d[1] == CTLESC && (d[2] == '/' || d[2] == '\0'))
+			while (d[0] == CTLESC && d[1] == CTLESC && (d[2] == '/' || !d[2]))
 			{
 				p = d;
 				if (d[2])
@@ -226,61 +260,59 @@ static char	**glob_filename(char *pathname, int flags)
 					while (*d == '/')
 						d++;
 					if (!*d)
-						break;
+						break ;
 				}
 			}
-			if (!*d)
-				all_starstar = 1;
+			all_starstar = 1 * !*d;
 			d = p;
-			dflags |= GX_ALLDIRS|GX_ADDCURDIR;
+			dflags |= GX_ALLDIRS | GX_ADDCURDIR;
 			directory_len = ft_strlen(d);
 		}
 		if (!all_starstar)
 		{
 			dl = directory_len;
 			prev = dl;
-			while (dl >= 4 && d[dl - 1] == '/' && d[dl - 2] == CTLESC && d[dl - 3] == CTLESC && d[dl - 4] == '/')
+			while (dl >= 4 && d[dl - 1] == '/' && d[dl - 2] == CTLESC
+				&& d[dl - 3] == CTLESC && d[dl - 4] == '/')
 			{
 				prev = dl;
 				dl -= 3;
 			}
-			if (dl != directory_len)
-				last_starstar = 1;
+			last_starstar = 1 * dl != directory_len;
 			directory_len = prev;
 		}
-		if (last_starstar && directory_len > 4 && ft_strncmp(filename, "\001\001", 2) == 0)
-			directory_len -= 3;
+		directory_len -= 3 * last_starstar && directory_len > 4
+			&& !ft_strncmp(filename, DCTLESC, 2);
 		if (d[directory_len - 1] == '/')
 			d[directory_len - 1] = '\0';
 		directories = glob_filename(d, dflags);
-		if (free_dirname)
+		if (ft_strrchr(pathname, '/'))
 			directory_name = NULL;
-		else if (directories == NULL)
+		else if (!directories || !*directories)
 			return (NULL);
-		else if (*directories == NULL)
-			return (NULL);
-		if (all_starstar && ft_strncmp(filename, "\001\001", 2) == 0)
+		if (all_starstar && !ft_strncmp(filename, DCTLESC, 2))
 		{
-			directory_name = NULL;
-			directory_len = 0;
-			goto only_filename;
+			if (!*filename)
+				return (handle_empty_filename(NULL, result));
+			return (handle_only_filename(NULL, 0, filename, flags));
 		}
 		i = -1;
 		while (directories[++i])
 		{
 			shouldbreak = 0;
 			dname = directories[i];
-			dflags = flags & ~(GX_ALLDIRS|GX_ADDCURDIR);
-			if (filename[0] == CTLESC && filename[1] == CTLESC && filename[2] == '\0')
-				dflags |= GX_ALLDIRS|GX_ADDCURDIR;
-			if (dname[0] == '\0' && filename[0])
+			dflags = flags & ~(GX_ALLDIRS | GX_ADDCURDIR);
+			if (filename[0] == CTLESC && filename[1] == CTLESC
+				&& !filename[2])
+				dflags |= GX_ALLDIRS | GX_ADDCURDIR;
+			if (!dname[0] && filename[0])
 			{
 				dflags |= GX_NULLDIR;
 				dname = ".";
 			}
-			if (all_starstar && (dflags & GX_NULLDIR) == 0)
+			if (all_starstar && !(dflags & GX_NULLDIR))
 			{
-				if (testdir(dname) == -2 && testdir(dname) == 0)
+				if (testdir(dname) == -2 && !testdir(dname))
 				{
 					if (filename[0] != 0)
 						temp_results = NULL;
@@ -298,17 +330,21 @@ static char	**glob_filename(char *pathname, int flags)
 				temp_results = glob_vector(filename, dname, dflags);
 			if (temp_results)
 			{
-				if ((dflags & GX_ALLDIRS) && filename[0] == CTLESC && filename[1] == CTLESC && (filename[2] == '\0' || filename[2] == '/'))
+				if ((dflags & GX_ALLDIRS) && filename[0] == CTLESC
+					&& filename[1] == CTLESC && (!filename[2]
+						|| filename[2] == '/'))
 				{
-					if ((dflags & GX_NULLDIR) && (flags & GX_NULLDIR) == 0 && temp_results && *temp_results && **temp_results == 0)
+					if ((dflags & GX_NULLDIR) && !(flags & GX_NULLDIR)
+						&& temp_results && *temp_results
+						&& !**temp_results)
 					{
 						n = 0;
 						while (temp_results[n] && *temp_results[n])
 							n++;
 						i = n;
-						do
+						temp_results[i - n] = temp_results[i];
+						while (temp_results[i++])
 							temp_results[i - n] = temp_results[i];
-						while (temp_results[i++]);
 						array = temp_results;
 						shouldbreak = 1;
 					}
@@ -320,87 +356,59 @@ static char	**glob_filename(char *pathname, int flags)
 				l = 0;
 				while (array[l])
 					++l;
-				result = ft_realloc_vec(result, (result_size + l) * sizeof(char *));
+				result = ft_realloc_vec(result,
+						(result_size + l) * sizeof(char *));
 				l = -1;
 				while (array[++l])
 					result[result_size++ - 1] = array[l];
 				result[result_size - 1] = NULL;
 				if (shouldbreak)
-					break;
+					break ;
 			}
 		}
 		return (result);
 	}
-	only_filename:
 	if (!*filename)
-	{
-		result = ft_realloc_vec(result, 2 * sizeof(char *));
-		result[0] = ft_strdup(directory_name);
-		result[1] = NULL;
-		return (result);
-	}
-	else
-	{
-		dflags = flags;
-		if (!directory_len)
-			dflags |= GX_NULLDIR;
-		if (!ft_strncmp(filename, "\001\001", 2) && filename[2] != CTLESC)
-		{
-			dflags |= GX_ALLDIRS|GX_ADDCURDIR;
-			if (!directory_len && !(flags & GX_ALLDIRS))
-				dflags &= ~GX_ADDCURDIR;
-		}
-		temp_results = glob_vector(filename, (!directory_len ? "." : directory_name), dflags);
-		if (!temp_results)
-			return (NULL);
-		result = arraydir((dflags & GX_ALLDIRS) ? "" : directory_name, temp_results);
-		return (result);
-	}
-	return (NULL);
+		return (handle_empty_filename(directory_name, result));
+	return (handle_only_filename(directory_name, directory_len,
+			filename, flags));
 }
 
-
-t_word_list	*glob_list(t_word_list *tlist)
+static t_word_list	*glob_append(char *word)
 {
 	char		**glob_array;
 	int			glob_index;
+	t_word_list	*res;
+
+	glob_array = strvec_sort(glob_filename(word, 0), 1);
+	if (!glob_array)
+		glob_array = mem_calloc(sizeof(char *), 1);
+	res = NULL;
+	glob_index = -1;
+	while (glob_array[++glob_index])
+		res = make_word_list(make_bare_word(glob_array[glob_index]), res);
+	return (res);
+}
+
+t_word_list	*glob_list(t_word_list *tlist)
+{
 	t_word_list	*glob_list;
 	t_word_list	*output_list;
 	t_word_list	*next;
 
 	output_list = NULL;
-	glob_array = NULL;
 	while (tlist)
 	{
 		next = tlist->next;
 		if (glob_pattern(tlist->word->word))
-		{
-			glob_array = glob_filename(tlist->word->word, 0);
-			if (glob_array && glob_array[0])
-				glob_array = strvec_sort(glob_array, 1);
-			if (!glob_array)
-			{
-				glob_array = mem_malloc(sizeof(char *));
-				glob_array[0] = NULL;
-			}
-			glob_list = NULL;
-			glob_index = -1;
-			while (glob_array[++glob_index])
-				glob_list = make_word_list(make_bare_word(glob_array[glob_index]), glob_list);
-			if (glob_list)
-				output_list = list_append(glob_list, output_list);
-			else
-			{
-				tlist->next = output_list;
-				output_list = tlist;
-			}
-		}
+			glob_list = glob_append(tlist->word->word);
+		if (glob_pattern(tlist->word->word) && glob_list)
+			output_list = list_append(glob_list, output_list);
 		else
 		{
 			tlist->next = output_list;
 			output_list = tlist;
 		}
-		glob_array = NULL;
 		tlist = next;
 	}
 	return (glob_restar(output_list));

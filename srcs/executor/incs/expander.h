@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/10 03:29:46 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 15:10:36 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define DEFAULT_INITIAL_ARRAY_SIZE 112
 # define VARIABLES_HASH_BUCKETS 1024
 # define CTLESC '\001'
+# define DCTLESC "\001\001"
 
 // Globbing Flags
 # define GX_ALLDIRS 4
