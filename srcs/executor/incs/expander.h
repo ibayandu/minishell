@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/08 15:12:49 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/10 03:29:46 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ t_word_list	*expand_word(t_word *word, int quoted, int *expand, int exit_code);
 int			testdir(char *dir);
 char		**arraydir(char *dir, char **array);
 t_list		*finddir(t_finddir_args args);
+
+t_word_list	*glob_restar(t_word_list *list);
+int			glob_pattern(char *string);
+int			glob_match(const char *pattern, const char *string);
+char		*glob_makepath(char *path, char *dir, int flags);
 
 t_word_list	*list_append(t_word_list *head, t_word_list *tail);
 char		**ft_realloc_vec(char **old, size_t new_items);

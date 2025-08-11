@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:06:51 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/08 15:30:59 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/10 03:32:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
 #include "expander.h"
 
-static t_word_list	*glob_restar(t_word_list *list)
+t_word_list	*glob_restar(t_word_list *list)
 {
 	t_word_list	*cur;
 	char		*s;
@@ -38,7 +38,7 @@ static t_word_list	*glob_restar(t_word_list *list)
 	return (list);
 }
 
-static int	glob_pattern(char *string)
+int	glob_pattern(char *string)
 {
 	int	i;
 
@@ -51,7 +51,7 @@ static int	glob_pattern(char *string)
 	return (0);
 }
 
-static int	glob_match(const char *pattern, const char *string)
+int	glob_match(const char *pattern, const char *string)
 {
 	if (!*pattern)
 		return (*string);
@@ -74,7 +74,7 @@ static int	glob_match(const char *pattern, const char *string)
 	return (1);
 }
 
-static char	*glob_makepath(char *path, char *dir, int flags)
+char	*glob_makepath(char *path, char *dir, int flags)
 {
 	int		dirlen;
 	char	*ret;
@@ -98,5 +98,6 @@ static char	*glob_makepath(char *path, char *dir, int flags)
 		*r++ = '/';
 	while (*dir)
 		*r++ = *dir++;
+	*r = '\0';
 	return (ret);
 }

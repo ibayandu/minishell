@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:21:53 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/08 15:06:41 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/10 04:01:28 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	**glob_vector(char *pat, char *dir, int flags)
 					pflags = 0;
 				if (flags & GX_NULLDIR)
 					pflags |= MP_IGNDOT;
-				subdir = sh_makepath(dir, dp->d_name, pflags);
+				subdir = glob_makepath(dir, dp->d_name, pflags);
 			}
 			if (flags & GX_ALLDIRS)
 			{
@@ -358,6 +358,7 @@ static char	**glob_filename(char *pathname, int flags)
 	}
 	return (NULL);
 }
+
 
 t_word_list	*glob_list(t_word_list *tlist)
 {

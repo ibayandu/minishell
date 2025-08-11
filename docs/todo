@@ -1,7 +1,3 @@
- Team
- - Decide similar approach on directory structor for total structs and definations
-
- !
- - handle star as glob char problem with CTLEC char
-
-
+!
+ - fix the echo **/"*.c" output
+ - norm the globber...

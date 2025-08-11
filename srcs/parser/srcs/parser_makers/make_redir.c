@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 12:37:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 04:22:58 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	handle_sigint(int sig)
 }
 
 t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
-				t_word *dest_and_filename)
+				t_word *dest_and_filename, int flags)
 {
 	t_redirect	*temp;
 
@@ -39,17 +39,13 @@ t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
 	temp->redirectee = dest_and_filename;
 	temp->here_doc_eof = NULL;
 	temp->redir_type = redir_type;
-	temp->flags = 0;
+	temp->flags = flags;
 	temp->next = NULL;
-	if (redir_type == REDIR_OUTPUT)
-		temp->flags = O_TRUNC | O_WRONLY | O_CREAT;
-	else if (redir_type == REDIR_INPUT)
-		temp->flags = O_RDONLY;
-	else if (redir_type == REDIR_APPEND)
-		temp->flags = O_APPEND | O_WRONLY | O_CREAT;
-	else if (redir_type == REDIR_UNTIL)
-		;
-	else
+	if (!(redir_type == REDIR_APPEND
+			|| redir_type == REDIR_INPUT
+			|| redir_type == REDIR_OUTPUT
+			|| redir_type == REDIR_UNTIL
+			|| redir_type == REDIR_IGNORE))
 		return (NULL);
 	return (temp);
 }

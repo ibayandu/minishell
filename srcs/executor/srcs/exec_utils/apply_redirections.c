@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:55:25 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 10:25:12 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 04:02:03 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,25 @@ static int	apply_output_redirection(t_redirect *r, int *exit_code)
 {
 	int	fd;
 
+	if (r->flags)
+		fd = r->flags;
 	r->redirectee->word = redir_expand(r->redirectee, exit_code);
 	if (r->redirectee->word)
 	{
-		if (r->redir_type == REDIR_OUTPUT)
+		if (!r->flags && r->redir_type == REDIR_OUTPUT)
 			fd = open(r->redirectee->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else if (r->redir_type == REDIR_APPEND)
+		else if (!r->flags && r->redir_type == REDIR_APPEND)
 			fd = open(r->redirectee->word, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
+		else if (!r->flags)
 			return (1);
 		if (fd >= 0)
 		{
+			close(ft_atoi(r->redirectee->word));
 			dup2(fd, ft_atoi(r->redirector->word));
 			close(fd);
 		}
 		else
-		{
-			perror(ft_strjoin("minishell: ", r->redirectee->word));
-			return (1);
-		}
+			return (perror(ft_strjoin("minishell: ", r->redirectee->word)), 1);
 	}
 	else
 		return (1);
@@ -73,16 +73,18 @@ static int	apply_input_redirection(t_redirect *r, int *exit_code)
 
 	if (r->redir_type == REDIR_INPUT)
 	{
+		if (r->flags)
+			fd = r->flags;
 		r->redirectee->word = redir_expand(r->redirectee, exit_code);
 		if (r->redirectee->word)
 		{
-			fd = open(r->redirectee->word, O_RDONLY);
+			if (!r->flags)
+				fd = open(r->redirectee->word, O_RDONLY);
 			if (fd < 0)
-			{
-				perror(ft_strjoin("minishell: ", r->redirectee->word));
-				return (1);
-			}
-			dup2(fd, STDIN_FILENO);
+				return (perror(ft_strjoin("minishell: ", r->redirectee->word))
+					, 1);
+			close(ft_atoi(r->redirectee->word));
+			dup2(fd, ft_atoi(r->redirector->word));
 			close(fd);
 		}
 		else
@@ -104,8 +106,15 @@ int	apply_redirections(t_redirect *r, int *exit_code)
 				return (1);
 		}
 		else if (r->redir_type == REDIR_INPUT || r->redir_type == REDIR_UNTIL)
+		{
 			if (apply_input_redirection(r, exit_code))
 				return (1);
+		}
+		else if (r->redir_type == REDIR_IGNORE)
+		{
+			close(r->flags);
+			close(ft_atoi(r->redirectee->word));
+		}
 		r = r->next;
 	}
 	return (0);

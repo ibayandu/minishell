@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:23:42 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/07 03:26:20 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 03:47:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,33 @@
 #include "exec_builtin.h"
 #include "exec_funcs.h"
 
-static int	store_fds(int fds[3])
+static int	store_fds(int fds_store[3])
 {
-	fds[0] = dup(STDIN_FILENO);
-	if (fds[0] < 0)
+	fds_store[0] = dup(STDIN_FILENO);
+	if (fds_store[0] < 0)
 		return (1);
-	fds[1] = dup(STDOUT_FILENO);
-	if (fds[1] < 0)
+	fds_store[1] = dup(STDOUT_FILENO);
+	if (fds_store[1] < 0)
 		return (1);
-	fds[2] = dup(STDERR_FILENO);
-	if (fds[2] < 0)
+	fds_store[2] = dup(STDERR_FILENO);
+	if (fds_store[2] < 0)
 		return (1);
 	return (0);
 }
 
-static int	restore_fds(int fds[3])
+static int	restore_fds(int fds_store[3])
 {
-	if (dup2(fds[0], STDIN_FILENO) < 0)
+	if (dup2(fds_store[0], STDIN_FILENO) < 0)
 		return (1);
-	if (close(fds[0]) < 0)
+	if (close(fds_store[0]) < 0)
 		return (1);
-	if (dup2(fds[1], STDOUT_FILENO) < 0)
+	if (dup2(fds_store[1], STDOUT_FILENO) < 0)
 		return (1);
-	if (close(fds[1]) < 0)
+	if (close(fds_store[1]) < 0)
 		return (1);
-	if (dup2(fds[2], STDERR_FILENO) < 0)
+	if (dup2(fds_store[2], STDERR_FILENO) < 0)
 		return (1);
-	if (close(fds[2]) < 0)
+	if (close(fds_store[2]) < 0)
 		return (1);
 	return (0);
 }
@@ -58,24 +58,45 @@ static int	is_builtin(const char *name)
 		|| !ft_strncmp(name, "unalias", 8));
 }
 
-int	execute_builtin(t_simple_cmd *cmd, int fds[3], int *exit_code)
+static t_redirect	*clear_redirects(t_redirect *redirects)
+{
+	t_redirect	*temp;
+
+	temp = redirects;
+	while (temp)
+	{
+		if (temp->next && temp->next->redir_type == REDIR_IGNORE)
+			temp->next = temp->next->next;
+		temp->redirectee->word = "-1";
+		temp = temp->next;
+	}
+	return (redirects);
+}
+
+int	execute_builtin(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 {
 	int	ret;
+	int	fds_store[3];
 
 	ret = 0;
 	if (!cmd->words || !cmd->words->word || !cmd->words->word->word)
 		return (-1);
 	if (!is_builtin(cmd->words->word->word))
 		return (-1);
-	if (store_fds(fds))
+	if (store_fds(fds_store))
 		return (1);
+	if (apply_redirections(clear_redirects(redirects), exit_code))
+	{
+		restore_fds(fds_store);
+		return (1);
+	}
 	if (apply_redirections(cmd->redirects, exit_code))
 	{
-		restore_fds(fds);
+		restore_fds(fds_store);
 		return (1);
 	}
 	ret = run_builtin(cmd);
-	if (restore_fds(fds))
+	if (restore_fds(fds_store))
 		return (1);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 13:03:32 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 03:09:39 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,12 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects,
 
 int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 {
-	int		fds[3];
 	int		ret;
 	pid_t	pid;
 	int		status;
 
 	cmd->words = expand_word_list(cmd->words, exit_code);
-	ret = execute_builtin(cmd, fds, exit_code);
+	ret = execute_builtin(cmd, redirects, exit_code);
 	if (ret != -1)
 		return (ret);
 	signal(SIGQUIT, SIG_IGN);
@@ -110,11 +109,11 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 		return (1);
 	if (pid == 0)
 		child_process(cmd, redirects, exit_code);
-	if (waitpid(pid, &status, 0) < 0)
+	if ((!redirects || !redirects->flags) && waitpid(pid, &status, 0) < 0)
 		return (1);
-	if (WIFEXITED(status))
+	if ((!redirects || !redirects->flags) && WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
+	if ((!redirects || !redirects->flags) && WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:26:22 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/02 18:15:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 04:23:10 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_command	*make_simple_command(t_element *element, t_command *command);
 t_command	*clean_simple_command(t_command *command);
 
 t_redirect	*make_redirection(t_word *source, t_redir_type redir_type,
-				t_word *dest_and_filename);
+				t_word *dest_and_filename, int flags);
 void		make_here_document_fd(t_redirect *temp, int fd);
 
 #endif // PARSER_MAKERS_H
