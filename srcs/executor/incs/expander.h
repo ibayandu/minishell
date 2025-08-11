@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/11 15:10:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 17:24:56 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_finddir_args
 	int		*np;
 }			t_finddir_args;
 
+char		**glob_filename(char *pathname, int flags);
 char		**glob_vector(char *pat, char *dir, int flags);
 t_word_list	*glob_list(t_word_list *tlist);
 
@@ -84,6 +85,7 @@ t_word_list	*list_append(t_word_list *head, t_word_list *tail);
 char		**ft_realloc_vec(char **old, size_t new_items);
 
 char		**make_var_export_array(t_hash *ht, int is_export);
+int			strvec_len(char **array);
 
 char		**strvec_sort(char **input, int is_asc);
 

@@ -6,14 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:40:03 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 12:54:17 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/11 17:17:33 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
 #include "expander.h"
 
-static int	strvec_len(char **array)
+int	strvec_len(char **array)
 {
 	int	i;
 
