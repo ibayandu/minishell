@@ -6,27 +6,52 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:00:01 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/08 15:30:07 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/12 15:01:59 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
 #include "expander.h"
 
-t_word_list	*list_append(t_word_list *head, t_word_list *tail)
+int	strvec_len(char **array)
 {
-	t_word_list	*t_head;
+	int	i;
 
-	if (!head)
-		return (tail);
-	t_head = head;
-	while (t_head->next)
-		t_head = t_head->next;
-	t_head->next = tail;
-	return (head);
+	if (!array)
+		return (0);
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
 }
 
-char	**ft_realloc_vec(char **old, size_t new_items)
+char	**strvec_shift(char **vec)
+{
+	size_t	i;
+	int		n;
+
+	n = 0;
+	while (vec[n] && *vec[n])
+		n++;
+	i = n;
+	vec[i - n] = vec[i];
+	while (vec[i++])
+		vec[i - n] = vec[i];
+	return (vec);
+}
+
+char	**strvec_cpy(char **dest, char **src)
+{
+	int	i;
+
+	i = -1;
+	while (src[++i])
+		dest[i] = src[i];
+	dest[i] = NULL;
+	return (dest);
+}
+
+char	**strvec_realloc(char **old, size_t new_items)
 {
 	size_t	old_count;
 	char	**newv;

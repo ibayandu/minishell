@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:21:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/11 17:24:18 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/12 22:10:28 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static char	**handle_empty_filename(char *directory_name, char **result)
 {
-	result = ft_realloc_vec(result, 2 * sizeof(char *));
+	result = strvec_realloc(result, 2 * sizeof(char *));
 	*result = ft_strdup(directory_name);
 	result[1] = NULL;
 	return (result);
@@ -50,159 +50,157 @@ static char	**handle_only_filename(char *directory_name, int directory_len,
 	return (result);
 }
 
-char	**glob_filename(char *pathname, int flags)
+static void	all_dctlesc(t_glob_state *glob_state, int flags)
 {
-	char			**result;
-	int				result_size;
-	char			*directory_name;
-	char			*filename;
-	char			*dname;
-	int				directory_len;
-	int				dflags;
-	char			**directories;
-	char			*d;
-	char			*p;
-	unsigned int	i;
-	int				all_starstar;
-	int				last_starstar;
-	int				dl;
-	int				prev;
-	char			**temp_results;
-	int				shouldbreak;
-	int				n;
-	char			**array;
-	unsigned int	l;
+	char	*p;
 
-	result = mem_malloc(sizeof(char *));
-	result_size = 1;
-	*result = NULL;
-	directory_name = NULL;
-	filename = ft_strrchr(pathname, '/');
-	if (!filename)
+	glob_state->flags = flags;
+	if (!ft_strncmp(glob_state->filename, DCTLESC, 2)
+		&& (glob_state->dirname[2] == '/' || !glob_state->dirname[2]))
 	{
-		filename = pathname;
-		directory_name = "";
-		directory_len = 0;
-	}
-	else
-	{
-		directory_len = (filename++ - pathname) + 1;
-		directory_name = mem_calloc(directory_len + 1, 1);
-		ft_memcpy(directory_name, pathname, directory_len);
-	}
-	if (directory_len > 0 && glob_pattern(directory_name) == 1)
-	{
-		all_starstar = 0;
-		last_starstar = 0;
-		d = directory_name;
-		dflags = flags;
-		if (*d == CTLESC && d[1] == CTLESC && (d[2] == '/' || !d[2]))
+		p = glob_state->dirname;
+		while (!ft_strncmp(glob_state->filename, DCTLESC, 2)
+			&& (glob_state->dirname[2] == '/' || !glob_state->dirname[2]))
 		{
-			p = d;
-			while (*d == CTLESC && d[1] == CTLESC && (d[2] == '/' || !d[2]))
+			p = glob_state->dirname;
+			if (glob_state->dirname[2])
 			{
-				p = d;
-				if (d[2])
-				{
-					d += 3;
-					while (*d == '/')
-						d++;
-					if (!*d)
-						break ;
-				}
-			}
-			all_starstar = 1 * !*d;
-			d = p;
-			dflags |= GX_ALLDIRS | GX_ADDCURDIR;
-			directory_len = ft_strlen(d);
-		}
-		if (!all_starstar)
-		{
-			dl = directory_len;
-			prev = dl;
-			while (dl >= 4 && d[dl - 1] == '/' && d[dl - 2] == CTLESC
-				&& d[dl - 3] == CTLESC && d[dl - 4] == '/')
-			{
-				prev = dl;
-				dl -= 3;
-			}
-			last_starstar = 1 * dl != directory_len;
-			directory_len = prev;
-		}
-		directory_len -= 3 * last_starstar && directory_len > 4
-			&& !ft_strncmp(filename, DCTLESC, 2);
-		if (d[directory_len - 1] == '/')
-			d[directory_len - 1] = '\0';
-		directories = glob_filename(d, dflags);
-		if (ft_strrchr(pathname, '/'))
-			directory_name = NULL;
-		else if (!directories || !*directories)
-			return (NULL);
-		if (all_starstar && !ft_strncmp(filename, DCTLESC, 2) && !*filename)
-			return (handle_empty_filename(NULL, result));
-		else if (all_starstar && !ft_strncmp(filename, DCTLESC, 2))
-			return (handle_only_filename(NULL, 0, filename, flags));
-		i = -1;
-		while (directories[++i])
-		{
-			shouldbreak = 0;
-			dname = directories[i];
-			dflags = flags & ~(GX_ALLDIRS | GX_ADDCURDIR);
-			if (*filename == CTLESC && filename[1] == CTLESC
-				&& !filename[2])
-				dflags |= GX_ALLDIRS | GX_ADDCURDIR;
-			if (!*dname && *filename)
-			{
-				dflags |= GX_NULLDIR;
-				dname = ".";
-			}
-			if (all_starstar && !(dflags & GX_NULLDIR)
-				&& testdir(dname) == -2 && !testdir(dname) && *filename)
-				temp_results = NULL;
-			else if (all_starstar && !(dflags & GX_NULLDIR)
-				&& testdir(dname) == -2 && !testdir(dname))
-				temp_results = handle_empty_filename("", NULL);
-			else
-				temp_results = glob_vector(filename, dname, dflags);
-			if (temp_results)
-			{
-				if ((dflags & GX_ALLDIRS) && *filename == CTLESC
-					&& filename[1] == CTLESC && (!filename[2]
-						|| filename[2] == '/'))
-				{
-					if ((dflags & GX_NULLDIR) && !(flags & GX_NULLDIR)
-						&& temp_results && *temp_results
-						&& !**temp_results)
-					{
-						n = 0;
-						while (temp_results[n] && *temp_results[n])
-							n++;
-						i = n;
-						temp_results[i - n] = temp_results[i];
-						while (temp_results[i++])
-							temp_results[i - n] = temp_results[i];
-						array = temp_results;
-						shouldbreak = 1;
-					}
-					else
-						array = temp_results;
-				}
-				else
-					array = arraydir(directories[i], temp_results);
-				result = ft_realloc_vec(result,
-						(result_size + strvec_len(array)) * 8);
-				l = -1;
-				while (array[++l])
-					result[result_size++ - 1] = array[l];
-				result[result_size - 1] = NULL;
-				if (shouldbreak)
+				glob_state->dirname += 3;
+				while (*glob_state->dirname == '/')
+					glob_state->dirname++;
+				if (!*glob_state->dirname)
 					break ;
 			}
 		}
-		return (result);
+		glob_state->is_all_dctlesc = !*glob_state->dirname;
+		glob_state->dirname = p;
+		glob_state->flags |= GX_ALLDIRS | GX_ADDCURDIR;
+		glob_state->dirlen = ft_strlen(glob_state->dirname);
 	}
-	if (!*filename)
-		return (handle_empty_filename(directory_name, result));
-	return (handle_only_filename(directory_name, directory_len,
-			filename, flags));
+}
+
+static void	last_dctlesc(t_glob_state *glob_state)
+{
+	int		last_starstar;
+	int		dl;
+	int		prev;
+
+	last_starstar = 0;
+	if (!glob_state->is_all_dctlesc)
+	{
+		dl = glob_state->dirlen;
+		prev = dl;
+		while (dl >= 4 && glob_state->dirname[dl - 1] == '/'
+			&& glob_state->dirname[dl - 2] == CTLESC
+			&& glob_state->dirname[dl - 3] == CTLESC
+			&& glob_state->dirname[dl - 4] == '/')
+		{
+			prev = dl;
+			dl -= 3;
+		}
+		last_starstar = dl != glob_state->dirlen;
+		glob_state->dirlen = prev;
+	}
+	glob_state->dirlen -= 3 * last_starstar && glob_state->dirlen > 4
+		&& !ft_strncmp(glob_state->filename, DCTLESC, 2);
+	if (glob_state->dirname[glob_state->dirlen - 1] == '/')
+		glob_state->dirname[glob_state->dirlen - 1] = '\0';
+}
+
+static int	glob_should(t_glob_state *glob_state, int flags, char **temp_results)
+{
+	return (glob_state->flags & GX_NULLDIR) && !(flags & GX_NULLDIR)
+		&& temp_results && *temp_results
+		&& !**temp_results && (glob_state->flags & GX_ALLDIRS)
+		&& !ft_strncmp(glob_state->filename, DCTLESC, 2)
+		&& (!glob_state->filename[2] || glob_state->filename[2] == '/');
+}
+
+static int	glob_dir(t_glob_state *glob_state, char *dir, int flags, char ***result)
+{
+	char	**temp_results;
+	char	**array;
+
+	glob_state->flags = flags & ~(GX_ALLDIRS | GX_ADDCURDIR);
+	if (!ft_strncmp(glob_state->filename, DCTLESC, 2)
+		&& !glob_state->filename[2])
+		glob_state->flags |= GX_ALLDIRS | GX_ADDCURDIR;
+	if (!*(dir) && *glob_state->filename)
+	{
+		glob_state->flags |= GX_NULLDIR;
+		dir = ".";
+	}
+	if (glob_state->is_all_dctlesc && !(glob_state->flags & GX_NULLDIR)
+		&& testdir(dir) == -2 && !testdir(dir) && *glob_state->filename)
+		temp_results = NULL;
+	else if (glob_state->is_all_dctlesc && !(glob_state->flags & GX_NULLDIR)
+		&& testdir(dir) == -2 && !testdir(dir))
+		temp_results = handle_empty_filename("", NULL);
+	else
+		temp_results = glob_vector(glob_state->filename, dir,
+			glob_state->flags);
+	if (glob_should(glob_state, flags, temp_results))
+		array = strvec_shift(temp_results);
+	else if ((glob_state->flags & GX_ALLDIRS) && !ft_strncmp(
+			glob_state->filename, DCTLESC, 2) && (!glob_state->filename[2]
+			|| glob_state->filename[2] == '/') && temp_results)
+		array = temp_results;
+	else if (temp_results)
+		array = arraydir(dir, temp_results);
+	if (temp_results)
+		*result = strvec_cpy(strvec_realloc(*result,
+			strvec_len(*result) + strvec_len(array))
+			+ strvec_len(*result), array) - strvec_len(*result);
+	if (glob_should(glob_state, flags, temp_results))
+		return (0);
+	return (1);
+}
+
+static char	**glob_dirs(t_glob_state *glob_state, char *dirname, int dirlen, int flags)
+{
+	char	**result;
+	char	**dirs;
+	size_t	i;
+
+	result = mem_calloc(sizeof(char *), 1);
+	glob_state->dirname = dirname;
+	glob_state->dirlen = dirlen;
+	glob_state->is_all_dctlesc = 0;
+	all_dctlesc(glob_state, flags);
+	last_dctlesc(glob_state);
+	dirs = glob_filename(glob_state->dirname, glob_state->flags);
+	if (!dirs || !*dirs)
+		return (NULL);
+	if (glob_state->is_all_dctlesc && !ft_strncmp(glob_state->filename, DCTLESC, 2) && !*glob_state->filename)
+		return (handle_empty_filename(NULL, result));
+	else if (glob_state->is_all_dctlesc && !ft_strncmp(glob_state->filename, DCTLESC, 2))
+		return (handle_only_filename(NULL, 0, glob_state->filename, flags));
+	i = -1;
+	while (dirs[++i] && glob_dir(glob_state, dirs[i], flags, &result))
+		;
+	return (result);
+}
+
+char	**glob_filename(char *pathname, int flags)
+{
+	t_glob_state	*glob_state;
+	char			*dirname;
+	int				dirlen;
+
+	glob_state = mem_malloc(sizeof(t_glob_state));
+	glob_state->filename = pathname;
+	dirlen = 0;
+	dirname = "";
+	if(ft_strrchr(pathname, '/'))
+	{
+		glob_state->filename = ft_strrchr(pathname, '/');
+		dirlen = (glob_state->filename++ - pathname) + 1;
+		dirname = ft_strndup(pathname, dirlen);
+	}
+	if (dirlen > 0 && glob_pattern(dirname))
+		return (glob_dirs(glob_state, dirname, dirlen, flags));
+	if (!*glob_state->filename)
+		return (handle_empty_filename(dirname, mem_calloc(sizeof(char *), 1)));
+	return (handle_only_filename(dirname, dirlen,
+			glob_state->filename, flags));
 }

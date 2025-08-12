@@ -6,23 +6,24 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:40:03 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/11 17:17:33 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/12 15:01:55 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
 #include "expander.h"
 
-int	strvec_len(char **array)
+t_word_list	*list_append(t_word_list *head, t_word_list *tail)
 {
-	int	i;
+	t_word_list	*t_head;
 
-	if (!array)
-		return (0);
-	i = 0;
-	while (array[i])
-		i++;
-	return (i);
+	if (!head)
+		return (tail);
+	t_head = head;
+	while (t_head->next)
+		t_head = t_head->next;
+	t_head->next = tail;
+	return (head);
 }
 
 static char	*mk_env_string(const char *name, const char *value)

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/11 17:24:56 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/12 20:51:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@
 # define MP_DOCWD 2
 # define MP_RMDOT 4
 # define MP_IGNDOT 8
+
+typedef struct	s_glob_state
+{
+	int		flags;
+	char	*filename;
+	char	*dirname;
+	int		dirlen;
+	int		is_all_dctlesc;
+
+}	t_glob_state;
 
 typedef struct s_variable
 {
@@ -81,11 +91,13 @@ int			glob_pattern(char *string);
 int			glob_match(const char *pattern, const char *string);
 char		*glob_makepath(char *path, char *dir, int flags);
 
-t_word_list	*list_append(t_word_list *head, t_word_list *tail);
-char		**ft_realloc_vec(char **old, size_t new_items);
-
-char		**make_var_export_array(t_hash *ht, int is_export);
 int			strvec_len(char **array);
+char		**strvec_cpy(char **dest, char **src);
+char		**strvec_shift(char **vec);
+char		**strvec_realloc(char **old, size_t new_items);
+
+t_word_list	*list_append(t_word_list *head, t_word_list *tail);
+char		**make_var_export_array(t_hash *ht, int is_export);
 
 char		**strvec_sort(char **input, int is_asc);
 
