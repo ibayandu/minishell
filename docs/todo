@@ -6,3 +6,4 @@
  - expand '$USER' in heredoc
  - fix permission denied on directory
  with convention NOTDIR
+ - expander sorting should be case insensetive

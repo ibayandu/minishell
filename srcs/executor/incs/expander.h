@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/13 01:45:18 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/13 19:51:22 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define MP_RMDOT 4
 # define MP_IGNDOT 8
 
-typedef struct	s_glob_state
+typedef struct s_glob_state
 {
 	int		flags;
 	char	*filename;
@@ -59,17 +59,8 @@ typedef struct s_var_list
 
 }	t_var_list;
 
-typedef struct s_finddir_args
-{
-	char	*pat;
-	char	*sdir;
-	int		flags;
-	t_list	**ep;
-	int		*np;
-}			t_finddir_args;
-
 char		**glob_dirs(t_glob_state *glob_state, char *dirname, int dirlen,
-				 int flags);
+				int flags);
 char		**glob_filename(char *pathname, int flags);
 char		**glob_filename_empty(char *directory_name, char **result);
 char		**glob_filename_only(char *directory_name, int directory_len,
@@ -89,7 +80,7 @@ t_word_list	*expand_word(t_word *word, int quoted, int *expand, int exit_code);
 
 int			testdir(char *dir);
 char		**arraydir(char *dir, char **array);
-t_list		*finddir(t_finddir_args args);
+void		finddir(char **r, int *count, t_list **lastlink);
 
 t_word_list	*glob_restar(t_word_list *list);
 int			glob_pattern(char *string);
