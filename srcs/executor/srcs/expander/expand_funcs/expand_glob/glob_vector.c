@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:22:32 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/11 17:23:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/13 03:11:05 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include <sys/stat.h>
 #include "libmem.h"
 #include "expander.h"
+
+static t_list	*make_node(t_list *next, void *content, unsigned int *count)
+{
+	t_list	*res;
+
+	res = mem_malloc(sizeof(t_list));
+	res->next = next;
+	res->content = content;
+	*count += 1;
+	return (res);
+}
 
 char	**glob_vector(char *pat, char *dir, int flags)
 {
@@ -24,61 +35,29 @@ char	**glob_vector(char *pat, char *dir, int flags)
 	t_list			*e;
 	t_list			*dirlist;
 	int				ndirs;
-	t_list			*nextlink;
-	char			*nextname;
-	char			*npat;
 	char			*subdir;
 	unsigned int	count;
-	int				skip;
-	int				add_current;
 	char			**name_vector;
 	unsigned int	i;
 	int				pflags;
 	t_list			*tmplink;
 	t_finddir_args	args;
 
-	lastlink = 0;
+	lastlink = NULL;
 	count = 0;
-	skip = 0;
-	add_current = 0;
 	name_vector = NULL;
+	if ((!pat || !*pat || !glob_pattern(pat)) && testdir(dir) < 0)
+		return (NULL);
 	if (!pat || !*pat)
-	{
-		if (testdir(dir) < 0)
-			return (NULL);
-		nextlink = mem_malloc(sizeof(t_list));
-		nextlink->next = NULL;
-		lastlink = nextlink;
-		nextlink->content = ft_strdup("");
-		count = 1;
-		skip = 1;
-	}
-	if (!skip && !glob_pattern(pat))
-	{
-		if (testdir(dir) < 0)
-			return (NULL);
-		nextname = mem_malloc(ft_strlen(dir) + ft_strlen(pat) + 2);
-		npat = ft_strdup(pat);
-		ft_strcpy(nextname, dir);
-		nextname[ft_strlen(dir)] = '/';
-		ft_strcpy(nextname + ft_strlen(dir) + 1, npat);
-		if (lstat(nextname, &finfo))
-		{
-			nextlink = mem_malloc(sizeof(t_list));
-			nextlink->next = NULL;
-			lastlink = nextlink;
-			nextlink->content = npat;
-			count = 1;
-		}
-		skip = 1;
-	}
-	if (!skip)
+		lastlink = make_node(NULL, ft_strdup(""), &count);
+	else if (!glob_pattern(pat) && lstat(ft_strjoin(ft_strjoin(dir, "/"),
+		pat), &finfo))
+		lastlink = make_node(NULL, ft_strdup(pat), &count);
+	else if (glob_pattern(pat))
 	{
 		d = opendir(dir);
 		if (!d)
 			return (NULL);
-		add_current = ((flags & (GX_ALLDIRS | GX_ADDCURDIR))
-				== (GX_ALLDIRS | GX_ADDCURDIR));
 		while (1)
 		{
 			dp = readdir(d);
@@ -89,16 +68,10 @@ char	**glob_vector(char *pat, char *dir, int flags)
 				continue ;
 			if (flags & GX_ALLDIRS)
 			{
-				if (flags & GX_ALLDIRS)
-					pflags = MP_RMDOT;
-				else
-					pflags = 0;
+				pflags = 0 + (flags & GX_ALLDIRS) * MP_RMDOT;
 				if (flags & GX_NULLDIR)
 					pflags |= MP_IGNDOT;
 				subdir = glob_makepath(dir, dp->d_name, pflags);
-			}
-			if (flags & GX_ALLDIRS)
-			{
 				if (!testdir(subdir))
 				{
 					args.pat = pat;
@@ -114,44 +87,23 @@ char	**glob_vector(char *pat, char *dir, int flags)
 						count += ndirs;
 					}
 				}
-				nextlink = mem_malloc(sizeof(t_list));
-				nextname = ft_strdup(subdir);
-				nextlink->next = lastlink;
-				lastlink = nextlink;
-				nextlink->content = nextname;
-				count++;
-				continue ;
+				lastlink = make_node(lastlink, ft_strdup(subdir), &count);
 			}
-			if (!ft_strchr(pat, '.') && (!ft_strcmp(dp->d_name, ".")
-					|| !ft_strcmp(dp->d_name, "..")))
-				continue ;
-			if (*(dp->d_name) == '.' && *pat != '.')
+			if ((!ft_strchr(pat, '.') && (!ft_strcmp(dp->d_name, ".")
+					|| !ft_strcmp(dp->d_name, ".."))) || (*(dp->d_name) == '.'
+					&& *pat != '.') || flags & GX_ALLDIRS)
 				continue ;
 			if (!glob_match(pat, dp->d_name))
-			{
-				nextlink = mem_malloc(sizeof(t_list));
-				nextname = ft_strdup(dp->d_name);
-				nextlink->next = lastlink;
-				lastlink = nextlink;
-				nextlink->content = nextname;
-				count++;
-			}
+				lastlink = make_node(lastlink, ft_strdup(dp->d_name), &count);
 		}
 		closedir(d);
 	}
-	if (add_current)
-	{
-		nextname = mem_malloc(ft_strlen(dir) + 1);
-		nextlink = mem_malloc(sizeof(t_list));
-		nextlink->content = nextname;
-		nextlink->next = lastlink;
-		lastlink = nextlink;
-		if (flags & GX_NULLDIR)
-			*nextname = '\0';
-		else
-			ft_memcpy(nextname, dir, ft_strlen(dir) + 1);
-		count++;
-	}
+	if ((flags & (GX_ALLDIRS | GX_ADDCURDIR)) == (GX_ALLDIRS | GX_ADDCURDIR)
+		&& flags & GX_NULLDIR)
+			lastlink = make_node(lastlink, ft_strdup(""), &count);
+	else if ((flags & (GX_ALLDIRS | GX_ADDCURDIR)) == (GX_ALLDIRS |
+		 GX_ADDCURDIR))
+			lastlink = make_node(lastlink, ft_strdup(dir), &count);
 	name_vector = mem_malloc((count + 1) * sizeof(char *));
 	tmplink = lastlink;
 	i = -1;

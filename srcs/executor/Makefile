@@ -9,8 +9,8 @@ CFLAGS = -Wall -Werror -Wextra -g
 VPATH = srcs/exec_builtin:srcs/exec_funcs:srcs/exec_utils:srcs/expander/expand_funcs:srcs/expander/expand_utils:srcs/expander/expand_funcs/expand_glob
 SRCS = executor.c alias.c builtin.c cd.c echo.c env.c exit.c export.c pwd.c unalias.c unset.c execute_builtin.c \
 		execute_connect.c execute_simple.c execute_subshell.c apply_redirections.c build_argv.c ft_execvp.c \
-		glob_list.c glob_filename.c glob_vector.c expand_list.c expand_param.c expand_redir.c expand_word.c \
-		dir.c list.c sorter.c split.c string.c variable.c vlist.c glob.c strvec.c
+		glob_dirs.c glob_list.c glob_filename.c glob_vector.c expand_list.c expand_param.c expand_redir.c \
+		expand_word.c dir.c list.c sorter.c split.c string.c variable.c vlist.c glob.c strvec.c
 
 OBJS_DIR = build/objs
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)

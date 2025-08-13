@@ -1,5 +1,8 @@
 !
  - fix the echo **/"*.c" output
  - fix the echo **.c output
+ - fix the * operator not shown in heredoc
  - norm the globber...
  - expand '$USER' in heredoc
+ - fix permission denied on directory
+ with convention NOTDIR

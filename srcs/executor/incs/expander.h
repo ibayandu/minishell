@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:06:33 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/12 20:51:11 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/13 01:45:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,12 @@ typedef struct s_finddir_args
 	int		*np;
 }			t_finddir_args;
 
+char		**glob_dirs(t_glob_state *glob_state, char *dirname, int dirlen,
+				 int flags);
 char		**glob_filename(char *pathname, int flags);
+char		**glob_filename_empty(char *directory_name, char **result);
+char		**glob_filename_only(char *directory_name, int directory_len,
+				char *filename, int flags);
 char		**glob_vector(char *pat, char *dir, int flags);
 t_word_list	*glob_list(t_word_list *tlist);
 
