@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:21:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/15 00:15:05 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 01:36:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**glob_filename_only(char *directory_name, int directory_len,
 	if (!directory_len)
 		dflags |= GX_NULLDIR;
 	if (!ft_strncmp(filename, DCTLESC, 2) && (filename[2] == '/'
-		|| !filename[2]))
+			|| !filename[2]))
 	{
 		dflags |= GX_ALLDIRS | GX_ADDCURDIR;
 		if (!directory_len && !(flags & GX_ALLDIRS))

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/15 01:20:36 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 01:37:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
 	wait_count = 0;
 	tmp = connect;
 	while (++wait_count && tmp && tmp->first->type == CMD_CONNECT
-			&& tmp->first->value.connection->type == CNT_PIPE)
+		&& tmp->first->value.connection->type == CNT_PIPE)
 		tmp = tmp->first->value.connection;
 	execute_pipe_left(connect->first, redirects, pipefd, exit_code);
 	execute_pipe_right(connect->second, redirects, pipefd, exit_code);
