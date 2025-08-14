@@ -1,8 +1,2 @@
 !
- - expander sorting should be case insensetive
- - fix the echo **/"*.c" output
- - fix the echo **.c output
- - fix the * operator not shown in heredoc
- - expand '$USER' in heredoc
  - fix permission denied on directory
- with convention NOTDIR

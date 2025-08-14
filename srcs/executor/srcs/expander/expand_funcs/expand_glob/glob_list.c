@@ -6,12 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:21:53 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/14 01:50:54 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 01:21:29 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
-#include "parser_makers.h"
 #include "expander.h"
 
 static t_word_list	*glob_append(char *word)

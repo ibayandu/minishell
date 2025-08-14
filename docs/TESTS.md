@@ -120,3 +120,10 @@ minishell> echo $"'$USER'"
 'yzeybek'
 
 -------------------------
+
+yzeybek@ThinkPad:~/forty-two$ $USER << $USER
+> dsaas
+> $USER
+yzeybek: command not found
+
+-------------------------

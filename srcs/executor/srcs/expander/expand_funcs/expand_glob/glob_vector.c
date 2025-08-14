@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:22:32 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/14 01:08:44 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/14 23:14:19 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,9 @@ static int	init_vector(t_glob_state *const *gs, t_list **lastlink, char *pat,
 		return (1);
 	if (!((*gs)->filename) || !*((*gs)->filename))
 		*lastlink = make_node(NULL, ft_strdup(""), &((*gs)->dirlen));
-	else if (!glob_pattern((*gs)->filename)
+	else if (!(!glob_pattern((*gs)->filename)
 		&& lstat(ft_strjoin(ft_strjoin((*gs)->dirname, "/"),
-				(*gs)->filename), &finfo))
-		*lastlink = make_node(NULL, ft_strdup((*gs)->filename),
-				&((*gs)->dirlen));
-	else if (glob_pattern((*gs)->filename))
+				(*gs)->filename), &finfo)) && glob_pattern((*gs)->filename))
 		loop_dir((*gs), d, lastlink);
 	closedir(d);
 	return (0);

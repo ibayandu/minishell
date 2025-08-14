@@ -6,12 +6,10 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/06 22:58:44 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 01:21:12 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser_utils.h"
-#include "parser_makers.h"
 #include "expander.h"
 
 static t_word_list	*copy_word_list(t_word_list *list)

@@ -6,13 +6,11 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:15:59 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/07 07:27:15 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 01:21:25 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmem.h"
-#include "parser_makers.h"
-#include "parser_utils.h"
 #include "expander.h"
 
 static char	*add_char(char *dst, char *src, int *srcindex, int quoted)
