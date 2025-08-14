@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:22:32 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/13 22:02:45 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/14 01:08:44 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,42 +67,47 @@ static void	loop_dir(t_glob_state *gs, DIR *d, t_list **lastlink)
 	}
 }
 
+static int	init_vector(t_glob_state *const *gs, t_list **lastlink, char *pat,
+	char *dir)
+{
+	DIR			*d;
+	struct stat	finfo;
+
+	*lastlink = NULL;
+	(*gs)->dirname = dir;
+	(*gs)->filename = pat;
+	(*gs)->dirlen = 0;
+	d = opendir((*gs)->dirname);
+	if (((!(*gs)->filename || !*(*gs)->filename
+				|| !glob_pattern((*gs)->filename))
+			&& testdir((*gs)->dirname) < 0)
+		|| (glob_pattern((*gs)->filename) && !d))
+		return (1);
+	if (!((*gs)->filename) || !*((*gs)->filename))
+		*lastlink = make_node(NULL, ft_strdup(""), &((*gs)->dirlen));
+	else if (!glob_pattern((*gs)->filename)
+		&& lstat(ft_strjoin(ft_strjoin((*gs)->dirname, "/"),
+				(*gs)->filename), &finfo))
+		*lastlink = make_node(NULL, ft_strdup((*gs)->filename),
+				&((*gs)->dirlen));
+	else if (glob_pattern((*gs)->filename))
+		loop_dir((*gs), d, lastlink);
+	closedir(d);
+	return (0);
+}
+
 char	**glob_vector(char *pat, char *dir, int flags)
 {
-	DIR				*d;
-	t_list			*lastlink;
-	struct stat		finfo;
-	char			**name_vector;
-	int				i;
-	t_list			*tmplink;
-	t_glob_state	*glob_state;
+	t_glob_state *const	glob_state = mem_malloc(sizeof(t_glob_state));
+	t_list				*lastlink;
+	char				**name_vector;
+	t_list				*tmplink;
 
-	lastlink = NULL;
-	glob_state = mem_malloc(sizeof(t_glob_state));
-	glob_state->dirname = dir;
-	glob_state->filename = pat;
 	glob_state->flags = flags;
-	glob_state->dirlen = 0;
-	name_vector = NULL;
-	d = opendir(glob_state->dirname);
-	if (((!glob_state->filename || !*glob_state->filename
-				|| !glob_pattern(glob_state->filename))
-			&& testdir(glob_state->dirname) < 0)
-		|| (glob_pattern(glob_state->filename) && !d))
+	if (init_vector(&glob_state, &lastlink, pat, dir))
 		return (NULL);
-	if (!glob_state->filename || !*glob_state->filename)
-		lastlink = make_node(NULL, ft_strdup(""), &glob_state->dirlen);
-	else if (!glob_pattern(glob_state->filename)
-		&& lstat(ft_strjoin(ft_strjoin(glob_state->dirname, "/"),
-				glob_state->filename), &finfo))
-		lastlink = make_node(NULL, ft_strdup(glob_state->filename),
-				&glob_state->dirlen);
-	else if (glob_pattern(glob_state->filename))
-		loop_dir(glob_state, d, &lastlink);
-	closedir(d);
-	if ((glob_state->flags & (GX_ALLDIRS | GX_ADDCURDIR))
-		== (GX_ALLDIRS | GX_ADDCURDIR)
-		&& (glob_state->flags & GX_NULLDIR))
+	if ((glob_state->flags & (GX_ALLDIRS | GX_ADDCURDIR)) == (GX_ALLDIRS
+			| GX_ADDCURDIR) && (glob_state->flags & GX_NULLDIR))
 		lastlink = make_node(lastlink, ft_strdup(""), &glob_state->dirlen);
 	else if ((glob_state->flags & (GX_ALLDIRS | GX_ADDCURDIR))
 		== (GX_ALLDIRS | GX_ADDCURDIR))
@@ -110,10 +115,10 @@ char	**glob_vector(char *pat, char *dir, int flags)
 				&glob_state->dirlen);
 	name_vector = mem_malloc((glob_state->dirlen + 1) * sizeof(char *));
 	tmplink = lastlink;
-	i = -1;
-	while (++i < glob_state->dirlen)
+	glob_state->is_all_dctlesc = -1;
+	while (++glob_state->is_all_dctlesc < glob_state->dirlen)
 	{
-		name_vector[i] = tmplink->content;
+		name_vector[glob_state->is_all_dctlesc] = tmplink->content;
 		tmplink = tmplink->next;
 	}
 	name_vector[glob_state->dirlen] = NULL;
