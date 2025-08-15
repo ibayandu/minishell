@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:23:42 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/15 05:04:42 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 01:15:24 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	child_builtin(t_simple_cmd *cmd, t_redirect *redirects,
 		mem_free();
 		exit (ret);
 	}
-	return (pid);
+	return (0);
 }
 
 int	execute_builtin(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)

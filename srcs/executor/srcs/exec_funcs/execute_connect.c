@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/15 05:11:50 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 01:41:38 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
 	int				status;
 	int				wait_count;
 	t_connect_cmd	*tmp;
-	pid_t			pid;
 
 	if (pipe(pipefd) == -1)
 		return (1);
@@ -104,11 +103,10 @@ static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
 		&& tmp->first->value.connection->type == CNT_PIPE)
 		tmp = tmp->first->value.connection;
 	execute_pipe_left(connect->first, redirects, pipefd, exit_code);
-	pid = execute_pipe_right(connect->second, redirects, pipefd, exit_code);
+	execute_pipe_right(connect->second, redirects, pipefd, exit_code);
+	wait_count++;
 	while ((!redirects || !redirects->flags) && wait_count--)
 		wait(&status);
-	if ((!redirects || !redirects->flags))
-		waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
