@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:58 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/07 03:26:40 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 05:04:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "parser.h"
 
+int	is_builtin(const char *name);
 int	run_builtin(t_simple_cmd *cmd);
 
 int	builtin_cd(char **argv);

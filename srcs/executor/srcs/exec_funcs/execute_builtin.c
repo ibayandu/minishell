@@ -6,11 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:23:42 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/11 03:47:45 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 05:04:42 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+#include "libmem.h"
 #include "libft.h"
 #include "exec_utils.h"
 #include "exec_builtin.h"
@@ -47,54 +50,63 @@ static int	restore_fds(int fds_store[3])
 	return (0);
 }
 
-static int	is_builtin(const char *name)
+static void	handle_sigint(int sig)
 {
-	if (!name)
-		return (0);
-	return (!ft_strncmp(name, "cd", 3) || !ft_strncmp(name, "export", 7)
-		|| !ft_strncmp(name, "unset", 6) || !ft_strncmp(name, "exit", 5)
-		|| !ft_strncmp(name, "echo", 5) || !ft_strncmp(name, "env", 4)
-		|| !ft_strncmp(name, "pwd", 4) || !ft_strncmp(name, "alias", 6)
-		|| !ft_strncmp(name, "unalias", 8));
+	(void)sig;
+	if (isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "\n", 1);
+	mem_free();
+	exit(130);
 }
 
-static t_redirect	*clear_redirects(t_redirect *redirects)
+static int	child_builtin(t_simple_cmd *cmd, t_redirect *redirects,
+	int *exit_code)
 {
-	t_redirect	*temp;
+	pid_t	pid;
+	int		ret;
 
-	temp = redirects;
-	while (temp)
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (!pid)
 	{
-		if (temp->next && temp->next->redir_type == REDIR_IGNORE)
-			temp->next = temp->next->next;
-		temp->redirectee->word = "-1";
-		temp = temp->next;
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, handle_sigint);
+		if (apply_redirections(redirects, exit_code))
+		{
+			mem_free();
+			exit(1);
+		}
+		if (apply_redirections(cmd->redirects, exit_code))
+		{
+			mem_free();
+			exit(1);
+		}
+		ret = run_builtin(cmd);
+		mem_free();
+		exit (ret);
 	}
-	return (redirects);
+	return (pid);
 }
 
 int	execute_builtin(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 {
-	int	ret;
-	int	fds_store[3];
+	int		ret;
+	int		fds_store[3];
 
 	ret = 0;
 	if (!cmd->words || !cmd->words->word || !cmd->words->word->word)
 		return (-1);
 	if (!is_builtin(cmd->words->word->word))
 		return (-1);
+	if (redirects && redirects->flags)
+		return (child_builtin(cmd, redirects, exit_code));
 	if (store_fds(fds_store))
 		return (1);
-	if (apply_redirections(clear_redirects(redirects), exit_code))
-	{
-		restore_fds(fds_store);
-		return (1);
-	}
+	if (apply_redirections(redirects, exit_code))
+		return (restore_fds(fds_store), 1);
 	if (apply_redirections(cmd->redirects, exit_code))
-	{
-		restore_fds(fds_store);
-		return (1);
-	}
+		return (restore_fds(fds_store), 1);
 	ret = run_builtin(cmd);
 	if (restore_fds(fds_store))
 		return (1);

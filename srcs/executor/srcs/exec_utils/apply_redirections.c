@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:55:25 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/11 04:02:03 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 03:23:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 #include <stdio.h>
 #include "exec_utils.h"
 #include "expander.h"
+
+static char	*check_word(char *word)
+{
+	int	i;
+
+	if (!word || !*word)
+		return ("-1");
+	i = -1;
+	while (word[++i])
+		if (!ft_isdigit(word[i]) && word[i] != ' ' && !(word[i] >= 9
+			&& word[i] <= 13) && word[i] != '+' && word[i] != '-')
+			return ("-1");
+	return (word);
+}
 
 static int	apply_output_redirection(t_redirect *r, int *exit_code)
 {
@@ -33,7 +47,7 @@ static int	apply_output_redirection(t_redirect *r, int *exit_code)
 			return (1);
 		if (fd >= 0)
 		{
-			close(ft_atoi(r->redirectee->word));
+			close(ft_atoi(check_word(r->redirectee->word)));
 			dup2(fd, ft_atoi(r->redirector->word));
 			close(fd);
 		}
@@ -83,7 +97,7 @@ static int	apply_input_redirection(t_redirect *r, int *exit_code)
 			if (fd < 0)
 				return (perror(ft_strjoin("minishell: ", r->redirectee->word))
 					, 1);
-			close(ft_atoi(r->redirectee->word));
+			close(ft_atoi(check_word(r->redirectee->word)));
 			dup2(fd, ft_atoi(r->redirector->word));
 			close(fd);
 		}

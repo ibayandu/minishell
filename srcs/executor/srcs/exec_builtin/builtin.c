@@ -6,13 +6,24 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:21:11 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/07 03:29:35 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 05:03:59 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec_builtin.h"
 #include "exec_utils.h"
 #include "expander.h"
+
+int	is_builtin(const char *name)
+{
+	if (!name)
+		return (0);
+	return (!ft_strncmp(name, "cd", 3) || !ft_strncmp(name, "export", 7)
+		|| !ft_strncmp(name, "unset", 6) || !ft_strncmp(name, "exit", 5)
+		|| !ft_strncmp(name, "echo", 5) || !ft_strncmp(name, "env", 4)
+		|| !ft_strncmp(name, "pwd", 4) || !ft_strncmp(name, "alias", 6)
+		|| !ft_strncmp(name, "unalias", 8));
+}
 
 int	run_builtin(t_simple_cmd *cmd)
 {

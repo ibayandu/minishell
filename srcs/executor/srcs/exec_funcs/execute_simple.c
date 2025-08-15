@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/11 03:09:39 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 04:42:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,13 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 		return (1);
 	if (pid == 0)
 		child_process(cmd, redirects, exit_code);
-	if ((!redirects || !redirects->flags) && waitpid(pid, &status, 0) < 0)
+	if (redirects && redirects->flags)
+		return (pid);
+	if (waitpid(pid, &status, 0) < 0)
 		return (1);
-	if ((!redirects || !redirects->flags) && WIFEXITED(status))
+	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	if ((!redirects || !redirects->flags) && WIFSIGNALED(status))
+	if (WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
 	return (1);
 }

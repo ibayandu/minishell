@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/15 01:37:34 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 05:11:50 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,12 @@ static void	execute_pipe_left(t_command *cmd, t_redirect *redirects,
 	execute_command(cmd, exit_code);
 }
 
-static void	execute_pipe_right(t_command *cmd, t_redirect *redirects,
+static int	execute_pipe_right(t_command *cmd, t_redirect *redirects,
 		int pipefd[2], int *exit_code)
 {
 	t_redirect	*r;
 	t_redirect	*temp;
+	pid_t		pid;
 
 	temp = cmd->redirects;
 	while (temp && temp->next)
@@ -79,9 +80,10 @@ static void	execute_pipe_right(t_command *cmd, t_redirect *redirects,
 	temp = cmd->redirects;
 	cmd->redirects = r;
 	r->next = temp;
-	execute_command(cmd, exit_code);
+	pid = execute_command(cmd, exit_code);
 	close(pipefd[0]);
 	close(pipefd[1]);
+	return (pid);
 }
 
 static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
@@ -91,20 +93,22 @@ static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
 	int				status;
 	int				wait_count;
 	t_connect_cmd	*tmp;
+	pid_t			pid;
 
 	if (pipe(pipefd) == -1)
 		return (1);
 	wait_count = 0;
+	status = 0;
 	tmp = connect;
 	while (++wait_count && tmp && tmp->first->type == CMD_CONNECT
 		&& tmp->first->value.connection->type == CNT_PIPE)
 		tmp = tmp->first->value.connection;
 	execute_pipe_left(connect->first, redirects, pipefd, exit_code);
-	execute_pipe_right(connect->second, redirects, pipefd, exit_code);
-	if (wait_count)
-		wait_count++;
+	pid = execute_pipe_right(connect->second, redirects, pipefd, exit_code);
 	while ((!redirects || !redirects->flags) && wait_count--)
 		wait(&status);
+	if ((!redirects || !redirects->flags))
+		waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
