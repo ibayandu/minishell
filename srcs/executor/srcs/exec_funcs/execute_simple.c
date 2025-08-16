@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/16 01:26:05 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 00:38:32 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,45 +23,40 @@
 #include "exec_utils.h"
 #include "expander.h"
 
-static void	is_directory(char *filename)
+static void	handle_error(char *cmd_name)
 {
 	struct stat	sb;
 	int			fd;
 	char		*joined_str;
 
-	if (ft_strchr(filename, '/'))
+	if (ft_strchr(cmd_name, '/'))
 	{
-		fd = open(filename, O_RDONLY, 0644);
+		fd = open(cmd_name, O_RDONLY, 0644);
 		if (fd >= 0 && (fstat(fd, &sb) == 0) && S_ISDIR(sb.st_mode))
 		{
-			joined_str = ft_strjoin("minishell: ", filename);
+			joined_str = ft_strjoin("minishell: ", cmd_name);
 			ft_putendl_fd(ft_strjoin(joined_str, ": Is a directory"),
 				STDERR_FILENO);
 			mem_free();
 			exit(126);
 		}
 	}
-}
-
-static void	handle_sigint(int sig)
-{
-	(void)sig;
-	if (isatty(STDOUT_FILENO))
-		write(STDOUT_FILENO, "\n", 1);
-	mem_free();
-	exit(130);
-}
-
-static void	handle_command_error(char *cmd)
-{
-	if (ft_strchr(cmd, '/') || errno == EACCES)
-		perror(ft_strjoin("minishell: ", cmd));
+	if (ft_strchr(cmd_name, '/') || errno == EACCES)
+		perror(ft_strjoin("minishell: ", cmd_name));
 	else
-		ft_putendl_fd(ft_strjoin(cmd, ": command not found"), STDERR_FILENO);
+		ft_putendl_fd(ft_strjoin(cmd_name, ": command not found"),
+			STDERR_FILENO);
 	mem_free();
 	if (errno == EACCES)
 		exit(126);
 	exit(127);
+}
+
+static void	handle_sigint_child(int sig)
+{
+	(void)sig;
+	mem_free();
+	exit(130);
 }
 
 static void	child_process(t_simple_cmd *cmd, t_redirect *redirects,
@@ -72,7 +67,7 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects,
 
 	stat = 0;
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_sigint);
+	signal(SIGINT, handle_sigint_child);
 	if (redirects)
 		stat = apply_redirections(redirects, exit_code);
 	if (cmd->redirects && !stat)
@@ -88,8 +83,14 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects,
 		exit(0);
 	}
 	ft_execvp(argv[0], argv);
-	is_directory(argv[0]);
-	handle_command_error(argv[0]);
+	handle_error(argv[0]);
+}
+
+void	handle_sigint_main(int sig)
+{
+	(void)sig;
+	if (isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "\n", 1);
 }
 
 int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
@@ -99,11 +100,10 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 	int		status;
 
 	cmd->words = expand_word_list(cmd->words, exit_code);
+	signal(SIGINT, handle_sigint_main);
 	ret = execute_builtin(cmd, redirects, exit_code);
 	if (ret != -1)
 		return (ret);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		return (1);

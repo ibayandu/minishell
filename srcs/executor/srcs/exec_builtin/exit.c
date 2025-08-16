@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:46:21 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/04 12:47:18 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 01:14:17 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@
 #include "libmem.h"
 #include "exec_builtin.h"
 
-static int	print_exit_and_count_args(char **argv)
+static int	print_exit_and_count_args(char **argv, int is_sub)
 {
 	int	i;
 
 	i = 0;
-	ft_putendl_fd("exit", STDOUT_FILENO);
+	if (!is_sub)
+		ft_putendl_fd("exit", STDOUT_FILENO);
 	while (argv[i])
 		i++;
 	return (i);
@@ -65,12 +66,12 @@ static void	handle_invalid_numeric(char *arg)
 	exit(2);
 }
 
-int	builtin_exit(char **argv)
+int	builtin_exit(char **argv, int is_sub)
 {
 	int	argc;
 	int	status;
 
-	argc = print_exit_and_count_args(argv);
+	argc = print_exit_and_count_args(argv, is_sub);
 	status = 0;
 	if (argv[1])
 	{

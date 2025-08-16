@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/16 00:45:30 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 00:34:55 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ int	main(void)
 			if (!ft_heredoc(&exit_code) && cmd)
 				exit_code = execute_command(cmd, &exit_code);
 		}
-		if (exit_code == 130)
-			printf("\n");
 		cmdline = ft_repl();
 	}
 	rl_clear_history();

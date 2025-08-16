@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/10 17:13:05 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 01:11:43 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,21 @@
 #include "exec_funcs.h"
 #include "executor.h"
 
+static void	mark_commands(t_command *cmd)
+{
+	if (!cmd)
+		return;
+	if (cmd->type == CMD_SIMPLE && cmd->value.simple)
+		cmd->value.simple->flags = 1;
+	else if (cmd->type == CMD_CONNECT && cmd->value.connection)
+	{
+		mark_commands(cmd->value.connection->first);
+		mark_commands(cmd->value.connection->second);
+	}
+	else if (cmd->type == CMD_SUBSHELL && cmd->value.subshell)
+		mark_commands(cmd->value.subshell->command);
+}
+
 int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects,
 					int *exit_code)
 {
@@ -26,6 +41,7 @@ int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects,
 	int		status;
 	int		res;
 
+	mark_commands(subshell->command);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -38,6 +54,10 @@ int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects,
 		mem_free();
 		exit(res);
 	}
-	waitpid(pid, &status, 0);
+	status = 0;
+	if (!redirects || !redirects->flags)
+		waitpid(pid, &status, 0);
+	else
+		return (pid);
 	return (WEXITSTATUS(status));
 }

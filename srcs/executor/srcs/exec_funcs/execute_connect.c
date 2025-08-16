@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/16 01:41:38 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 00:39:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
 #include "libmem.h"
 #include "libft.h"
 #include "executor.h"
 #include "exec_funcs.h"
+#include "exec_utils.h"
 
 static int	execute_if(t_connect_cmd *connect, int *exit_code)
 {
@@ -34,7 +34,7 @@ static int	execute_if(t_connect_cmd *connect, int *exit_code)
 	return (status);
 }
 
-static void	execute_pipe_left(t_command *cmd, t_redirect *redirects,
+static int	execute_pipe_left(t_command *cmd, t_redirect *redirects,
 		int pipefd[2], int *exit_code)
 {
 	t_redirect	*r;
@@ -60,7 +60,7 @@ static void	execute_pipe_left(t_command *cmd, t_redirect *redirects,
 	temp = cmd->redirects;
 	cmd->redirects = r;
 	r->next = temp;
-	execute_command(cmd, exit_code);
+	return (execute_command(cmd, exit_code));
 }
 
 static int	execute_pipe_right(t_command *cmd, t_redirect *redirects,
@@ -89,24 +89,25 @@ static int	execute_pipe_right(t_command *cmd, t_redirect *redirects,
 static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
 	int *exit_code)
 {
-	int				pipefd[2];
-	int				status;
-	int				wait_count;
-	t_connect_cmd	*tmp;
+	static int	*pids;
+	int			pipefd[2];
+	int			status;
+	int			i;
+	int			wait_count;
 
 	if (pipe(pipefd) == -1)
 		return (1);
-	wait_count = 0;
 	status = 0;
-	tmp = connect;
-	while (++wait_count && tmp && tmp->first->type == CMD_CONNECT
-		&& tmp->first->value.connection->type == CNT_PIPE)
-		tmp = tmp->first->value.connection;
-	execute_pipe_left(connect->first, redirects, pipefd, exit_code);
-	execute_pipe_right(connect->second, redirects, pipefd, exit_code);
-	wait_count++;
-	while ((!redirects || !redirects->flags) && wait_count--)
-		wait(&status);
+	wait_count = pipe_count_wait(connect);
+	if ((!redirects || !redirects->flags) && wait_count)
+		pids = mem_calloc(sizeof(int), wait_count + 1);
+	push_pipe(execute_pipe_left(connect->first, redirects, pipefd,
+			exit_code), pids);
+	push_pipe(execute_pipe_right(connect->second, redirects, pipefd,
+			exit_code), pids);
+	i = -1;
+	while ((!redirects || !redirects->flags) && pids[++i])
+		waitpid(pids[i], &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))

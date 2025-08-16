@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:41:24 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/11 04:22:58 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 23:55:49 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 static void	handle_sigint(int sig)
 {
 	(void)sig;
-	if (isatty(STDOUT_FILENO))
-		write(STDOUT_FILENO, "\n", 1);
 	mem_free();
 	exit(130);
 }

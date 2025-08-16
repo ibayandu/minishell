@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 20:33:07 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/11 04:23:59 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 15:39:13 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_redirect	*parse_redirection(int *exit_code)
 		return (ft_panic(get_current_token(), exit_code), NULL);
 	redirect = make_redirection(source, redir_type, dest, 0);
 	if (get_next_token() && redir_type == REDIR_UNTIL)
-		push_heredoc(redirect);
+		push_heredoc(redirect, 0);
 	return (redirect);
 }
 

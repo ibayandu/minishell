@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 20:50:54 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 11:13:12 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 15:40:09 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_redir_type	ft_get_redir(t_token *token);
 char			*ft_readline(char *prompt);
 t_cnt_type		ft_get_cnt(t_token *token);
 char			*string_extract_single_quoted(char *string, int *sindex);
-t_redirect		**push_heredoc(t_redirect *r);
+t_redirect		**push_heredoc(t_redirect *r, int refresh);
 pid_t			gather_here_documents_fd(char ***paths,
 					t_redirect **redir_stack);
 int				read_heredoc_inputs(char **paths, t_redirect **redir_stack);

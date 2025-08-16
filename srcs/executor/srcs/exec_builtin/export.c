@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:43:20 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/14 20:42:37 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 15:54:06 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int	ft_export_without_value(char *arg)
 		while (ft_isalnum(arg[i]) || arg[i] == '_')
 			i++;
 	}
-	if (i != ft_strlen(arg))
+	if (i != ft_strlen(arg) || !i)
 	{
 		ft_putendl_fd(ft_strjoin(ft_strjoin("minishell: export: `", arg),
 				"': not a valid identifier"), 2);

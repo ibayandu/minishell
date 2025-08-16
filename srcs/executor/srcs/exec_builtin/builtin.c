@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:21:11 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/15 05:03:59 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 01:12:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	run_builtin(t_simple_cmd *cmd)
 	else if (!ft_strncmp(name, "unset", 6))
 		return (builtin_unset(build_argv(cmd->words)));
 	else if (!ft_strncmp(name, "exit", 5))
-		return (builtin_exit(build_argv(cmd->words)));
+		return (builtin_exit(build_argv(cmd->words), cmd->flags));
 	else if (!ft_strncmp(name, "echo", 5))
 		return (builtin_echo(build_argv(cmd->words)));
 	else if (!ft_strncmp(name, "pwd", 4))

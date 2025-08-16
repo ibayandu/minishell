@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:23:42 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/16 01:15:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 23:54:54 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ static int	restore_fds(int fds_store[3])
 static void	handle_sigint(int sig)
 {
 	(void)sig;
-	if (isatty(STDOUT_FILENO))
-		write(STDOUT_FILENO, "\n", 1);
 	mem_free();
 	exit(130);
 }
@@ -65,8 +63,6 @@ static int	child_builtin(t_simple_cmd *cmd, t_redirect *redirects,
 	pid_t	pid;
 	int		ret;
 
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (!pid)
 	{
@@ -86,7 +82,7 @@ static int	child_builtin(t_simple_cmd *cmd, t_redirect *redirects,
 		mem_free();
 		exit (ret);
 	}
-	return (0);
+	return (pid);
 }
 
 int	execute_builtin(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
