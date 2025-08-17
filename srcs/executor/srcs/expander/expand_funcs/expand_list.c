@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:17:25 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/15 01:21:12 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 07:33:27 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,26 @@ static void	denull_list(t_word_list **list)
 static char	*expand_alias(char *word, int *is_expand)
 {
 	t_variable	*v;
+	int			i;
+	char		*res;
 
 	v = find_variable(word, create_tables(1));
 	if (v)
 	{
 		*is_expand = 1;
-		return (v->value);
+		i = -1;
+		while (v->value[++i])
+			if (v->value[i] == ' ')
+				break ;
+		if (v->value[i])
+			res = ft_strndup(v->value, i);
+		else
+			res = ft_strdup(v->value);
+		if (!ft_strcmp(word, res))
+			return (v->value);
+		else
+			return (ft_strjoin(expand_alias(res, is_expand),
+					ft_strndup(v->value + i, ft_strlen(v->value) - i)));
 	}
 	return (word);
 }

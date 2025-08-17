@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:00:00 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 04:33:07 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 06:46:54 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,15 @@ static char	*decode_prompt(const char *ps1)
 {
 	char	*tmp;
 	char	*decoded;
-	char	*result;
 
 	if (!ps1)
 		return (NULL);
 	tmp = mem_malloc(ft_strlen(ps1) + 1);
-	if (!tmp)
-		return (NULL);
 	remove_escape_blocks(ps1, tmp);
 	decoded = replace_escape_sequences(tmp);
 	if (!decoded)
 		return (NULL);
-	result = expand_prompt_vars(decoded);
-	return (result);
+	return (expand_prompt_vars(decoded));
 }
 
 char	*get_prompt(void)

@@ -97,7 +97,10 @@ fclean: clean
 
 re: fclean all
 
+norm:
+	norminette
+
 leak:
 	valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp ./$(NAME)
 
-.PHONY: all clean fclean re dir leak
+.PHONY: all clean fclean re dir leak norm

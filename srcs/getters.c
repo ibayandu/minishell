@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 04:24:19 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/17 04:37:41 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 06:47:10 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*get_short_pwd(void)
 			return (ft_strdup(variable->value));
 		short_pwd[0] = '~';
 		ft_strlcpy(short_pwd + 1, variable->value + home_len,
-			ft_strlen(variable->value + home_len - 1));
+			ft_strlen(variable->value) - home_len + 2);
 		return (short_pwd);
 	}
 	return (ft_strdup(variable->value));
