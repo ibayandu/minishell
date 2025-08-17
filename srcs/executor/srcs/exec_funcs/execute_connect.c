@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 00:39:20 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 04:01:26 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
 	status = 0;
 	wait_count = pipe_count_wait(connect);
 	if ((!redirects || !redirects->flags) && wait_count)
-		pids = mem_calloc(sizeof(int), wait_count + 1);
+		pids = mem_calloc(sizeof(int), wait_count + 2);
 	push_pipe(execute_pipe_left(connect->first, redirects, pipefd,
 			exit_code), pids);
 	push_pipe(execute_pipe_right(connect->second, redirects, pipefd,

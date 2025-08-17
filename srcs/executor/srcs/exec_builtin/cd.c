@@ -6,12 +6,13 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 02:45:44 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 09:58:55 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 04:13:20 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdio.h>
+#include "libmem.h"
 #include "exec_builtin.h"
 #include "expander.h"
 
@@ -24,7 +25,7 @@ static void	update_directory_vars(char *oldpwd)
 		unbind_variable("OLDPWD", create_tables(0));
 		bind_variable("OLDPWD", oldpwd, create_tables(0));
 	}
-	cwd = ft_strdup(getcwd(NULL, 0));
+	cwd = ft_strdup(mem_absorb(getcwd(NULL, 0)));
 	if (*cwd)
 	{
 		unbind_variable("PWD", create_tables(0));

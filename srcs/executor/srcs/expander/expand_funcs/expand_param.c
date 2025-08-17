@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 06:23:05 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/15 01:21:19 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 03:33:19 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*replace_star_unquoted(char *input)
 			in_dq = !in_dq;
 		else if (input[i] == '*' && !in_sq && !in_dq)
 			out[j++] = CTLESC;
-		if (out[j - 1] != CTLESC)
+		if (j && out[j - 1] != CTLESC)
 			out[j++] = input[i];
 	}
 	return (out);

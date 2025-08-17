@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 01:11:43 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 04:39:28 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 static void	mark_commands(t_command *cmd)
 {
 	if (!cmd)
-		return;
+		return ;
 	if (cmd->type == CMD_SIMPLE && cmd->value.simple)
 		cmd->value.simple->flags = 1;
 	else if (cmd->type == CMD_CONNECT && cmd->value.connection)
