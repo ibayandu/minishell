@@ -6,12 +6,10 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:04:08 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 13:05:22 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/15 01:21:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser_makers.h"
-#include "parser_utils.h"
 #include "expander.h"
 
 static char	*string_extract_verbatim(char *string, size_t slen, int *sindex,

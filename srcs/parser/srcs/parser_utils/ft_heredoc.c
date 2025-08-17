@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 14:05:47 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/05 17:03:14 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 00:37:03 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "libft.h"
 #include "libmem.h"
 #include "libgnl.h"
@@ -21,7 +22,7 @@
 #include "parser_makers.h"
 #include "minishell.h"
 
-t_redirect	**push_heredoc(t_redirect *r)
+t_redirect	**push_heredoc(t_redirect *r, int refresh)
 {
 	static t_redirect	*redir_stack[HEREDOC_MAX + 1] = {0};
 	static int			count = 0;
@@ -33,13 +34,16 @@ t_redirect	**push_heredoc(t_redirect *r)
 		mem_free();
 		exit(2);
 	}
-	if (r)
+	if (!refresh && r)
 	{
 		redir_stack[count++] = r;
 		redir_stack[count] = NULL;
 	}
-	else
+	else if (refresh)
+	{
 		count = 0;
+		redir_stack[count] = NULL;
+	}
 	return (redir_stack);
 }
 

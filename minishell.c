@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 21:56:04 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 04:36:34 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include "executor.h"
 #include "minishell.h"
 #include "init.h"
+#include "prompt.h"
 
 static void	handle_sigint(int sig)
 {
@@ -35,7 +36,7 @@ static void	handle_sigint(int sig)
 	rl_redisplay();
 }
 
-char	*ft_repl()
+char	*ft_repl(void)
 {
 	char	*line;
 
@@ -43,7 +44,7 @@ char	*ft_repl()
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handle_sigint);
 	if (isatty(STDIN_FILENO))
-		line = mem_absorb(readline("minishell> "));
+		line = mem_absorb(readline(get_prompt()));
 	else
 		line = gnl_one(STDIN_FILENO);
 	if (!line)
@@ -77,8 +78,6 @@ int	main(void)
 			if (!ft_heredoc(&exit_code) && cmd)
 				exit_code = execute_command(cmd, &exit_code);
 		}
-		if (exit_code == 130)
-			printf("\n");
 		cmdline = ft_repl();
 	}
 	rl_clear_history();

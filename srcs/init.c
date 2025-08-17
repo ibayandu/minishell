@@ -6,13 +6,14 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 11:48:19 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/05 22:37:47 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 04:39:51 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "libmem.h"
 #include "libgnl.h"
 #include "lexer.h"
 #include "parser.h"
@@ -126,7 +127,8 @@ void	initialize_shell_variables(char **env, int *exit_code)
 		if (tmp && same_file(tmp, "."))
 			bind_variable("PWD", tmp, create_tables(0));
 		else
-			bind_variable("PWD", ft_strdup(getcwd(NULL, 0)), create_tables(0));
+			bind_variable("PWD", ft_strdup(mem_absorb(getcwd(NULL, 0))),
+				create_tables(0));
 	}
 	execute_minirc(exit_code);
 }

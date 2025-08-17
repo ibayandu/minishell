@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:02:38 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/05 17:02:26 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 23:18:27 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@ t_command	*parse_inputunit(int *exit_code)
 
 int	ft_heredoc(int *exit_code)
 {
-	pid_t	pid;
-	char	**paths;
-	int		status;
+	pid_t		pid;
+	char		**paths;
+	int			status;
+	t_redirect	**redir_stack;
 
 	status = 1;
-	if (!*push_heredoc(NULL))
+	redir_stack = push_heredoc(NULL, 0);
+	if (!*redir_stack)
 		return (0);
-	pid = gather_here_documents_fd(&paths, push_heredoc(NULL));
+	pid = gather_here_documents_fd(&paths, redir_stack);
 	if (pid < 0)
 		return (1);
 	if (waitpid(pid, &status, 0) < 0)
@@ -50,6 +52,7 @@ int	ft_heredoc(int *exit_code)
 	else if (WIFSIGNALED(status))
 		*exit_code = WTERMSIG(status) + 128;
 	if (!status)
-		return (read_heredoc_inputs(paths, push_heredoc(NULL)));
+		status = read_heredoc_inputs(paths, redir_stack);
+	push_heredoc(NULL, 1);
 	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 13:50:29 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 13:01:51 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/16 01:41:56 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,20 @@
 
 int	execute_command(t_command *cmd, int *exit_code)
 {
+	int	ret;
+
+	ret = 0;
 	if (!cmd)
-		return (0);
-	if (cmd->type == CMD_SIMPLE)
-		return (execute_simple(cmd->value.simple, cmd->redirects, exit_code));
-	if (cmd->type == CMD_CONNECT)
-		return (execute_connect(cmd->value.connection, exit_code));
-	if (cmd->type == CMD_SUBSHELL)
-		return (execute_subshell(cmd->value.subshell, cmd->redirects,
-				exit_code));
-	return (1);
+		ret = 0;
+	else if (cmd->type == CMD_SIMPLE)
+		ret = execute_simple(cmd->value.simple, cmd->redirects, exit_code);
+	else if (cmd->type == CMD_CONNECT)
+		ret = execute_connect(cmd->value.connection, cmd->redirects,
+				exit_code);
+	else if (cmd->type == CMD_SUBSHELL)
+		ret = execute_subshell(cmd->value.subshell, cmd->redirects,
+				exit_code);
+	else
+		ret = 1;
+	return (ret);
 }

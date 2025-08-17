@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 06:26:16 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/04 10:33:55 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/13 19:45:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,8 @@ char	**arraydir(char *dir, char **array)
 	return (result);
 }
 
-static void	set_addr(t_list **ep, int *np, int np_v, t_list *ep_v)
+void	finddir(char **r, int *count, t_list **lastlink)
 {
-	if (ep)
-		*ep = ep_v;
-	if (np)
-		*np = np_v;
-}
-
-t_list	*finddir(t_finddir_args args)
-{
-	char	**r;
 	int		ndirs;
 	t_list	*ret;
 	t_list	*e;
@@ -76,9 +67,8 @@ t_list	*finddir(t_finddir_args args)
 
 	ret = NULL;
 	e = NULL;
-	r = glob_vector(args.pat, args.sdir, args.flags);
 	if (!r || !*r)
-		return (set_addr(args.ep, args.np, 0, NULL), NULL);
+		return ;
 	ndirs = -1;
 	while (r[++ndirs])
 	{
@@ -89,6 +79,10 @@ t_list	*finddir(t_finddir_args args)
 		ret = g;
 		g->content = r[ndirs];
 	}
-	set_addr(args.ep, args.np, ndirs, e);
-	return (ret);
+	if (ndirs)
+	{
+		e->next = *lastlink;
+		*lastlink = ret;
+		*count += ndirs;
+	}
 }

@@ -1,4 +1,4 @@
-# MAKEFLAGS += --no-print-directory
+MAKEFLAGS += --no-print-directory
 
 CC = cc
 
@@ -8,7 +8,7 @@ LFLAGS = -lreadline
 
 VPATH = srcs
 
-SRCS = minishell.c init.c prompt.c
+SRCS = minishell.c init.c prompt.c escape.c getters.c
 
 LIBFT = libs/libft/build/libs/libft.a
 LIBMEM = libs/libmem/build/libs/libmem.a

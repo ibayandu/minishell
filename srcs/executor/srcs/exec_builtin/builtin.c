@@ -6,13 +6,24 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 21:21:11 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/05 09:58:32 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 01:12:45 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec_builtin.h"
 #include "exec_utils.h"
 #include "expander.h"
+
+int	is_builtin(const char *name)
+{
+	if (!name)
+		return (0);
+	return (!ft_strncmp(name, "cd", 3) || !ft_strncmp(name, "export", 7)
+		|| !ft_strncmp(name, "unset", 6) || !ft_strncmp(name, "exit", 5)
+		|| !ft_strncmp(name, "echo", 5) || !ft_strncmp(name, "env", 4)
+		|| !ft_strncmp(name, "pwd", 4) || !ft_strncmp(name, "alias", 6)
+		|| !ft_strncmp(name, "unalias", 8));
+}
 
 int	run_builtin(t_simple_cmd *cmd)
 {
@@ -29,7 +40,7 @@ int	run_builtin(t_simple_cmd *cmd)
 	else if (!ft_strncmp(name, "unset", 6))
 		return (builtin_unset(build_argv(cmd->words)));
 	else if (!ft_strncmp(name, "exit", 5))
-		return (builtin_exit(build_argv(cmd->words)));
+		return (builtin_exit(build_argv(cmd->words), cmd->flags));
 	else if (!ft_strncmp(name, "echo", 5))
 		return (builtin_echo(build_argv(cmd->words)));
 	else if (!ft_strncmp(name, "pwd", 4))
