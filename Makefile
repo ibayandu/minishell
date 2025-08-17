@@ -43,36 +43,24 @@ NAME = minishell
 $(OBJS_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o  $@ $(IFLAGS)
 
-all: dir $(LIBMEM) $(LIBGNL) $(LIBFT) $(LIBHASH) $(LEXER) $(PARSER) $(EXECUTOR) $(NAME)
+all: dir libraries $(NAME)
 
 dir:
 	@if [ ! -d $(OBJS_DIR) ]; then \
 		$(MKDIR) $(OBJS_DIR); \
 	fi
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(EXECUTOR) $(PARSER) $(LEXER) $(LIBHASH) $(LIBFT) $(LIBGNL) $(LIBMEM) -o $@ $(LFLAGS)
-
-$(LIBMEM):
+libraries:
 	@$(MAKE) $(LIBMEM_DIR)
-
-$(LIBGNL):
 	@$(MAKE) $(LIBGNL_DIR)
-
-$(LIBFT):
 	@$(MAKE) $(LIBFT_DIR)
-
-$(LIBHASH):
 	@$(MAKE) $(LIBHASH_DIR)
-
-$(LEXER):
 	@$(MAKE) $(LEXER_DIR)
-
-$(PARSER):
 	@$(MAKE) $(PARSER_DIR)
-
-$(EXECUTOR):
 	@$(MAKE) $(EXECUTOR_DIR)
+
+$(NAME): $(OBJS) $(EXECUTOR) $(PARSER) $(LEXER) $(LIBHASH) $(LIBFT) $(LIBGNL) $(LIBMEM)
+	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
 clean:
 	@$(MAKE) $(LIBMEM_DIR) clean
@@ -103,4 +91,4 @@ norm:
 leak:
 	valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp ./$(NAME)
 
-.PHONY: all clean fclean re dir leak norm
+.PHONY: all clean fclean re dir leak norm libraries
