@@ -43,3 +43,4 @@ Extended Shell Syntax
  - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
 
 export PS1='\[\e[1;33m\]┌─[\[\e[1;36m\]\u\[\e[1;33m\]]─[\[\e[1;32m\]\w\[\e[1;33m\]]\n└─\[\e[1;35m\]\$\[\e[0m\] '
+
