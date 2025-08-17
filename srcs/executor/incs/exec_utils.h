@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 19:05:56 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 00:39:30 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 11:23:32 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ char	**build_argv(t_word_list *words);
 int		ft_execvp(const char *file, char *const argv[]);
 int		pipe_count_wait(t_connect_cmd *connect);
 void	push_pipe(int pid, int *pids);
+int		pipe_handle_stat(int status, int count);
 
 #endif // EXEC_UTILS_H

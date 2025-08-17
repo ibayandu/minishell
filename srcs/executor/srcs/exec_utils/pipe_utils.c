@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 17:19:19 by yzeybek           #+#    #+#             */
-/*   Updated: 2025/08/17 00:39:24 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 11:28:16 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include <unistd.h>
 #include "libmem.h"
 #include "exec_utils.h"
+
+int	pipe_handle_stat(int status, int count)
+{
+	if (count && isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "\n", 1);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (WTERMSIG(status) + 128);
+	return (1);
+}
 
 int	pipe_count_wait(t_connect_cmd *connect)
 {

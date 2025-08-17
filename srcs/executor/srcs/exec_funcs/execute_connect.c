@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:50 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 04:01:26 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 11:23:11 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,14 @@ static int	execute_pipe(t_connect_cmd *connect, t_redirect *redirects,
 	push_pipe(execute_pipe_right(connect->second, redirects, pipefd,
 			exit_code), pids);
 	i = -1;
+	wait_count = 0;
 	while ((!redirects || !redirects->flags) && pids[++i])
+	{
 		waitpid(pids[i], &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (WTERMSIG(status) + 128);
-	return (1);
+		if (WIFSIGNALED(status) && status == 2)
+			wait_count = 1;
+	}
+	return (pipe_handle_stat(status, wait_count));
 }
 
 int	execute_connect(t_connect_cmd *connect, t_redirect *redirects,

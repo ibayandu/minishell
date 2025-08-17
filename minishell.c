@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 00:53:15 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 05:45:02 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 11:28:26 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@
 #include "init.h"
 #include "prompt.h"
 
+static int	*set_code(int code)
+{
+	static int	exit_code = 0;
+
+	if (code >= 0)
+		exit_code = code;
+	return (&exit_code);
+}
+
 static void	handle_sigint(int sig)
 {
 	(void)sig;
@@ -34,6 +43,7 @@ static void	handle_sigint(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+	set_code(130);
 }
 
 char	*ft_repl(void)
@@ -66,21 +76,20 @@ int	main(void)
 	t_command	*cmd;
 	char		*cmdline;
 	extern char	**environ;
-	int			exit_code;
 
-	initialize_shell_variables(environ, &exit_code);
+	initialize_shell_variables(environ, set_code(-1));
 	cmdline = ft_repl();
 	while (cmdline)
 	{
 		if (init_lexer(ft_strjoin(cmdline, "\n")))
 		{
-			cmd = parse_inputunit(&exit_code);
-			if (!ft_heredoc(&exit_code) && cmd)
-				exit_code = execute_command(cmd, &exit_code);
+			cmd = parse_inputunit(set_code(-1));
+			if (!ft_heredoc(set_code(-1)) && cmd)
+				set_code(execute_command(cmd, set_code(-1)));
 		}
 		cmdline = ft_repl();
 	}
 	rl_clear_history();
 	mem_free();
-	return (exit_code);
+	return (*set_code(-1));
 }

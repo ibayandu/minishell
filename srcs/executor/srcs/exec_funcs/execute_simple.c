@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:58:31 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 00:38:32 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 11:17:18 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,6 @@ static void	child_process(t_simple_cmd *cmd, t_redirect *redirects,
 	handle_error(argv[0]);
 }
 
-void	handle_sigint_main(int sig)
-{
-	(void)sig;
-	if (isatty(STDOUT_FILENO))
-		write(STDOUT_FILENO, "\n", 1);
-}
-
 int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 {
 	int		ret;
@@ -100,7 +93,6 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 	int		status;
 
 	cmd->words = expand_word_list(cmd->words, exit_code);
-	signal(SIGINT, handle_sigint_main);
 	ret = execute_builtin(cmd, redirects, exit_code);
 	if (ret != -1)
 		return (ret);
@@ -115,6 +107,8 @@ int	execute_simple(t_simple_cmd *cmd, t_redirect *redirects, int *exit_code)
 		return (1);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status) && status == 2 && isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "\n", 1);
 	if (WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
 	return (1);

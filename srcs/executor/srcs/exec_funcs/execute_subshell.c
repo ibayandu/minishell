@@ -6,7 +6,7 @@
 /*   By: yzeybek <yzeybek@student.42.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 18:59:24 by ibayandu          #+#    #+#             */
-/*   Updated: 2025/08/17 04:39:28 by yzeybek          ###   ########.tr       */
+/*   Updated: 2025/08/17 11:23:46 by yzeybek          ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,17 @@
 #include "exec_utils.h"
 #include "exec_funcs.h"
 #include "executor.h"
+
+static int	handle_stat(int status)
+{
+	if (WIFSIGNALED(status) && status == 2 && isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "\n", 1);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (WTERMSIG(status));
+	return (status);
+}
 
 static void	mark_commands(t_command *cmd)
 {
@@ -59,5 +70,5 @@ int	execute_subshell(t_subshell_cmd *subshell, t_redirect *redirects,
 		waitpid(pid, &status, 0);
 	else
 		return (pid);
-	return (WEXITSTATUS(status));
+	return (handle_stat(status));
 }
